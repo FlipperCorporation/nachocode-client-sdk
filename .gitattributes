@@ -1,0 +1,13 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+*.html text diff=html
+*.css text eol=lf
+# JS files must always use LF for tools to work
+# JS files may have mjs or cjs extensions now as well
+*.js text eol=lf
+*.cjs eol=lf
+*.mjs eol=lf
+*.sql text eol=lf
+
+# paths that don't start with / are treated relative to the .gitattributes folder
+relative/path/*.txt text eol-lf

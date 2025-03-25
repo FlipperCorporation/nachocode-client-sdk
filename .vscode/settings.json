@@ -1,0 +1,29 @@
+{
+  "editor.bracketPairColorization.enabled": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.tabSize": 2,
+  "files.eol": "\n",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "prettier.arrowParens": "avoid",
+  "prettier.enable": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "cSpell.words": [
+    "backkey",
+    "kakao",
+    "keyboardhidden",
+    "keyboardshown",
+    "lastupdated",
+    "nachocode",
+    "networkchanged",
+    "nowrap",
+    "rgba",
+    "tabbar",
+    "touchstart"
+  ]
+}

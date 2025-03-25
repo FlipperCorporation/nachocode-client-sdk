@@ -1,0 +1,49 @@
+# husky
+.husky/*
+
+# GitHub
+.github/*
+
+# Third party
+node_modules
+**/node_modules
+
+# Logs
+logs
+*.log
+*.log*
+
+# Compiled outputs
+_generated_
+out
+tmp
+build
+dist
+dist/*
+prod/*
+fixtures
+
+# IDEs
+.idea
+.classpath
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Key files
+*.pem
+
+# Code testing coverage
+coverage
+
+# Temp
+.temp
+tmp
+
+# .yml files
+*.yml
+*.yaml
+
+# released files
+releases/**/*.min.js
