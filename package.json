@@ -40,7 +40,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/FlipperCorporation/nachocode-client-sdk"
+    "url": "git+https://github.com/FlipperCorporation/nachocode-client-sdk.git"
   },
   "license": "MIT",
   "bugs": {
