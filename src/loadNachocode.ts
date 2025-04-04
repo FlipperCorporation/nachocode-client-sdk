@@ -77,32 +77,26 @@ export function loadNachocode(
   return cachedPromise;
 }
 
-function initializeNachocode(
+async function initializeNachocode(
   apiKey: string,
   options: Nachocode.InitializeOptions
 ): Promise<typeof Nachocode> {
-  return new Promise((resolve, reject) => {
-    if (!window.Nachocode || !window.Nachocode.env) {
-      return reject(
-        // SDK가 존재하지 않습니다.
-        new Error('[Nachocode] SDK is not available on the window object.')
-      );
-    }
+  if (!window.Nachocode || !window.Nachocode.env) {
+    // SDK가 존재하지 않습니다.
+    throw new Error('[Nachocode] SDK is not available on the window object.');
+  }
 
-    try {
-      if (!window.Nachocode.env.isInitialized()) {
-        window.Nachocode.init(apiKey, options);
-      }
-      resolve(window.Nachocode);
-    } catch (error) {
-      console.error(
-        '[Nachocode] An error occurred during SDK initialization.',
-        error
-      );
-      reject(
-        // SDK 초기화 실패
-        new Error('[Nachocode] An error occurred during SDK initialization.')
-      );
+  try {
+    if (!window.Nachocode.env.isInitialized()) {
+      await window.Nachocode.initAsync(apiKey, options);
     }
-  });
+    return window.Nachocode;
+  } catch (error) {
+    console.error(
+      '[Nachocode] An error occurred during SDK initialization.',
+      error
+    );
+    // SDK 초기화 실패
+    throw new Error('[Nachocode] An error occurred during SDK initialization.');
+  }
 }

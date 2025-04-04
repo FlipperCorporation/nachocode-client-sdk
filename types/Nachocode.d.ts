@@ -8,7 +8,7 @@ declare global {
    * CDN
    *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.4.2/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-03-04
+   * Last Updated Date: 2025-03-26
    */
   namespace Nachocode {
     /**
@@ -51,9 +51,42 @@ declare global {
 
     /**
      * Initializes the Nachocode SDK with the provided API key and environment setting.
+     * @param apiKey - The API key for accessing Nachocode services.
+     * @example
+     * // checks Nachocode script loaded or not
+     * if (window.Nachocode) {
+     *   // registers event willing to be fired after SDK initialization
+     *   Nachocode.event.on('init', () => {
+     *     if (Nachocode.env.isApp()) {
+     *       // logic here only works in `App` environment..
+     *     }
+     *   });
+     *
+     *   // initializes Nachocode SDK
+     *   Nachocode.init('your_api_key_here', { logger: true });
+     * } else {
+     *   console.error('nachocode SDK not loaded..');
+     * }
      * @since 1.0.0
      */
     function init(apiKey: string, options?: InitializeOptions): void;
+
+    /**
+     * Asynchronously initializes the Nachocode SDK with the provided API key and options.
+     * @param apiKey - The API key for accessing Nachocode services.
+     * @example
+     * // asynchronously initializes Nachocode SDK
+     * await Nachocode.initAsync('your_api_key_here');
+     *
+     * if (Nachocode.env.isApp()) {
+     *  // logic here only works in `App` environment..
+     * }
+     * @since 1.4.2
+     */
+    function initAsync(
+      apiKey: string,
+      options?: InitializeOptions
+    ): Promise<void>;
 
     /**
      * Namespace for application specific functions
@@ -109,25 +142,28 @@ declare global {
      */
     namespace apple {
       /**
-       * Facebook result from native layer
+       * Apple result from native layer
        * @since 1.4.0
        */
       export declare type AppleResult = {
-        status: 'error' | 'success';
+        status: 'success' | 'error';
         errorCode?: string;
         message?: string;
       };
+
       /**
        * Reserved Apple permission types
        * @since 1.4.0
        */
       export declare type ApplePermissionTypes = ['email', 'fullName'];
+
       /**
        * Apple permissions
        * @since 1.4.0
        */
       export declare type ApplePermissions =
         (typeof ApplePermissionTypes)[string][];
+
       /**
        * Apple user data from native layer
        * @since 1.4.0
@@ -143,6 +179,7 @@ declare global {
         };
         [fields: string]: any;
       };
+
       /**
        * Apple native social login
        * @since 1.4.0
@@ -151,6 +188,7 @@ declare global {
         permissions: ApplePermissions,
         callback: (result: AppleResult, userData?: AppleUserData) => any
       ): void;
+
       /**
        * Check whether logged in with Apple native social login
        * @since 1.4.0
@@ -159,8 +197,11 @@ declare global {
         identifier: string,
         callback: (result: AppleResult, isLoggedIn: boolean) => any
       ): void;
+
       /**
+       * @description
        * Function to get Apple user identifier from native layer.
+       *
        * Calls callback function with the user identifier.
        * @since 1.4.0
        */
@@ -588,6 +629,7 @@ declare global {
          */
         KEYBOARD_HIDDEN = 'keyboardhidden',
       }
+
       /**
        * Registers an event listener for the specified event name.
        * @param eventName - The event type to register.
@@ -595,12 +637,14 @@ declare global {
        * @since 1.0.2
        */
       function on(eventName: EventType, callback: (params?: any) => any): void;
+
       /**
        * Unbinds registered event listener for the specified event name.
        * @param eventName - The event type to unregister.
        * @since 1.0.3
        */
       function off(eventName: EventType): void;
+
       /**
        * Registered events
        */
@@ -620,10 +664,11 @@ declare global {
        * @since 1.4.0
        */
       export declare type FacebookResult = {
-        status: 'error' | 'success';
+        status: 'success' | 'error';
         errorCode?: string;
         message?: string;
       };
+
       /**
        * Reserved facebook permission types
        * @see {@link https://developers.facebook.com/docs/permissions}
@@ -653,12 +698,14 @@ declare global {
         'user_friends_relationships',
         'user_pages',
       ];
+
       /**
        * Facebook permissions
        * @since 1.4.0
        */
       export declare type FacebookPermissions =
         (typeof FacebookPermissionTypes)[string][];
+
       /**
        * Facebook user data from native layer
        * @since 1.4.0
@@ -671,6 +718,7 @@ declare global {
         last_name?: string;
         [fields: string]: any;
       };
+
       /**
        * Facebook native social login
        * @since 1.4.0
@@ -684,6 +732,7 @@ declare global {
           userData?: FacebookUserData
         ) => any
       ): void;
+
       /**
        * Check whether logged in with Facebook native social login
        * @since 1.4.0
@@ -696,8 +745,11 @@ declare global {
           userId?: string
         ) => any
       ): void;
+
       /**
+       * @description
        * Requests to get Facebook user data from native layer.
+       *
        * Calls callback function with the data.
        * @since 1.4.0
        */
@@ -705,6 +757,7 @@ declare global {
         permissions: FacebookPermissions,
         callback: (result: FacebookResult, userData?: FacebookUserData) => any
       ): void;
+
       /**
        * Facebook native social logout
        * @since 1.4.0
@@ -714,6 +767,7 @@ declare global {
 
     /**
      * Namespace for in-app purchase functions
+     * @since 1.4.0
      */
     namespace iap {
       /**
@@ -735,8 +789,10 @@ declare global {
           };
         };
       };
+
       /**
        * Initiates a purchase transaction for the specified product.
+       * @since 1.4.0
        */
       function purchase(
         productKey: string,
@@ -789,7 +845,9 @@ declare global {
       }
 
       /**
+       * @description
        * Checks whether the app user grants the specified permission or not.
+       *
        * Asks if optional parameter `ask` is set `true`.
        * @since 1.2.0
        */
@@ -809,6 +867,7 @@ declare global {
      */
     namespace preference {
       /**
+       * @description
        * Deletes the data from native layer's preference area
        * with the specified key.
        * @since 1.3.0
@@ -816,14 +875,17 @@ declare global {
       function deleteData(key: string): void;
 
       /**
+       * @description
        * Retrieves the data with the specified key
        * from native layer's preference area.
+       *
        * Calls callback function with selected data.
        * @since 1.2.0
        */
       function getData(key: string, callback: (data: string) => any): void;
 
       /**
+       * @description
        * Sets the data with the specified key
        * into native layer's preference area.
        * @since 1.2.0
@@ -837,7 +899,9 @@ declare global {
       function deleteCustomUserId(): void;
 
       /**
+       * @description
        * Retrieves the custom user id data from native layer's preference area.
+       *
        * Calls callback function with the result data.
        * @param callback
        * - if `customUserId` is not set yet,
@@ -1036,12 +1100,14 @@ declare global {
        * @since 1.4.2
        */
       function openSetting(): void;
+
       /**
        * Set whether pull to refresh feature is enabled or not.
        * @since 1.3.0
        * @lastupdated 1.4.0
        */
       function setPullToRefresh(enable: boolean): void;
+
       /**
        * Set whether zoom support feature is enabled or not.
        * @since 1.4.0
@@ -1063,6 +1129,7 @@ declare global {
 
       /**
        * Native Kakao sharing type
+       * @deprecated This has been moved to `kakao` namespace since `SDK version 1.5.0`
        */
       export declare enum KakaoShareType {
         CUSTOM = 'custom',
@@ -1071,6 +1138,7 @@ declare global {
 
       /**
        * Native Kakao custom data to send
+       * @deprecated This has been moved to `kakao` namespace since `SDK version 1.5.0`
        */
       export declare type KakaoShareCustom = {
         templateId: number;
@@ -1084,6 +1152,7 @@ declare global {
 
       /**
        * Native Kakao scrap data to send
+       * @deprecated This has been moved to `kakao` namespace since `SDK version 1.5.0`
        */
       export declare type KakaoShareScrap = {
         requestUrl: string;
@@ -1098,6 +1167,7 @@ declare global {
 
       /**
        * Kakao share result status code
+       * @deprecated This has been moved to `kakao` namespace since `SDK version 1.5.0`
        */
       export declare enum KakaoShareResultStatusCode {
         ERROR_JSON_FAILED = 102,
@@ -1113,9 +1183,10 @@ declare global {
 
       /**
        * Kakao share result
+       * @deprecated This has been moved to `kakao` namespace since `SDK version 1.5.0`
        */
       export declare type KakaoShareResult = {
-        status: 'error' | 'success';
+        status: 'success' | 'error';
         statusCode: KakaoShareStatusCode;
         message?: string;
       };
@@ -1126,6 +1197,7 @@ declare global {
        * @param data - Data to send kakao
        * @param callback - Callback function called after sharing kakao
        * @since 1.2.0
+       * @deprecated This method has been moved to `kakao` namespace since `SDK version 1.5.0`
        */
       function sendKakao(
         type: KakaoShareType,
@@ -1171,32 +1243,39 @@ declare global {
         SUCCESS = 0,
         ERROR = 1,
       }
+
       /**
        * Set whether haptics feedback is used or not.
        * @since 1.2.0
        */
       function setHaptics(enable: boolean): void;
+
       /**
        * Set whether vibration is used or not.
        * @since 1.2.0
        */
       function setVibration(enable: boolean): void;
+
       /**
        * Get whether haptics feedback is used or not from native.
        * @since 1.2.0
        */
       function getHaptics(callback: (enable: boolean) => void): void;
+
       /**
        * Get whether vibration is used or not from native.
        * @since 1.2.0
        */
       function getVibration(callback: (enable: boolean) => void): void;
+
       /**
+       * @description
        * Triggers haptics feedback.
        * - Default : `0`
        * @since 1.2.0
        */
       function haptics(hapticsType?: HapticsType): void;
+
       /**
        * Triggers vibration.
        * @since 1.2.0
