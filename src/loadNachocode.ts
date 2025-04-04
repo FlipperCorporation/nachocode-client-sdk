@@ -79,7 +79,7 @@ export function loadNachocode(
 
 async function initializeNachocode(
   apiKey: string,
-  options: Nachocode.InitializeOptions
+  options?: Nachocode.InitializeOptions
 ): Promise<typeof Nachocode> {
   if (!window.Nachocode || !window.Nachocode.env) {
     // SDK가 존재하지 않습니다.
@@ -88,7 +88,11 @@ async function initializeNachocode(
 
   try {
     if (!window.Nachocode.env.isInitialized()) {
-      await window.Nachocode.initAsync(apiKey, options);
+      if (window.Nachocode.env.getSDKVersion() < '1.4.2') {
+        window.Nachocode.init(apiKey, options);
+      } else {
+        await window.Nachocode.initAsync(apiKey, options);
+      }
     }
     return window.Nachocode;
   } catch (error) {

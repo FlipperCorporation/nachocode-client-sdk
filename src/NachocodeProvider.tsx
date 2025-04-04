@@ -35,7 +35,7 @@ export function NachoProvider({
     osVersion?: string;
     packageName?: string;
     pushToken?: string;
-  }) => any;
+  }) => void;
   children: ReactNode;
 }) {
   const [nachocode, setNachocode] = useState<typeof window.Nachocode | null>(

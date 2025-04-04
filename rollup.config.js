@@ -28,7 +28,7 @@ export default [
         include: ['src/**/*', 'types/**/*'],
       }), // TypeScript 변환
     ],
-    external: ['Nachocode', 'react'], // 외부 모듈은 번들에 포함하지 않음
+    external: ['Nachocode', 'react', 'react-dom', 'react/jsx-runtime'], // 외부 모듈은 번들에 포함하지 않음
   },
   {
     input: 'src/index.ts',
