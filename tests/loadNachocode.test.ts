@@ -2,8 +2,22 @@ import { loadNachocode } from '../src/loadNachocode';
 
 describe('loadNachocode', () => {
   beforeEach(() => {
-    document.head.innerHTML = ''; // ✅ <head> 초기화
-    delete (window as any).Nachocode; // ✅ Nachocode 초기화
+    document.head.innerHTML = '';
+    delete (window as any).Nachocode;
+
+    (window as any).Nachocode = {
+      initAsync: jest.fn(),
+      init: jest.fn(),
+      env: {
+        isInitialized: jest.fn().mockReturnValue(false),
+      },
+      event: {
+        EventType: {
+          INIT: 'INIT',
+        },
+        on: jest.fn(),
+      },
+    };
   });
 
   /** ✅ 1. 서버 환경에서 실행 시 예외 발생 테스트 */
@@ -35,8 +49,12 @@ describe('loadNachocode', () => {
   /** ✅ 3. `cachedPromise`가 존재하는 경우 추가 초기화 방지 확인 */
   test('cachedPromise가 존재하면 추가적으로 초기화하지 않음', async () => {
     window.Nachocode = {
-      init: jest.fn(),
+      initAsync: jest.fn(),
       env: { isInitialized: () => false },
+      event: {
+        EventType: { INIT: 'INIT' },
+        on: jest.fn(),
+      },
     } as any;
 
     const firstCall = loadNachocode('test-key');
@@ -49,12 +67,16 @@ describe('loadNachocode', () => {
   /** ✅ 4. Nachocode가 존재할 경우 바로 초기화 확인 */
   test('Nachocode가 존재할 경우 바로 초기화하는지 확인', async () => {
     window.Nachocode = {
-      init: jest.fn(),
+      initAsync: jest.fn(),
       env: { isInitialized: () => false },
+      event: {
+        EventType: { INIT: 'INIT' },
+        on: jest.fn(),
+      },
     } as any;
 
     await loadNachocode('test-key');
-    expect(window.Nachocode.init).toHaveBeenCalledWith('test-key', {});
+    expect(window.Nachocode.initAsync).toHaveBeenCalledWith('test-key', {});
   });
 
   /** ✅ 5. `script.onload` 실행 시 Nachocode가 존재하는 경우 */
@@ -74,7 +96,7 @@ describe('loadNachocode', () => {
     });
 
     await loadNachocode('test-key');
-    expect(window.Nachocode.init).toHaveBeenCalledWith('test-key', {});
+    expect(window.Nachocode.initAsync).toHaveBeenCalledWith('test-key', {});
 
     jest.restoreAllMocks(); // ✅ Mock 복구
   });
@@ -121,13 +143,17 @@ describe('loadNachocode', () => {
   /** ✅ 8. 이미 초기화된 경우 초기화 방지 확인 */
   test('window.Nachocode.env.isInitialized()가 true면 초기화 방지', async () => {
     window.Nachocode = {
-      init: jest.fn(),
-      env: { isInitialized: () => true }, // 이미 초기화된 상태
+      initAsync: jest.fn(),
+      env: { isInitialized: () => true },
+      event: {
+        EventType: { INIT: 'INIT' },
+        on: jest.fn(),
+      },
     } as any;
 
     await loadNachocode('test-key');
 
     // ✅ `init`이 호출되지 않았어야 함
-    expect(window.Nachocode.init).not.toHaveBeenCalled();
+    expect(window.Nachocode.initAsync).not.toHaveBeenCalled();
   });
 });
