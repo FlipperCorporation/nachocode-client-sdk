@@ -15,7 +15,8 @@
   },
   "scripts": {
     "clean": "rm -rf dist .tsbuildinfo *.tgz",
-    "build": "npm run clean && rollup -c && tsc --emitDeclarationOnly",
+    "build": "rollup -c && tsc --emitDeclarationOnly",
+    "build:clean": "npm run clean && rollup -c && tsc --emitDeclarationOnly",
     "test": "jest --coverage --silent",
     "test:watch": "jest --watch",
     "lint": "eslint --ignore-path .eslintignore --fix .",

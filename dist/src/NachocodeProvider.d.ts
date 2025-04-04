@@ -18,7 +18,7 @@ export declare function NachoProvider({ apiKey, options, version, onInitialized,
         osVersion?: string;
         packageName?: string;
         pushToken?: string;
-    }) => any;
+    }) => void;
     children: ReactNode;
 }): import("react/jsx-runtime").JSX.Element;
 export declare function useNachocode(): NachoContextType;

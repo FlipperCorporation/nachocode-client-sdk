@@ -49,7 +49,12 @@ async function initializeNachocode(apiKey, options) {
     }
     try {
         if (!window.Nachocode.env.isInitialized()) {
-            await window.Nachocode.initAsync(apiKey, options);
+            if (window.Nachocode.env.getSDKVersion() < '1.4.2') {
+                window.Nachocode.init(apiKey, options);
+            }
+            else {
+                await window.Nachocode.initAsync(apiKey, options);
+            }
         }
         return window.Nachocode;
     }

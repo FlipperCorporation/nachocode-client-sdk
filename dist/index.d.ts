@@ -32,7 +32,7 @@ declare function NachoProvider({ apiKey, options, version, onInitialized, childr
         osVersion?: string;
         packageName?: string;
         pushToken?: string;
-    }) => any;
+    }) => void;
     children: ReactNode;
 }): react_jsx_runtime.JSX.Element;
 declare function useNachocode(): NachoContextType;
