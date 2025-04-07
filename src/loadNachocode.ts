@@ -4,7 +4,7 @@ let cachedPromise: Promise<typeof Nachocode> | undefined;
 
 export function loadNachocode(
   apiKey: string,
-  options: Nachocode.InitializeOptions = {},
+  options?: Nachocode.InitializeOptions,
   version?: Nachocode.VersionString,
   onInitialized?: (response?: {
     appKey?: string;

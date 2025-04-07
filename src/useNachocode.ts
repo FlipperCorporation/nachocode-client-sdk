@@ -13,7 +13,7 @@ type UseNachocodeReturn =
 
 export function useNachocode(
   apiKey: string,
-  options: Nachocode.InitializeOptions = { logger: true },
+  options?: Nachocode.InitializeOptions,
   version?: Nachocode.VersionString,
   onInitialized?: (response?: {
     appKey?: string;
