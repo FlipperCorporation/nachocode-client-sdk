@@ -66,34 +66,72 @@ async function initializeNachocode(apiKey, options) {
     }
 }
 
-const NachoContext = react.createContext(undefined);
-function NachoProvider({ apiKey, options, version, onInitialized, children, }) {
-    const [nachocode, setNachocode] = react.useState(null);
-    const [loading, setLoading] = react.useState(true);
-    const [error, setError] = react.useState(null);
+function useNachocode(apiKey, options = { logger: true }, version, onInitialized) {
+    const isMounted = react.useRef(false);
+    const [state, setState] = react.useState({
+        isLoading: true,
+        isError: false,
+        error: null,
+        Nachocode: null,
+    });
     react.useEffect(() => {
+        isMounted.current = true;
         if (options?.logger) {
             console.log('[Nachocode] NachoProvider mounted.');
         }
         loadNachocode(apiKey, options, version, onInitialized)
-            .then(sdk => {
+            .then((sdk) => {
+            if (!isMounted.current)
+                return;
             if (options?.logger) {
                 console.log('[Nachocode] Nachocode SDK successfully loaded:', sdk);
             }
-            setNachocode(sdk);
+            setState({
+                isLoading: false,
+                isError: false,
+                error: null,
+                Nachocode: sdk,
+            });
         })
-            .catch(err => {
-            console.error('[Nachocode] Failed to load Nachocode SDK:', err);
-            setError(err);
-        })
-            .finally(() => setLoading(false));
+            .catch((error) => {
+            if (!isMounted.current)
+                return;
+            console.error('[Nachocode] Failed to load Nachocode SDK:', error);
+            setState({
+                isLoading: false,
+                isError: true,
+                error,
+                Nachocode: null,
+            });
+        });
+        return () => {
+            isMounted.current = false;
+        };
     }, [apiKey, options, version, onInitialized]);
-    return (jsxRuntime.jsx(NachoContext.Provider, { value: { Nachocode: nachocode, loading, error }, children: children }));
+    return state;
 }
-function useNachocode() {
+
+const initialContextValue = {
+    isLoading: true,
+    isError: false,
+    error: null,
+    Nachocode: null,
+};
+const NachoContext = react.createContext(initialContextValue);
+function NachoProvider({ apiKey, options, version, onInitialized, children, }) {
+    const nachocodeState = useNachocode(apiKey, options, version, onInitialized);
+    const contextValue = {
+        Nachocode: nachocodeState.Nachocode,
+        isLoading: nachocodeState.isLoading,
+        isError: nachocodeState.isError,
+        error: nachocodeState.error,
+    };
+    return (jsxRuntime.jsx(NachoContext.Provider, { value: contextValue, children: children }));
+}
+function useNachocodeContext() {
     const context = react.useContext(NachoContext);
     if (!context) {
-        throw new Error('[Nachocode] `useNachocode` must be used within a `<NachoProvider>` component.');
+        throw new Error('[Nachocode] `useNachocodeContext` must be used within a `<NachoProvider>` component.');
     }
     return context;
 }
@@ -101,4 +139,5 @@ function useNachocode() {
 exports.NachoProvider = NachoProvider;
 exports.loadNachocode = loadNachocode;
 exports.useNachocode = useNachocode;
+exports.useNachocodeContext = useNachocodeContext;
 //# sourceMappingURL=index.cjs.js.map

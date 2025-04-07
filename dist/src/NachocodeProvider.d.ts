@@ -1,9 +1,20 @@
 import { ReactNode } from 'react';
-interface NachoContextType {
-    Nachocode: typeof window.Nachocode | null;
-    loading: boolean;
-    error: Error | null;
-}
+type NachocodeContextType = {
+    isLoading: true;
+    isError: false;
+    error: null;
+    Nachocode: null;
+} | {
+    isLoading: false;
+    isError: true;
+    error: Error;
+    Nachocode: null;
+} | {
+    isLoading: false;
+    isError: false;
+    error: null;
+    Nachocode: typeof Nachocode;
+};
 export declare function NachoProvider({ apiKey, options, version, onInitialized, children, }: {
     apiKey: string;
     options?: Nachocode.InitializeOptions;
@@ -21,5 +32,5 @@ export declare function NachoProvider({ apiKey, options, version, onInitialized,
     }) => void;
     children: ReactNode;
 }): import("react/jsx-runtime").JSX.Element;
-export declare function useNachocode(): NachoContextType;
+export declare function useNachocodeContext(): NachocodeContextType;
 export {};
