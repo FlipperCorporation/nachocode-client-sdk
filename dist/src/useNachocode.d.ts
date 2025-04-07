@@ -1,3 +1,19 @@
+type UseNachocodeReturn = {
+    isLoading: true;
+    isError: false;
+    error: null;
+    Nachocode: null;
+} | {
+    isLoading: false;
+    isError: true;
+    error: Error;
+    Nachocode: null;
+} | {
+    isLoading: false;
+    isError: false;
+    error: null;
+    Nachocode: typeof Nachocode;
+};
 export declare function useNachocode(apiKey: string, options?: Nachocode.InitializeOptions, version?: Nachocode.VersionString, onInitialized?: (response?: {
     appKey?: string;
     appName?: string;
@@ -8,8 +24,5 @@ export declare function useNachocode(apiKey: string, options?: Nachocode.Initial
     osVersion?: string;
     packageName?: string;
     pushToken?: string;
-}) => any): {
-    Nachocode: typeof Nachocode | null;
-    loading: boolean;
-    error: Error | null;
-};
+}) => any): UseNachocodeReturn;
+export {};

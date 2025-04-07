@@ -1,2 +1,3 @@
 export { loadNachocode } from './loadNachocode';
-export { NachoProvider, useNachocode } from './NachocodeProvider';
+export { NachoProvider, useNachocodeContext } from './NachocodeProvider';
+export { useNachocode } from './useNachocode';

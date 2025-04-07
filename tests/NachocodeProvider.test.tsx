@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { NachoProvider, useNachocode } from '../src/NachocodeProvider';
+import { NachoProvider, useNachocodeContext } from '../src/NachocodeProvider';
 
 // 🔥 loadNachocode를 Mock 처리
 jest.mock('../src/loadNachocode', () => ({
@@ -13,10 +13,10 @@ jest.mock('../src/loadNachocode', () => ({
 }));
 
 const TestComponent = () => {
-  const { loading, error } = useNachocode();
+  const { isLoading, isError, error } = useNachocodeContext();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
   return <p>Nachocode Loaded!</p>;
 };
 
@@ -50,13 +50,13 @@ describe('NachoProvider', () => {
     );
   });
 
-  test('Provider 없이 useNachocode() 호출 시 오류가 발생하는지 확인', () => {
+  test('Provider 없이 useNachocodeContext() 호출 시 오류가 발생하는지 확인', () => {
     expect(() => {
       act(() => {
         render(<TestComponent />);
       });
     }).toThrow(
-      '[Nachocode] `useNachocode` must be used within a `<NachoProvider>` component.'
+      '[Nachocode] `useNachocodeContext` must be used within a `<NachoProvider>` component.'
     );
   });
 });

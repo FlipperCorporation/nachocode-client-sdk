@@ -38,10 +38,19 @@ export function useNachocode(
   useEffect(() => {
     isMounted.current = true;
 
+    if (options?.logger) {
+      // NachoProvider 마운트됨
+      console.log('[Nachocode] NachoProvider mounted.');
+    }
+
     loadNachocode(apiKey, options, version, onInitialized)
       .then((sdk: typeof Nachocode) => {
         if (!isMounted.current) return;
 
+        if (options?.logger) {
+          // SDK 로드 완료
+          console.log('[Nachocode] Nachocode SDK successfully loaded:', sdk);
+        }
         setState({
           isLoading: false,
           isError: false,
@@ -52,6 +61,8 @@ export function useNachocode(
       .catch((error: Error) => {
         if (!isMounted.current) return;
 
+        // SDK 로드 실패
+        console.error('[Nachocode] Failed to load Nachocode SDK:', error);
         setState({
           isLoading: false,
           isError: true,

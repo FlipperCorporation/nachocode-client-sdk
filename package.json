@@ -17,7 +17,7 @@
     "clean": "rm -rf dist .tsbuildinfo *.tgz",
     "build": "rollup -c && tsc --emitDeclarationOnly",
     "build:clean": "npm run clean && rollup -c && tsc --emitDeclarationOnly",
-    "test": "jest --coverage --silent",
+    "test": "jest --coverage --silent -c jest.config.mjs",
     "test:watch": "jest --watch",
     "lint": "eslint --ignore-path .eslintignore --fix .",
     "prettier": "prettier --ignore-path .prettierignore --write ."

@@ -4,6 +4,7 @@ import '@testing-library/jest-dom'; // ✅ Jest DOM matchers 로드
 Object.defineProperty(window, 'Nachocode', {
   value: {
     init: jest.fn(),
+    initAsync: jest.fn(),
     env: {
       isInitialized: () => false,
     },
