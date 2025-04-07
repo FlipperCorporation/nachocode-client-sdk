@@ -11,7 +11,7 @@ declare function loadNachocode(apiKey: string, options?: Nachocode.InitializeOpt
     osVersion?: string;
     packageName?: string;
     pushToken?: string;
-}) => any): Promise<typeof Nachocode>;
+}) => void): Promise<typeof Nachocode>;
 
 type NachocodeContextType = {
     isLoading: true;
@@ -74,6 +74,6 @@ declare function useNachocode(apiKey: string, options?: Nachocode.InitializeOpti
     osVersion?: string;
     packageName?: string;
     pushToken?: string;
-}) => any): UseNachocodeReturn;
+}) => void): UseNachocodeReturn;
 
 export { NachoProvider, loadNachocode, useNachocode, useNachocodeContext };

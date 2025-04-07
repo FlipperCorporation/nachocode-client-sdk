@@ -24,5 +24,5 @@ export declare function useNachocode(apiKey: string, options?: Nachocode.Initial
     osVersion?: string;
     packageName?: string;
     pushToken?: string;
-}) => any): UseNachocodeReturn;
+}) => void): UseNachocodeReturn;
 export {};
