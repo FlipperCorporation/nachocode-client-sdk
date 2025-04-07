@@ -18,7 +18,7 @@
   - [개요](#개요)
   - [설치](#설치)
   - [사용법](#사용법)
-    - [1️⃣ `NachoProvider` (React Context 방식)](#1️⃣-nachoprovider-react-context-방식)
+    - [1️⃣ `useNachocode` (React 방식)](#1️⃣-usenachocode-react-방식)
       - [`useNachocode()` 반환값](#usenachocode-반환값)
     - [2️⃣ `loadNachocode` 직접 사용](#2️⃣-loadnachocode-직접-사용)
   - [SDK 초기화 옵션 (`InitializeOptions`)](#sdk-초기화-옵션-initializeoptions)
@@ -59,16 +59,17 @@ yarn add nachocode-client-sdk
 
 nachocode Client SDK는 두 가지 방법으로 사용할 수 있습니다.
 
-### 1️⃣ `NachoProvider` (React Context 방식)
+### 1️⃣ `useNachocode` (React 방식)
 
 - 애플리케이션 전체에서 `Nachocode`를 사용할 수 있도록 `Provider` 패턴을 제공합니다.
-- `useNachocode` 훅을 사용하여 `Nachocode` 객체에 접근할 수 있습니다.
+- `useNachocodeContext` 훅을 사용하여 `Nachocode` 객체에 접근할 수 있습니다.
 
 ```jsx
-import { NachoProvider, useNachocode } from 'nachocode-client-sdk';
+import { NachoProvider, useNachocodeContext } from 'nachocode-client-sdk';
 
 function MyComponent() {
-  const { Nachocode, isLoading, isError, error } = useNachocode();
+  const { Nachocode, isLoading, isError, error } =
+    useNachocodeContext('test-key');
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
@@ -82,6 +83,21 @@ export default function App() {
       <MyComponent />
     </NachoProvider>
   );
+}
+```
+
+- 특정 `Component`에서만 `Nachocode`를 사용하고 싶다면 `useNachocode` 훅을 사용하여 `Nachocode` 객체에 접근할 수 있습니다.
+
+```jsx
+import { useNachocode } from 'nachocode-client-sdk';
+
+export default function MyComponent2() {
+  const { Nachocode, isLoading, isError, error } = useNachocode('test-key');
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
+
+  return <p>Nachocode SDK 사용 가능!</p>;
 }
 ```
 
