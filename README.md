@@ -9,7 +9,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2025-03-25_
+> 🔔 **최신화 일자:** _2025-04-07_
 
 ## 목차
 
@@ -68,10 +68,10 @@ nachocode Client SDK는 두 가지 방법으로 사용할 수 있습니다.
 import { NachoProvider, useNachocode } from 'nachocode-client-sdk';
 
 function MyComponent() {
-  const { Nachocode, loading, error } = useNachocode();
+  const { Nachocode, isLoading, isError, error } = useNachocode();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
 
   return <p>Nachocode SDK 사용 가능!</p>;
 }
@@ -90,7 +90,8 @@ export default function App() {
 | 반환값      | 설명                                          |
 | ----------- | --------------------------------------------- |
 | `Nachocode` | Nachocode SDK 객체                            |
-| `loading`   | SDK 로딩 상태 (`true` 또는 `false`)           |
+| `isLoading` | SDK 로딩 상태 (`true` 또는 `false`)           |
+| `isError`   | SDK 에러 여부 (`true` 또는 `false`)           |
 | `error`     | SDK 로드 중 발생한 에러 (`Error` 또는 `null`) |
 
 ### 2️⃣ `loadNachocode` 직접 사용
