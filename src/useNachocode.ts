@@ -25,7 +25,7 @@ export function useNachocode(
     osVersion?: string;
     packageName?: string;
     pushToken?: string;
-  }) => any
+  }) => void
 ): UseNachocodeReturn {
   const isMounted = useRef(false);
   const [state, setState] = useState<UseNachocodeReturn>({

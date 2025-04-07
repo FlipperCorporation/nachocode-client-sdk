@@ -16,7 +16,7 @@ export function loadNachocode(
     osVersion?: string;
     packageName?: string;
     pushToken?: string;
-  }) => any
+  }) => void
 ): Promise<typeof Nachocode> {
   if (typeof window === 'undefined') {
     return Promise.reject(
