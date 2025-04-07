@@ -1,6 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { loadNachocode } from './loadNachocode';
 
+type UseNachocodeReturn =
+  | { isLoading: true; isError: false; error: null; Nachocode: null }
+  | { isLoading: false; isError: true; error: Error; Nachocode: null }
+  | {
+      isLoading: false;
+      isError: false;
+      error: null;
+      Nachocode: typeof Nachocode;
+    };
+
 export function useNachocode(
   apiKey: string,
   options: Nachocode.InitializeOptions = { logger: true },
@@ -16,32 +26,38 @@ export function useNachocode(
     packageName?: string;
     pushToken?: string;
   }) => any
-) {
-  const isMounted = useRef(true);
-  const [nachocode, setNachocode] = useState<typeof Nachocode | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isError, setIsError] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
+): UseNachocodeReturn {
+  const isMounted = useRef(false);
+  const [state, setState] = useState<UseNachocodeReturn>({
+    isLoading: true,
+    isError: false,
+    error: null,
+    Nachocode: null,
+  });
 
   useEffect(() => {
-    setIsLoading(true);
+    isMounted.current = true;
 
     loadNachocode(apiKey, options, version, onInitialized)
       .then((sdk: typeof Nachocode) => {
-        if (isMounted.current) {
-          setNachocode(sdk);
-        }
+        if (!isMounted.current) return;
+
+        setState({
+          isLoading: false,
+          isError: false,
+          error: null,
+          Nachocode: sdk,
+        });
       })
-      .catch((err: Error) => {
-        if (isMounted.current) {
-          setIsError(true);
-          setError(err);
-        }
-      })
-      .finally(() => {
-        if (isMounted.current) {
-          setIsLoading(false);
-        }
+      .catch((error: Error) => {
+        if (!isMounted.current) return;
+
+        setState({
+          isLoading: false,
+          isError: true,
+          error,
+          Nachocode: null,
+        });
       });
 
     return () => {
@@ -49,5 +65,5 @@ export function useNachocode(
     };
   }, [apiKey, options, version, onInitialized]);
 
-  return { Nachocode: nachocode, isLoading, isError, error };
+  return state;
 }
