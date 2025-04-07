@@ -1,5 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { loadNachocode } from './loadNachocode';
+
+type UseNachocodeReturn =
+  | { isLoading: true; isError: false; error: null; Nachocode: null }
+  | { isLoading: false; isError: true; error: Error; Nachocode: null }
+  | {
+      isLoading: false;
+      isError: false;
+      error: null;
+      Nachocode: typeof Nachocode;
+    };
 
 export function useNachocode(
   apiKey: string,
@@ -16,37 +26,44 @@ export function useNachocode(
     packageName?: string;
     pushToken?: string;
   }) => any
-) {
-  const [nachocode, setNachocode] = useState<typeof Nachocode | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+): UseNachocodeReturn {
+  const isMounted = useRef(false);
+  const [state, setState] = useState<UseNachocodeReturn>({
+    isLoading: true,
+    isError: false,
+    error: null,
+    Nachocode: null,
+  });
 
   useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-    setError(null);
+    isMounted.current = true;
 
     loadNachocode(apiKey, options, version, onInitialized)
       .then((sdk: typeof Nachocode) => {
-        if (isMounted) {
-          setNachocode(sdk);
-        }
+        if (!isMounted.current) return;
+
+        setState({
+          isLoading: false,
+          isError: false,
+          error: null,
+          Nachocode: sdk,
+        });
       })
-      .catch((err: Error) => {
-        if (isMounted) {
-          setError(err);
-        }
-      })
-      .finally(() => {
-        if (isMounted) {
-          setLoading(false);
-        }
+      .catch((error: Error) => {
+        if (!isMounted.current) return;
+
+        setState({
+          isLoading: false,
+          isError: true,
+          error,
+          Nachocode: null,
+        });
       });
 
     return () => {
-      isMounted = false;
+      isMounted.current = false;
     };
   }, [apiKey, options, version, onInitialized]);
 
-  return { Nachocode: nachocode, loading, error };
+  return state;
 }
