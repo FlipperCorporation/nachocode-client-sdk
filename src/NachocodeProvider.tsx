@@ -1,19 +1,24 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { loadNachocode } from './loadNachocode';
+import { createContext, ReactNode, useContext } from 'react';
+import { useNachocode as useNachocodeHook } from './useNachocode';
 
-interface NachoContextType {
-  Nachocode: typeof window.Nachocode | null;
-  loading: boolean;
-  error: Error | null;
-}
+type NachocodeContextType =
+  | { isLoading: true; isError: false; error: null; Nachocode: null }
+  | { isLoading: false; isError: true; error: Error; Nachocode: null }
+  | {
+      isLoading: false;
+      isError: false;
+      error: null;
+      Nachocode: typeof Nachocode;
+    };
 
-const NachoContext = createContext<NachoContextType | undefined>(undefined);
+const initialContextValue: NachocodeContextType = {
+  isLoading: true,
+  isError: false,
+  error: null,
+  Nachocode: null,
+};
+
+const NachoContext = createContext<NachocodeContextType>(initialContextValue);
 
 export function NachoProvider({
   apiKey,
@@ -38,46 +43,32 @@ export function NachoProvider({
   }) => void;
   children: ReactNode;
 }) {
-  const [nachocode, setNachocode] = useState<typeof window.Nachocode | null>(
-    null
+  const nachocodeState = useNachocodeHook(
+    apiKey,
+    options,
+    version,
+    onInitialized
   );
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    if (options?.logger) {
-      // NachoProvider 마운트됨
-      console.log('[Nachocode] NachoProvider mounted.');
-    }
-
-    loadNachocode(apiKey, options, version, onInitialized)
-      .then(sdk => {
-        if (options?.logger) {
-          // SDK 로드 완료
-          console.log('[Nachocode] Nachocode SDK successfully loaded:', sdk);
-        }
-        setNachocode(sdk);
-      })
-      .catch(err => {
-        // SDK 로드 실패
-        console.error('[Nachocode] Failed to load Nachocode SDK:', err);
-        setError(err);
-      })
-      .finally(() => setLoading(false));
-  }, [apiKey, options, version, onInitialized]);
+  const contextValue: NachocodeContextType = {
+    Nachocode: nachocodeState.Nachocode,
+    isLoading: nachocodeState.isLoading,
+    isError: nachocodeState.isError,
+    error: nachocodeState.error,
+  } as NachocodeContextType;
 
   return (
-    <NachoContext.Provider value={{ Nachocode: nachocode, loading, error }}>
+    <NachoContext.Provider value={contextValue}>
       {children}
     </NachoContext.Provider>
   );
 }
 
-export function useNachocode() {
+export function useNachocodeContext() {
   const context = useContext(NachoContext);
   if (!context) {
     throw new Error(
-      '[Nachocode] `useNachocode` must be used within a `<NachoProvider>` component.'
+      '[Nachocode] `useNachocodeContext` must be used within a `<NachoProvider>` component.'
     );
   }
   return context;
