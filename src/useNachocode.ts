@@ -74,7 +74,7 @@ export function useNachocode(
     return () => {
       isMounted.current = false;
     };
-  }, [apiKey, options, version, onInitialized]);
+  }, [apiKey, version]);
 
   return state;
 }

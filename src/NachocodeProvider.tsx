@@ -3,6 +3,7 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import { loadNachocode } from './loadNachocode';
@@ -49,6 +50,7 @@ export function NachoProvider({
   }) => void;
   children: ReactNode;
 }) {
+  const isMounted = useRef(false);
   const [state, setState] = useState<NachocodeContextType>({
     isLoading: true,
     isError: false,
@@ -57,6 +59,8 @@ export function NachoProvider({
   });
 
   useEffect(() => {
+    isMounted.current = true;
+
     if (options?.logger) {
       // NachoProvider 마운트됨
       console.log('[Nachocode] NachoProvider mounted.');
@@ -64,6 +68,8 @@ export function NachoProvider({
 
     loadNachocode(apiKey, options, version, onInitialized)
       .then(sdk => {
+        if (!isMounted.current) return;
+
         if (options?.logger) {
           // SDK 로드 완료
           console.log('[Nachocode] Nachocode SDK successfully loaded:', sdk);
@@ -76,6 +82,8 @@ export function NachoProvider({
         });
       })
       .catch(err => {
+        if (!isMounted.current) return;
+
         // SDK 로드 실패
         console.error('[Nachocode] Failed to load Nachocode SDK:', err);
         setState({
@@ -85,21 +93,14 @@ export function NachoProvider({
           Nachocode: null,
         });
       });
-  }, [apiKey, options, version, onInitialized]);
+
+    return () => {
+      isMounted.current = false;
+    };
+  }, [apiKey, version]);
 
   return (
-    <NachoContext.Provider
-      value={
-        {
-          Nachocode: state.Nachocode,
-          isLoading: state.isLoading,
-          isError: state.isError,
-          error: state.error,
-        } as NachocodeContextType
-      }
-    >
-      {children}
-    </NachoContext.Provider>
+    <NachoContext.Provider value={state}>{children}</NachoContext.Provider>
   );
 }
 
