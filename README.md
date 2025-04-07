@@ -68,8 +68,7 @@ nachocode Client SDK는 두 가지 방법으로 사용할 수 있습니다.
 import { NachoProvider, useNachocodeContext } from 'nachocode-client-sdk';
 
 function MyComponent() {
-  const { Nachocode, isLoading, isError, error } =
-    useNachocodeContext('test-key');
+  const { Nachocode, isLoading, isError, error } = useNachocodeContext();
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;

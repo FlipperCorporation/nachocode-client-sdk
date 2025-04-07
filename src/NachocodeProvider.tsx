@@ -1,5 +1,11 @@
-import { createContext, ReactNode, useContext } from 'react';
-import { useNachocode as useNachocodeHook } from './useNachocode';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { loadNachocode } from './loadNachocode';
 
 type NachocodeContextType =
   | { isLoading: true; isError: false; error: null; Nachocode: null }
@@ -43,22 +49,55 @@ export function NachoProvider({
   }) => void;
   children: ReactNode;
 }) {
-  const nachocodeState = useNachocodeHook(
-    apiKey,
-    options,
-    version,
-    onInitialized
-  );
+  const [state, setState] = useState<NachocodeContextType>({
+    isLoading: true,
+    isError: false,
+    error: null,
+    Nachocode: null,
+  });
 
-  const contextValue: NachocodeContextType = {
-    Nachocode: nachocodeState.Nachocode,
-    isLoading: nachocodeState.isLoading,
-    isError: nachocodeState.isError,
-    error: nachocodeState.error,
-  } as NachocodeContextType;
+  useEffect(() => {
+    if (options?.logger) {
+      // NachoProvider 마운트됨
+      console.log('[Nachocode] NachoProvider mounted.');
+    }
+
+    loadNachocode(apiKey, options, version, onInitialized)
+      .then(sdk => {
+        if (options?.logger) {
+          // SDK 로드 완료
+          console.log('[Nachocode] Nachocode SDK successfully loaded:', sdk);
+        }
+        setState({
+          isLoading: false,
+          isError: false,
+          error: null,
+          Nachocode: sdk,
+        });
+      })
+      .catch(err => {
+        // SDK 로드 실패
+        console.error('[Nachocode] Failed to load Nachocode SDK:', err);
+        setState({
+          isLoading: false,
+          isError: true,
+          error: err,
+          Nachocode: null,
+        });
+      });
+  }, [apiKey, options, version, onInitialized]);
 
   return (
-    <NachoContext.Provider value={contextValue}>
+    <NachoContext.Provider
+      value={
+        {
+          Nachocode: state.Nachocode,
+          isLoading: state.isLoading,
+          isError: state.isError,
+          error: state.error,
+        } as NachocodeContextType
+      }
+    >
       {children}
     </NachoContext.Provider>
   );
