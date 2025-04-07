@@ -262,6 +262,14 @@ nachocode Client SDK는 각 기능별로 **네임스페이스(namespace)** 로 �
         </sub>
       </a>
     </td>
+    <td align="center">
+      <a href="https://github.com/lazy-sky" target="_blank">
+        <img src="https://avatars.githubusercontent.com/lazy-sky" width="100px;" alt="GitHub Profile Picture"/><br>
+        <sub>
+          <b>Ratel Kim</b>
+        </sub>
+      </a>
+    </td>
   </tr>
 </table>
 <!-- markdownlint-enable MD033 -->
