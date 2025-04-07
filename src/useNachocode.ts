@@ -19,12 +19,12 @@ export function useNachocode(
 ) {
   const [nachocode, setNachocode] = useState<typeof Nachocode | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
-    setError(null);
 
     loadNachocode(apiKey, options, version, onInitialized)
       .then((sdk: typeof Nachocode) => {
@@ -34,6 +34,7 @@ export function useNachocode(
       })
       .catch((err: Error) => {
         if (isMounted) {
+          setIsError(true);
           setError(err);
         }
       })
@@ -48,5 +49,5 @@ export function useNachocode(
     };
   }, [apiKey, options, version, onInitialized]);
 
-  return { Nachocode: nachocode, isLoading, error };
+  return { Nachocode: nachocode, isLoading, isError, error };
 }
