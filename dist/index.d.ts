@@ -23,7 +23,7 @@ declare global {
    * CDN
    *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.4.2/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-03-26
+   * Last Updated Date: 2025-04-08
    */
   namespace Nachocode {
     /**
@@ -115,7 +115,7 @@ declare global {
        * @since 1.4.0
        */
       function checkFirstLaunch(
-        callback: (isFirstLaunch: boolean) => any
+        callback: (isFirstLaunch: boolean) => void
       ): void;
 
       /**
@@ -201,7 +201,7 @@ declare global {
        */
       function login(
         permissions: ApplePermissions,
-        callback: (result: AppleResult, userData?: AppleUserData) => any
+        callback: (result: AppleResult, userData?: AppleUserData) => void
       ): void;
 
       /**
@@ -210,7 +210,7 @@ declare global {
        */
       function isLoggedIn(
         identifier: string,
-        callback: (result: AppleResult, isLoggedIn: boolean) => any
+        callback: (result: AppleResult, isLoggedIn: boolean) => void
       ): void;
 
       /**
@@ -221,7 +221,7 @@ declare global {
        * @since 1.4.0
        */
       function getUserIdentifier(
-        callback: (result: AppleResult, userIdentifier?: string) => any
+        callback: (result: AppleResult, userIdentifier?: string) => void
       ): void;
     }
 
@@ -244,7 +244,7 @@ declare global {
        * @since 1.3.0
        */
       function canUseBiometrics(
-        callback: (available: boolean, error?: SDKError) => any
+        callback: (available: boolean, error?: SDKError) => void
       ): void;
 
       /**
@@ -253,7 +253,7 @@ declare global {
        * @since 1.3.0
        */
       function useBiometrics(
-        callback: (result: AuthenticationResult) => any
+        callback: (result: AuthenticationResult) => void
       ): void;
     }
 
@@ -373,7 +373,7 @@ declare global {
        * Function to get text from the native clipboard through native layer.
        * @since 1.4.0
        */
-      function getText(callback: (text: string) => any): void;
+      function getText(callback: (text: string) => void): void;
 
       /**
        * Function to set text to the native clipboard through native layer.
@@ -381,34 +381,52 @@ declare global {
        */
       function setText(
         text: string,
-        callback?: (status: 'success' | 'error', message: string) => any
+        callback?: (status: 'success' | 'error', message: string) => void
       ): void;
     }
 
     /**
      * Namespace for device specific functions
      * @since 1.0.0
-     * @lastupdated 1.3.0
+     * @lastupdated 1.4.2
      */
     namespace device {
       /**
-       * Enum for device types
+       * Device types
+       * @since 1.4.2
        */
-      export declare enum DeviceType {
-        ANDROID = 'Android',
-        IOS = 'iOS',
-        UNKNOWN = 'Unknown',
-      }
+      export declare const DEVICE_TYPES = {
+        ANDROID: 'Android',
+        IOS: 'iOS',
+        UNKNOWN: 'Unknown',
+      } as const;
 
       /**
-       * Enum for network connection types
+       * Type for device types
+       * @since 1.0.0
+       * @lastupdated 1.4.2
        */
-      export declare enum NetworkConnectionType {
-        WIFI = 'Wi-Fi',
-        CELLULAR = 'Cellular',
-        ETHERNET = 'Ethernet',
-        UNKNOWN = 'No Internet Connection',
-      }
+      export declare type DeviceType =
+        (typeof DEVICE_TYPES)[keyof typeof DEVICE_TYPES];
+
+      /**
+       * Network connection types
+       * @since 1.4.2
+       */
+      export declare const NETWORK_CONNECTION_TYPES = {
+        WIFI: 'Wi-Fi',
+        CELLULAR: 'Cellular',
+        ETHERNET: 'Ethernet',
+        UNKNOWN: 'No Internet Connection',
+      } as const;
+
+      /**
+       * Type for network connection types
+       * @since 1.3.0
+       * @lastupdated 1.4.2
+       */
+      export declare type NetworkConnectionType =
+        (typeof NETWORK_CONNECTION_TYPES)[keyof typeof NETWORK_CONNECTION_TYPES];
 
       /**
        * Detect the device type using the User-Agent string.
@@ -430,7 +448,10 @@ declare global {
        * @since 1.3.0
        */
       function getBatteryLevel(
-        callback: (status: { batteryLevel: number; isCharging: boolean }) => any
+        callback: (status: {
+          batteryLevel: number;
+          isCharging: boolean;
+        }) => void
       ): void;
 
       /**
@@ -443,7 +464,7 @@ declare global {
        * });
        * @since 1.4.0
        */
-      function getCurrentLanguage(callback: (language: string) => any): void;
+      function getCurrentLanguage(callback: (language: string) => void): void;
 
       /**
        * Retrieves the device model from the native layer.
@@ -467,7 +488,7 @@ declare global {
         callback: (status: {
           isConnected: boolean;
           connectionType: NetworkConnectionType;
-        }) => any
+        }) => void
       ): void;
 
       /**
@@ -495,13 +516,18 @@ declare global {
      * @lastupdated 1.2.0
      */
     namespace env {
+      const RUNNING_ENVIRONMENTS = {
+        WEB: 'web',
+        APP: 'app',
+      } as const;
+
       /**
-       * Enum for Nachocode application running environment
+       * Type for Nachocode application running environment
+       * @since 1.0.0
+       * @lastupdated 1.4.2
        */
-      export declare enum RunningEnvironment {
-        WEB = 'web',
-        APP = 'app',
-      }
+      export declare type RunningEnvironment =
+        (typeof RUNNING_ENVIRONMENTS)[keyof typeof RUNNING_ENVIRONMENTS];
 
       /**
        * Current environment of the application
@@ -605,45 +631,55 @@ declare global {
     namespace event {
       /**
        * Reserved event types
+       * @since 1.0.2
+       * @lastupdated 1.4.2
        */
-      export declare enum EventType {
+      export declare const EVENT_TYPES = {
         /**
          * Callback event triggered when the SDK is initialized.
          * @since 1.0.2
          */
-        INIT = 'init',
+        INIT: 'init',
 
         /**
          * Callback event automatically triggered when the app transitions to the background.
          * @since 1.2.0
          */
-        BACKGROUND = 'background',
+        BACKGROUND: 'background',
 
         /**
          * Callback event automatically triggered when the app transitions to the foreground.
          * @since 1.2.0
          */
-        FOREGROUND = 'foreground',
+        FOREGROUND: 'foreground',
 
         /**
          * Callback event triggered when the network status changes,
          * such as losing internet connection or switching from Wi-Fi to cellular.
          * @since 1.4.0
          */
-        NETWORK_CHANGED = 'networkchanged',
+        NETWORK_CHANGED: 'networkchanged',
 
         /**
          * Callback event triggered when the native keyboard is shown.
          * @since 1.4.2
          */
-        KEYBOARD_SHOWN = 'keyboardshown',
+        KEYBOARD_SHOWN: 'keyboardshown',
 
         /**
          * Callback event triggered when the native keyboard is hidden.
          * @since 1.4.2
          */
-        KEYBOARD_HIDDEN = 'keyboardhidden',
-      }
+        KEYBOARD_HIDDEN: 'keyboardhidden',
+      } as const;
+
+      /**
+       * Type for reserved event types
+       * @since 1.0.2
+       * @lastupdated 1.4.2
+       */
+      export declare type EventType =
+        (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
 
       /**
        * Registers an event listener for the specified event name.
@@ -651,7 +687,7 @@ declare global {
        * @param callback - The callback function to execute when the event is triggered.
        * @since 1.0.2
        */
-      function on(eventName: EventType, callback: (params?: any) => any): void;
+      function on(eventName: EventType, callback: (params?: any) => void): void;
 
       /**
        * Unbinds registered event listener for the specified event name.
@@ -745,7 +781,7 @@ declare global {
           accessToken?: string,
           userId?: string,
           userData?: FacebookUserData
-        ) => any
+        ) => void
       ): void;
 
       /**
@@ -758,7 +794,7 @@ declare global {
           isLoggedIn: boolean,
           accessToken?: string,
           userId?: string
-        ) => any
+        ) => void
       ): void;
 
       /**
@@ -770,7 +806,7 @@ declare global {
        */
       function getUserData(
         permissions: FacebookPermissions,
-        callback: (result: FacebookResult, userData?: FacebookUserData) => any
+        callback: (result: FacebookResult, userData?: FacebookUserData) => void
       ): void;
 
       /**
@@ -812,7 +848,7 @@ declare global {
       function purchase(
         productKey: string,
         userId: string,
-        callback: (result: IapPurchaseResult) => any
+        callback: (result: IapPurchaseResult) => void
       ): Promise<any>;
     }
 
@@ -846,18 +882,27 @@ declare global {
     /**
      * Namespace for permission handling
      * @since 1.2.0
+     * @lastupdated 1.4.2
      */
     namespace permission {
       /**
        * Native device permission types
-       * @since 1.2.0
+       * @since 1.4.2
        */
-      export declare enum PermissionType {
-        CAMERA = 'camera',
-        LOCATION = 'location',
-        MICROPHONE = 'microphone',
-        PUSH = 'push',
-      }
+      export declare const PERMISSION_TYPES = {
+        CAMERA: 'camera',
+        LOCATION: 'location',
+        MICROPHONE: 'microphone',
+        PUSH: 'push',
+      } as const;
+
+      /**
+       * Type for native device permission types
+       * @since 1.2.0
+       * @lastupdated 1.4.2
+       */
+      export declare type PermissionType =
+        (typeof PERMISSION_TYPES)[keyof typeof PERMISSION_TYPES];
 
       /**
        * @description
@@ -871,7 +916,7 @@ declare global {
           type: PermissionType;
           ask?: boolean;
         },
-        callback?: (granted: boolean) => any
+        callback?: (granted: boolean) => void
       ): void;
     }
 
@@ -897,7 +942,7 @@ declare global {
        * Calls callback function with selected data.
        * @since 1.2.0
        */
-      function getData(key: string, callback: (data: string) => any): void;
+      function getData(key: string, callback: (data: string) => void): void;
 
       /**
        * @description
@@ -944,7 +989,7 @@ declare global {
         callback: (
           status: 'success' | 'error',
           customUserId: string | undefined
-        ) => any
+        ) => void
       ): void;
 
       /**
@@ -1058,7 +1103,7 @@ declare global {
        */
       function sendLocalPush(
         payload: LocalPushPayload,
-        callback?: (result: LocalPushResult) => any
+        callback?: (result: LocalPushResult) => void
       ): void;
 
       /**
@@ -1100,7 +1145,7 @@ declare global {
           openDirect: boolean;
           openType?: 'internal' | 'external' | 'main';
         },
-        callback?: (data: string, error?: SDKError) => any
+        callback?: (data: string, error?: SDKError) => void
       ): void;
     }
 
@@ -1252,12 +1297,21 @@ declare global {
      */
     namespace vibration {
       /**
-       * Enum for haptics feedback type
+       * Haptics feedback types
+       * @since 1.4.2
        */
-      export declare enum HapticsType {
-        SUCCESS = 0,
-        ERROR = 1,
-      }
+      export declare const HAPTICS_TYPES = {
+        SUCCESS: 0,
+        ERROR: 1,
+      } as const;
+
+      /**
+       * Type for haptics feedback types
+       * @since 1.2.0
+       * @lastupdated 1.4.2
+       */
+      export declare type HapticsType =
+        (typeof HAPTICS_TYPES)[keyof typeof HAPTICS_TYPES];
 
       /**
        * Set whether haptics feedback is used or not.

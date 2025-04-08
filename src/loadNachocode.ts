@@ -41,7 +41,10 @@ export function loadNachocode(
 
   if (window.Nachocode) {
     if (onInitialized) {
-      window.Nachocode.event.on(Nachocode.event.EventType.INIT, onInitialized);
+      window.Nachocode.event.on(
+        Nachocode.event.EVENT_TYPES.INIT,
+        onInitialized
+      );
     }
     return initializeNachocode(apiKey, options);
   }
@@ -57,7 +60,7 @@ export function loadNachocode(
       if (window.Nachocode) {
         if (onInitialized) {
           window.Nachocode.event.on(
-            Nachocode.event.EventType.INIT,
+            Nachocode.event.EVENT_TYPES.INIT,
             onInitialized
           );
         }
