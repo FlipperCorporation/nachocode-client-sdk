@@ -837,14 +837,19 @@ declare global {
        * Native device permission types
        * @since 1.2.0
        */
-      export declare enum PermissionType {
-        CAMERA = 'camera',
-        LOCATION = 'location',
-        MICROPHONE = 'microphone',
-        PUSH = 'push',
-      }
+      // enum 대신 const object와 union type 사용
+      const PERMISSION_TYPES = {
+        CAMERA: 'camera',
+        LOCATION: 'location',
+        MICROPHONE: 'microphone',
+        PUSH: 'push',
+      } as const;
 
+      // union type으로 PermissionType 정의
+      type PermissionType =
+        (typeof PERMISSION_TYPES)[keyof typeof PERMISSION_TYPES];
       /**
+       *
        * @description
        * Checks whether the app user grants the specified permission or not.
        *
