@@ -1,5 +1,11 @@
 # 📦 nachocode Client SDK
 
+![npm](https://img.shields.io/npm/v/nachocode-client-sdk)
+![npm bundle size](https://img.shields.io/bundlephobia/min/nachocode-client-sdk)
+![npm downloads](https://img.shields.io/npm/dm/nachocode-client-sdk)
+![GitHub stars](https://img.shields.io/github/stars/FlipperCorporation/nachocode-client-sdk)
+![License](https://img.shields.io/npm/l/nachocode-client-sdk)
+
 <!-- markdownlint-disable MD033 -->
 <p align="center">
   <img src="https://cdn.nachocode.io/common/assets/images/logo.png" width="130" alt="Nachocode Logo" style="margin-top: 50px; margin-left: 150px" />
@@ -9,7 +15,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2025-04-07_
+> 🔔 **최신화 일자:** _2025-04-08_
 
 ## 목차
 
@@ -18,16 +24,17 @@
   - [개요](#개요)
   - [설치](#설치)
   - [사용법](#사용법)
-    - [1️⃣ `useNachocode` (React 방식)](#1️⃣-usenachocode-react-방식)
+    - [1️⃣ `NachoProvider`, `useNachocodeContext` (React Context 방식)](#1️⃣-nachoprovider-usenachocodecontext-react-context-방식)
+    - [2️⃣ `useNachocode` (React Hook 방식)](#2️⃣-usenachocode-react-hook-방식)
       - [`useNachocode()` 반환값](#usenachocode-반환값)
-    - [2️⃣ `loadNachocode` 직접 사용](#2️⃣-loadnachocode-직접-사용)
+    - [3️⃣ `loadNachocode` 직접 사용](#3️⃣-loadnachocode-직접-사용)
   - [SDK 초기화 옵션 (`InitializeOptions`)](#sdk-초기화-옵션-initializeoptions)
   - [SDK 버전 관리](#sdk-버전-관리)
   - [SDK 기능 사용](#sdk-기능-사용)
   - [네임스페이스 소개](#네임스페이스-소개)
-  - [라이선스](#라이선스)
   - [기여자](#기여자)
-  - [마무리](#마무리)
+  - [기여하기](#기여하기)
+  - [라이선스](#라이선스)
 
 ---
 
@@ -57,9 +64,9 @@ yarn add nachocode-client-sdk
 
 ## 사용법
 
-nachocode Client SDK는 두 가지 방법으로 사용할 수 있습니다.
+nachocode Client SDK는 세 가지 방법으로 사용할 수 있습니다.
 
-### 1️⃣ `useNachocode` (React 방식)
+### 1️⃣ `NachoProvider`, `useNachocodeContext` (React Context 방식)
 
 - 애플리케이션 전체에서 `Nachocode`를 사용할 수 있도록 `Provider` 패턴을 제공합니다.
 - `useNachocodeContext` 훅을 사용하여 `Nachocode` 객체에 접근할 수 있습니다.
@@ -85,6 +92,8 @@ export default function App() {
 }
 ```
 
+### 2️⃣ `useNachocode` (React Hook 방식)
+
 - 특정 `Component`에서만 `Nachocode`를 사용하고 싶다면 `useNachocode` 훅을 사용하여 `Nachocode` 객체에 접근할 수 있습니다.
 
 ```jsx
@@ -109,7 +118,7 @@ export default function MyComponent2() {
 | `isError`   | SDK 에러 여부 (`true` 또는 `false`)           |
 | `error`     | SDK 로드 중 발생한 에러 (`Error` 또는 `null`) |
 
-### 2️⃣ `loadNachocode` 직접 사용
+### 3️⃣ `loadNachocode` 직접 사용
 
 - React 외부에서도 `loadNachocode` 함수를 직접 호출하여 사용 가능합니다.
 
@@ -250,12 +259,6 @@ nachocode Client SDK는 각 기능별로 **네임스페이스(namespace)** 로 �
 
 ---
 
-## 라이선스
-
-이 프로젝트는 MIT 라이선스 하에 제공됩니다.
-
----
-
 ## 기여자
 
 <!-- markdownlint-disable MD033 -->
@@ -289,10 +292,18 @@ nachocode Client SDK는 각 기능별로 **네임스페이스(namespace)** 로 �
 </table>
 <!-- markdownlint-enable MD033 -->
 
-## 마무리
+---
+
+## 기여하기
 
 nachocode Client SDK를 사용해주셔서 감사합니다! 🚀
 
 궁금한 점이나 개선 사항이 있다면 [Issues](https://github.com/FlipperCorporation/nachocode-client-sdk/issues) 또는 [Pull Requests](https://github.com/FlipperCorporation/nachocode-client-sdk/pulls)를 통해 남겨주시거나,
 
 언제든지 [support@nachocode.io](mailto:support@nachocode.io)로 문의를 보내주세요. 🙌
+
+---
+
+## 라이선스
+
+이 프로젝트는 [MIT 라이선스](LICENSE) 하에 제공됩니다.
