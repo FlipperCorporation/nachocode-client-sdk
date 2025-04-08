@@ -1,3 +1,4 @@
+// Custom module dependencies
 import { SCRIPT_ID, SCRIPT_NAME, SCRIPT_URL } from './constants';
 
 let cachedPromise: Promise<typeof Nachocode> | undefined;

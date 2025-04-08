@@ -1,3 +1,4 @@
+import type Nachocode from '../types/Nachocode.d.ts';
 type UseNachocodeReturn = {
     isLoading: true;
     isError: false;

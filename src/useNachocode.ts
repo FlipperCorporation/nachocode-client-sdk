@@ -1,4 +1,8 @@
+// Module dependencies
 import { useEffect, useRef, useState } from 'react';
+
+// Custom module dependencies
+import type Nachocode from '../types/Nachocode.d.ts';
 import { loadNachocode } from './loadNachocode';
 
 type UseNachocodeReturn =
