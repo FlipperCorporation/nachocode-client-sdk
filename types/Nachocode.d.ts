@@ -1,14 +1,14 @@
 declare global {
   /**
-   * Nachocode JavaScript Client SDK Type Declaration v1.4.2
+   * Nachocode JavaScript Client SDK Type Declaration v1.5.0
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.4.2/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.5.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-04-08
+   * Last Updated Date: 2025-04-18
    */
   namespace Nachocode {
     /**
@@ -802,6 +802,93 @@ declare global {
     }
 
     /**
+     * Namespace for Google native features
+     * @since 1.5.0
+     */
+    namespace google {
+      /**
+       * Google result from native layer
+       * @since 1.5.0
+       */
+      export declare type GoogleResult = {
+        /**
+         * Whether the Google native feature failed or not.
+         */
+        status: 'success' | 'error';
+        /**
+         * Google native feature result status code. 200 when successful.
+         */
+        statusCode: number;
+        /**
+         * Google native feature result message when failed.
+         */
+        message?: string;
+      };
+
+      /**
+       * Google user data from native layer
+       * @since 1.5.0
+       */
+      export declare type GoogleUserData = {
+        uid: string;
+        email?: string;
+        displayName?: string;
+        photoURL?: string;
+        phoneNumber?: string;
+        isEmailVerified: boolean;
+        providerId?: string;
+      };
+
+      /**
+       * @description
+       * Function to authenticate with native Google social login.
+       *
+       * Calls callback function with the user data value.
+       * @since 1.5.0
+       */
+      function login(
+        callback: (
+          result: GoogleResult,
+          idToken?: string,
+          userData?: GoogleUserData
+        ) => void
+      ): void;
+
+      /**
+       * @description
+       * Function to check whether authenticated with native Google social login.
+       *
+       * Calls callback function with the value whether the user is logged in or not.
+       * @since 1.5.0
+       */
+      function isLoggedIn(
+        callback: (
+          result: GoogleResult,
+          isLoggedIn: boolean,
+          idToken?: string
+        ) => void
+      ): void;
+
+      /**
+       * @description
+       * Function to get Google user data from native layer.
+       *
+       * Calls callback function with the user data.
+       * @since 1.5.0
+       */
+      function getUserData(
+        callback: (result: GoogleResult, userData?: GoogleUserData) => void
+      ): void;
+
+      /**
+       * @description
+       * Function to logout with Google native social features.
+       * @since 1.5.0
+       */
+      function logout(callback: (result: GoogleResult) => void): void;
+    }
+
+    /**
      * Namespace for in-app purchase functions
      * @since 1.4.0
      */
@@ -835,6 +922,320 @@ declare global {
         userId: string,
         callback: (result: IapPurchaseResult) => void
       ): Promise<any>;
+    }
+
+    /**
+     * Namespace for Kakao native features
+     * @since 1.5.0
+     */
+    namespace kakao {
+      /**
+       * Kakao result from native layer
+       * @since 1.5.0
+       */
+      export declare type KakaoResult = {
+        /**
+         * Whether the Kakao native feature failed or not.
+         */
+        status: 'success' | 'error';
+        /**
+         * Kakao native feature result status code. 200 when successful.
+         */
+        statusCode: number;
+        /**
+         * Kakao native feature result message when failed.
+         */
+        message?: string;
+      };
+
+      /**
+       * Kakao login data from native layer.
+       *
+       * Returned when a user logs in or checks logged in.
+       * @since 1.5.0
+       */
+      export declare type KakaoLoginData = {
+        accessToken?: string;
+        accessTokenExpiresAt?: Date;
+        refreshToken?: string;
+        refreshTokenExpiresAt?: Date;
+        idToken?: string;
+      };
+
+      /**
+       * Kakao user data from native layer.
+       * @since 1.5.0
+       */
+      export declare type KakaoUserData = {
+        id: number;
+        connectedAt?: Date;
+        /**
+         * Whether profile can be provided under user consent
+         */
+        profileNeedsAgreement?: boolean;
+        /**
+         * Whether profile can be provided under user consent
+         */
+        profileNeedsAgreement?: boolean;
+        /**
+         * Whether profileNickname can be provided under user consent
+         */
+        profileNicknameNeedsAgreement?: boolean;
+        /**
+         * Whether profileImage can be provided under user consent
+         */
+        profileImageNeedsAgreement?: boolean;
+        /**
+         * Profile information
+         */
+        profile?: string;
+        /**
+         * Whether name can be provided under user consent
+         */
+        nameNeedsAgreement?: boolean;
+        /**
+         * Name of Kakao Account
+         */
+        name?: string;
+        /**
+         * Whether email can be provided under user consent
+         */
+        emailNeedsAgreement?: boolean;
+        /**
+         * Whether email address is valid
+         */
+        isEmailValid?: boolean;
+        /**
+         * Whether email address is verified
+         */
+        isEmailVerified?: boolean;
+        /**
+         * Representative email of Kakao Account
+         */
+        email?: string;
+        /**
+         * Whether age can be provided under user consent
+         */
+        ageRangeNeedsAgreement?: boolean;
+        /**
+         * Age range
+         */
+        ageRange?: unknown;
+        /**
+         * Whether birthyear can be provided under user consent
+         */
+        birthyearNeedsAgreement?: boolean;
+        /**
+         * Birth year in `YYYY` format
+         */
+        birthyear?: string;
+        /**
+         * Whether birthday can be provided under user consent
+         */
+        birthdayNeedsAgreement?: boolean;
+        /**
+         * Birthday in `MMDD` format
+         */
+        birthday?: string;
+        /**
+         * Birthday type
+         */
+        birthdayType?: unknown;
+        /**
+         * Whether gender can be provided under user consent
+         */
+        genderNeedsAgreement?: boolean;
+        /**
+         * Gender
+         */
+        gender?: string;
+        /**
+         * Legal name
+         */
+        legalName?: string;
+        /**
+         * Whether legalGender can be provided under user consent
+         */
+        legalGenderNeedsAgreement?: boolean;
+        /**
+         * Legal gender
+         */
+        legalGender?: string;
+        /**
+         * Whether isKorean can be provided under user consent
+         */
+        legalBirthDateNeedsAgreement?: boolean;
+        /**
+         * Legal birth date in yyyyMMDD format
+         */
+        legalBirthDate?: string;
+        /**
+         * Whether phoneNumber can be provided under user consent
+         */
+        phoneNumberNeedsAgreement?: boolean;
+        /**
+         * Phone number of Kakao Account
+         */
+        phoneNumber?: string;
+        /**
+         * Whether consent to isKorean can be provided under user consent
+         */
+        isKoreanNeedsAgreement?: boolean;
+        /**
+         * Whether the user is Korean
+         */
+        isKorean?: boolean;
+      };
+
+      /**
+       * @description
+       * Function to authenticate with native Kakao social login.
+       *
+       * Calls callback function with the login data value.
+       * @since 1.5.0
+       */
+      function login(
+        callback: (result: KakaoResult, loginData?: KakaoLoginData) => void
+      ): void;
+
+      /**
+       * @description
+       * Function to check whether authenticated with native Kakao social login.
+       *
+       * Calls callback function with the value whether the user is logged in or not.
+       * @since 1.5.0
+       */
+      function isLoggedIn(
+        callback: (
+          result: KakaoResult,
+          isLoggedIn: boolean,
+          loginData?: KakaoLoginData
+        ) => void
+      ): void;
+
+      /**
+       * @description
+       * Function to get user data from native Kakao features.
+       *
+       * Calls callback function with the user data.
+       * @since 1.5.0
+       */
+      function getUserData(
+        callback: (result: KakaoResult, userData?: KakaoUserData) => void
+      ): void;
+
+      /**
+       * @description
+       * Function to logout Kakao. Unavailable to use `isLoggedIn` and `getUserData` any more.
+       *
+       * When the user attempts to log in, automatically authorized again
+       * with past account info from KakaoTalk.
+       * @since 1.5.0
+       */
+      function logout(callback: (result: KakaoResult) => void): void;
+
+      /**
+       * @description
+       * Function to completely disconnect Kakao between the account and the app.
+       *
+       * When the user attempts to log in, must be authorized again
+       * from scratch on KakaoTalk, after unlinked.
+       * @since 1.5.0
+       */
+      function unlink(callback: (result: KakaoResult) => void): void;
+
+      /**
+       * Native Kakao sharing types
+       * @since 1.4.2
+       */
+      export declare const KAKAO_SHARE_TYPES = {
+        CUSTOM: 'custom',
+        SCRAP: 'scrap',
+      } as const;
+
+      /**
+       * Type for native Kakao sharing types
+       * @since 1.2.0
+       * @lastupdated 1.4.2
+       */
+      export declare type KakaoShareType =
+        (typeof KAKAO_SHARE_TYPES)[keyof typeof KAKAO_SHARE_TYPES];
+
+      /**
+       * Native Kakao custom data to send
+       * @since 1.2.0
+       */
+      export declare type KakaoShareCustom = {
+        templateId: number;
+        templateArgs?: {
+          [key: string]: string;
+        };
+        serverCallbackArgs?: {
+          [key: string]: string;
+        };
+      };
+
+      /**
+       * Native Kakao scrap data to send
+       * @since 1.2.0
+       */
+      export declare type KakaoShareScrap = {
+        requestUrl: string;
+        templateId?: number;
+        templateArgs?: {
+          [key: string]: string;
+        };
+        serverCallbackArgs?: {
+          [key: string]: string;
+        };
+      };
+
+      /**
+       * Native Kakao share result status codes
+       * @since 1.5.0
+       */
+      export const KAKAO_SHARE_STATUS_CODES = {
+        ERROR_JSON_FAILED: 102,
+        ERROR_JSON_FAILED_TO_MODEL: 103,
+        ERROR_JSON_FAILED_TO_KAKAO_MODEL: 104,
+        ERROR_JSON_WRONG_SHARE_TYPE: 105,
+        ERROR_JSON_EMPTY_REQUEST_URL: 106,
+        ERROR_JSON_EMPTY_TEMPLATE_ID: 108,
+        ERROR_KAKAO_FAILED: 199,
+        SUCCESS_KAKAO: 200,
+        SUCCESS_SAFARI: 201,
+      } as const;
+
+      /**
+       * Kakao share result status code
+       * @since 1.2.0
+       * @lastupdated 1.4.2
+       */
+      export declare type KakaoShareStatusCode =
+        (typeof KAKAO_SHARE_STATUS_CODES)[keyof typeof KAKAO_SHARE_STATUS_CODES];
+
+      /**
+       * Kakao share result
+       * @since 1.2.0
+       */
+      export declare type KakaoShareResult = {
+        status: 'success' | 'error';
+        statusCode: KakaoShareStatusCode;
+        message?: string;
+      };
+
+      /**
+       * Send Kakao sharing
+       * @param type - Kakao sharing type
+       * @param data - Data to send kakao
+       * @param callback - Callback function called after sharing kakao
+       * @since 1.5.0
+       */
+      function share(
+        type: KakaoShareType,
+        data: KakaoShareCustom | KakaoShareScrap,
+        callback?: (result: KakaoShareResult) => void
+      ): void;
     }
 
     /**
@@ -873,11 +1274,33 @@ declare global {
       /**
        * Native device permission types
        * @since 1.4.2
+       * @lastupdated 1.5.0
        */
       export declare const PERMISSION_TYPES = {
+        /**
+         * Camera usage permission
+         * @since 1.4.2
+         */
         CAMERA: 'camera',
+        /**
+         * Location access permission
+         * @since 1.4.2
+         */
         LOCATION: 'location',
+        /**
+         * Microphone usage permission
+         * @since 1.4.2
+         */
         MICROPHONE: 'microphone',
+        /**
+         * Photo usage permission
+         * @since 1.5.0
+         */
+        PHOTO: 'photo',
+        /**
+         * Push notification permission
+         * @since 1.4.2
+         */
         PUSH: 'push',
       } as const;
 
