@@ -1,14 +1,15 @@
 declare global {
   /**
-   * Nachocode JavaScript Client SDK Type Declaration v1.5.0
+   * nachocode JavaScript Client SDK Type Declaration v1.6.0
    *
    * GitHub
+   *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.5.0/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.6.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-04-18
+   * Last Updated Date: 2025-06-05
    */
   namespace Nachocode {
     /**
@@ -31,7 +32,7 @@ declare global {
     }
 
     /**
-     * Options for Nachocode SDK environment
+     * Options for nachocode SDK environment
      */
     export declare type InitializeOptions = {
       /**
@@ -50,10 +51,10 @@ declare global {
     export declare type VersionString = `${number}.${number}.${number}`;
 
     /**
-     * Initializes the Nachocode SDK with the provided API key and environment setting.
-     * @param apiKey - The API key for accessing Nachocode services.
+     * Initializes the nachocode SDK with the provided API key and environment setting.
+     * @param apiKey - The API key for accessing nachocode services.
      * @example
-     * // checks Nachocode script loaded or not
+     * // checks nachocode script loaded or not
      * if (window.Nachocode) {
      *   // registers event willing to be fired after SDK initialization
      *   Nachocode.event.on('init', () => {
@@ -62,7 +63,7 @@ declare global {
      *     }
      *   });
      *
-     *   // initializes Nachocode SDK
+     *   // initializes nachocode SDK
      *   Nachocode.init('your_api_key_here', { logger: true });
      * } else {
      *   console.error('nachocode SDK not loaded..');
@@ -72,10 +73,10 @@ declare global {
     function init(apiKey: string, options?: InitializeOptions): void;
 
     /**
-     * Asynchronously initializes the Nachocode SDK with the provided API key and options.
-     * @param apiKey - The API key for accessing Nachocode services.
+     * Asynchronously initializes the nachocode SDK with the provided API key and options.
+     * @param apiKey - The API key for accessing nachocode services.
      * @example
-     * // asynchronously initializes Nachocode SDK
+     * // asynchronously initializes nachocode SDK
      * await Nachocode.initAsync('your_api_key_here');
      *
      * if (Nachocode.env.isApp()) {
@@ -507,7 +508,7 @@ declare global {
       } as const;
 
       /**
-       * Type for Nachocode application running environment
+       * Type for nachocode application running environment
        * @since 1.0.0
        * @lastupdated 1.4.2
        */
@@ -590,7 +591,7 @@ declare global {
       function isApp(): boolean;
 
       /**
-       * Checks whether the Nachocode SDK is initialized.
+       * Checks whether the nachocode SDK is initialized.
        * @since 1.0.0
        */
       function isInitialized(): boolean;
@@ -1194,7 +1195,7 @@ declare global {
        * Native Kakao share result status codes
        * @since 1.5.0
        */
-      export const KAKAO_SHARE_STATUS_CODES = {
+      const KAKAO_SHARE_STATUS_CODES = {
         ERROR_JSON_FAILED: 102,
         ERROR_JSON_FAILED_TO_MODEL: 103,
         ERROR_JSON_FAILED_TO_KAKAO_MODEL: 104,
@@ -1410,7 +1411,7 @@ declare global {
     /**
      * Namespace for push notification functions
      * @since 1.0.0
-     * @lastupdated 1.4.1
+     * @lastupdated 1.6.0
      */
     namespace push {
       /**
@@ -1472,6 +1473,8 @@ declare global {
 
       /**
        * Asks for the permission for push notifications.
+       *
+       * If already granted, nothing happens.
        * @since 1.2.0
        */
       function askPushPermission(): void;
@@ -1483,7 +1486,7 @@ declare global {
       function getPushToken(): Promise<string>;
 
       /**
-       * Registers the push token to the Nachocode server.
+       * Registers the push token to the nachocode server.
        * @param userID - Client user identifier
        * @since 1.0.0
        */
@@ -1522,6 +1525,53 @@ declare global {
        * @since 1.4.1
        */
       function cancelLocalPush(id: number): void;
+
+      /**
+       * Function to request native layer to subscribe push topic.
+       *
+       * Calls `callback` function with the result from native layer.
+       * @param topic - Topic to subscribe
+       * @param callback - Callback called with the response from native layer.
+       * @since 1.6.0
+       */
+      function subscribePushTopic(
+        topic: string,
+        callback?: (pushTopicResult: {
+          status: 'success' | 'error';
+          statusCode: number;
+          errorCode?: string;
+          message: string;
+        }) => void
+      ): void;
+
+      /**
+       * Function to request native layer to unsubscribe push topic.
+       *
+       * Calls `callback` function with the result from native layer.
+       * @param topic - Topic to unsubscribe
+       * @param callback - Callback called with the response from native layer.
+       * @since 1.6.0
+       */
+      function unsubscribePushTopic(
+        topic: string,
+        callback?: (pushTopicResult: {
+          status: 'success' | 'error';
+          statusCode: number;
+          errorCode?: string;
+          message: string;
+        }) => void
+      ): void;
+
+      /**
+       * Function to get push topic subscription list.
+       *
+       * Calls `callback` function with the list data.
+       * @param callback - Callback called with the response from native layer.
+       * @since 1.6.0
+       */
+      function getSubscriptionList(
+        callback: (subscriptionList: Array<string>) => void
+      ): void;
     }
 
     /**
@@ -1586,14 +1636,36 @@ declare global {
     /**
      * Namespace for share functions
      * @since 1.1.0
-     * @lastupdated 1.2.0
+     * @lastupdated 1.6.0
      */
     namespace share {
       /**
-       * Opens the native sharing UI with the provided URL.
+       * Opens the native UI with the provided share data.
+       *
+       * Supported Platforms
+       * - **Android** : Uses native interface
+       * - **iOS** : Uses Web Share API
+       * - **Web** : Uses Web Share API
+       * @param {string | {title?:string, url:string, text?:string} | {title?:string, url?:string, text:string}} shareData
+       * @param {string} shareData.title - _(optional)_ title of the sharing.
+       * @param {string} shareData.url - _(optional)_ url willing to be shared.
+       * @param {string} shareData.text - _(optional)_ text willing to be shared.
        * @since 1.1.0
+       * @lastupdated 1.6.0
        */
-      function openSharing(url: string): void;
+      function openSharing(
+        shareData:
+          | {
+              title?: string;
+              url: string;
+              text?: string;
+            }
+          | {
+              title?: string;
+              url?: string;
+              text: string;
+            }
+      ): void;
 
       /**
        * Native Kakao sharing type
@@ -1672,6 +1744,85 @@ declare global {
         data: KakaoShareCustom | KakaoShareScrap,
         callback?: (result: KakaoShareResult) => void
       ): void;
+    }
+
+    /**
+     * Namespace for store related functions
+     * @since 1.6.0
+     */
+    namespace store {
+      /**
+       * Opens Apple App Store or Google Play Store.
+       *
+       * Automatically checks current OS and opens target store.
+       *
+       * Should provide one of parameters `androidAppId` or `iOSAppId`.
+       *
+       * Supported Platforms
+       * - Android
+       * - iOS
+       * - Web
+       * @param {string} storeInfo.androidAppId - package name for android app
+       * - Used in Android
+       * @param {string} storeInfo.iOSAppId - iOS app id. Can be found in apple app store connect.
+       * - Used in iOS
+       * @since 1.6.0
+       */
+      function openStore(
+        storeInfo:
+          | {
+              androidAppId: string;
+              iOSAppId?: string;
+            }
+          | {
+              androidAppId?: string;
+              iOSAppId: string;
+            }
+      ): void;
+
+      /**
+       * Opens Apple App Store or Google Play Store.
+       *
+       * Automatically checks current OS and opens target store.
+       *
+       * Only shows write review page in Apple App Store. (Android not supported.)
+       *
+       * Should provide one of parameters `androidAppId` or `iOSAppId`.
+       *
+       * Supported Platforms
+       * - iOS
+       *   - only iOS app works as expected
+       * - Android
+       *   - just opens Google Play Store
+       * - Web (Mobile)
+       *   - only Apple App Store works as expected.
+       * - Web (PC)
+       *   - just opens Apple App Store or Google Play Store
+       * @param {string} storeInfo.androidAppId - package name for android app
+       * - Used in Android
+       * @param {string} storeInfo.iOSAppId - iOS app id. Can be found in apple app store connect.
+       * - Used in iOS
+       * @since 1.6.0
+       */
+      function openReviewInStore(
+        storeInfo:
+          | {
+              androidAppId: string;
+              iOSAppId?: string;
+            }
+          | {
+              androidAppId?: string;
+              iOSAppId: string;
+            }
+      ): void;
+
+      /**
+       * Opens the native request review popup UI.
+       *
+       * Only works in native environment. (iOS, Android app)
+       * @since 1.6.0
+       */
+      function requestReview(): void;
     }
 
     /**

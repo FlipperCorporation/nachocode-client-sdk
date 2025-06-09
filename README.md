@@ -15,7 +15,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2025-04-22_
+> 🔔 **최신화 일자:** _2025-06-09_
 
 ## 목차
 
@@ -184,7 +184,7 @@ nachocode Client SDK는 초기화 시 선택적으로 옵션을 설정할 수 �
 최신 버전 로드 (기본)
 
 - 최신 버전의 SDK를 항상 유지하려면 아래 코드를 사용하세요
-- 현재 최신 버전 v.1.5.0
+- 현재 최신 버전 v.1.6.0
 
 ```jsx
 loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
@@ -195,7 +195,7 @@ loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
 - 특정 버전으로 고정하려면 다음과 같이 사용합니다
 
 ```jsx
-loadNachocode('your-api-key', options, '1.5.0');
+loadNachocode('your-api-key', options, '1.6.0');
 ```
 
 > 📢 최신 버전 사용이 권장되며, 특정 버전 고정은 호환성이 중요한 경우에만 사용하세요.
@@ -254,6 +254,7 @@ nachocode Client SDK는 각 기능별로 **네임스페이스(namespace)** 로 �
 | `scanner`        | QR 코드 스캔 및 기타 스캔 기능을 제공합니다.                                     | [스캐너 문서](https://developer.nachocode.io/docs/sdk/namespaces/scanner)         |
 | `setting`        | Pull to Refresh와 같은 설정 기능을 제공합니다.                                   | [설정 문서](https://developer.nachocode.io/docs/sdk/namespaces/setting)           |
 | `share`          | 네이티브 공유 UI를 통해 URL을 공유할 수 있습니다.                                | [공유 문서](https://developer.nachocode.io/docs/sdk/namespaces/share)             |
+| `store`          | Apple App Store, Google Play Store 관련 기능을 제공합니다.                       | -                                                                                 |
 | `tabbar`         | 앱 내부 탭바의 표시 여부 및 이동을 제어할 수 있습니다.                           | [탭 바 문서](https://developer.nachocode.io/docs/sdk/namespaces/tabbar)           |
 | `vibration`      | 디바이스 진동 및 햅틱 피드백을 제어합니다.                                       | [진동 문서](https://developer.nachocode.io/docs/sdk/namespaces/vibration)         |
 
