@@ -1,5 +1,10 @@
 // Custom module dependencies
-import { SCRIPT_ID, SCRIPT_NAME, SCRIPT_URL } from './constants';
+import {
+  LATEST_VERSION,
+  SCRIPT_ID,
+  SCRIPT_NAME,
+  SCRIPT_URL,
+} from './constants';
 
 let cachedPromise: Promise<typeof Nachocode> | undefined;
 
@@ -50,7 +55,7 @@ export function loadNachocode(
   }
 
   const script = document.createElement('script');
-  script.src = `${SCRIPT_URL}@${version || 'latest'}/${SCRIPT_NAME}`;
+  script.src = `${SCRIPT_URL}@${version || 'latest'}/${SCRIPT_NAME}?v=${LATEST_VERSION}`;
   script.id = SCRIPT_ID;
   script.async = true;
   document.head.appendChild(script);
