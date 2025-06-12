@@ -9,7 +9,7 @@ declare global {
    * CDN
    *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.6.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-06-05
+   * Last Updated Date: 2025-06-12
    */
   namespace Nachocode {
     /**
@@ -1213,7 +1213,7 @@ declare global {
        * @lastupdated 1.4.2
        */
       export declare type KakaoShareStatusCode =
-        (typeof KAKAO_SHARE_STATUS_CODES)[keyof typeof KAKAO_SHARE_STATUS_CODES];
+        (typeof KAKAO_SHARE_RESULT_STATUS_CODES)[keyof typeof KAKAO_SHARE_RESULT_STATUS_CODES];
 
       /**
        * Kakao share result
@@ -1472,6 +1472,36 @@ declare global {
       };
 
       /**
+       * Push subscription result from native layer
+       * @since 1.6.0
+       */
+      export declare type PushTopicResult = {
+        /**
+         * Whether push subscription request was successful or not
+         */
+        status: 'success' | 'error';
+        /**
+         * Status code of the subscription result
+         * - `200` : the process was successful
+         * - `201` : already subscribed
+         * - `202` : already unsubscribed
+         * - `401` : subscribe failed
+         * - `402` : unsubscribe failed
+         */
+        statusCode: 200 | 201 | 202 | 401 | 402;
+        /**
+         * If the subscription failed, returns error code.
+         */
+        errorCode?: string;
+        /**
+         * Result message from native layer.
+         *
+         * If the subscription failed, returns the reason why.
+         */
+        message: string;
+      };
+
+      /**
        * Asks for the permission for push notifications.
        *
        * If already granted, nothing happens.
@@ -1536,12 +1566,7 @@ declare global {
        */
       function subscribePushTopic(
         topic: string,
-        callback?: (pushTopicResult: {
-          status: 'success' | 'error';
-          statusCode: number;
-          errorCode?: string;
-          message: string;
-        }) => void
+        callback?: (result: PushTopicResult) => void
       ): void;
 
       /**
@@ -1554,12 +1579,7 @@ declare global {
        */
       function unsubscribePushTopic(
         topic: string,
-        callback?: (pushTopicResult: {
-          status: 'success' | 'error';
-          statusCode: number;
-          errorCode?: string;
-          message: string;
-        }) => void
+        callback?: (result: PushTopicResult) => void
       ): void;
 
       /**
@@ -1752,6 +1772,40 @@ declare global {
      */
     namespace store {
       /**
+       * Type for the app's store information.
+       * - Package name represents Android app id.
+       * - iOS Apple app id can be found in Apple App Store Connect.
+       * @since 1.6.0
+       */
+      export declare type StoreInfo =
+        | {
+            /**
+             * package name for Android app
+             * - Used in Android platform
+             */
+            androidAppId: string;
+            /**
+             * iOS Apple app id.
+             * - Used in iOS platform
+             * - Can be found in Apple App Store Connect.
+             */
+            iOSAppId?: string;
+          }
+        | {
+            /**
+             * package name for Android app
+             * - Used in Android platform
+             */
+            androidAppId?: string;
+            /**
+             * iOS Apple app id.
+             * - Used in iOS platform
+             * - Can be found in Apple App Store Connect.
+             */
+            iOSAppId: string;
+          };
+
+      /**
        * Opens Apple App Store or Google Play Store.
        *
        * Automatically checks current OS and opens target store.
@@ -1763,22 +1817,12 @@ declare global {
        * - iOS
        * - Web
        * @param {string} storeInfo.androidAppId - package name for android app
-       * - Used in Android
+       * - Used in Android platform
        * @param {string} storeInfo.iOSAppId - iOS app id. Can be found in apple app store connect.
-       * - Used in iOS
+       * - Used in iOS platform
        * @since 1.6.0
        */
-      function openStore(
-        storeInfo:
-          | {
-              androidAppId: string;
-              iOSAppId?: string;
-            }
-          | {
-              androidAppId?: string;
-              iOSAppId: string;
-            }
-      ): void;
+      function openStore(storeInfo: StoreInfo): void;
 
       /**
        * Opens Apple App Store or Google Play Store.
@@ -1799,22 +1843,12 @@ declare global {
        * - Web (PC)
        *   - just opens Apple App Store or Google Play Store
        * @param {string} storeInfo.androidAppId - package name for android app
-       * - Used in Android
+       * - Used in Android platform
        * @param {string} storeInfo.iOSAppId - iOS app id. Can be found in apple app store connect.
-       * - Used in iOS
+       * - Used in iOS platform
        * @since 1.6.0
        */
-      function openReviewInStore(
-        storeInfo:
-          | {
-              androidAppId: string;
-              iOSAppId?: string;
-            }
-          | {
-              androidAppId?: string;
-              iOSAppId: string;
-            }
-      ): void;
+      function openReviewInStore(storeInfo: StoreInfo): void;
 
       /**
        * Opens the native request review popup UI.
