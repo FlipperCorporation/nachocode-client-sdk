@@ -4,7 +4,7 @@ import { createContext, useRef, useState, useEffect, useContext } from 'react';
 const SCRIPT_ID = 'nachocode-client-sdk';
 const SCRIPT_URL = 'https://cdn.nachocode.io/nachocode/client-sdk/';
 const SCRIPT_NAME = 'client-sdk.min.js';
-const LATEST_VERSION = '1.6.0';
+const LATEST_VERSION = '1.6.1';
 
 let cachedPromise;
 function loadNachocode(apiKey, options, version, onInitialized) {

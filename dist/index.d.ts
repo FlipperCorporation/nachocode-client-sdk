@@ -15,16 +15,16 @@ declare function loadNachocode(apiKey: string, options?: Nachocode.InitializeOpt
 
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.6.0
+   * nachocode JavaScript Client SDK Type Declaration v1.6.1
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.6.0/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.6.1/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-06-12
+   * Last Updated Date: 2025-06-20
    */
   namespace Nachocode {
     /**
@@ -128,24 +128,27 @@ declare global {
 
       /**
        * Retrieves the stored application key.
-       * @returns {string} The key of the application.
+       * @returns {string | void} The key of the application.
+       * - `void` if called in web environment.
        * @since 1.0.0
        */
-      function getAppKey(): string;
+      function getAppKey(): string | void;
 
       /**
        * Retrieves the stored application version.
-       * @returns {VersionString} The current version of the application installed.
+       * @returns {VersionString | void} The current version of the application installed.
+       * - `void` if called in web environment.
        * @since 1.0.0
        */
-      function getCurrentAppVersion(): VersionString;
+      function getCurrentAppVersion(): VersionString | void;
 
       /**
        * Retrieves the stored application package name.
-       * @returns {string} The package name of the application.
+       * @returns {string | void} The package name of the application.
+       * - `void` if called in web environment.
        * @since 1.0.0
        */
-      function getPackageName(): string;
+      function getPackageName(): string | void;
     }
 
     /**
@@ -158,14 +161,29 @@ declare global {
      */
     namespace apple {
       /**
+       * Apple success result from native layer
+       * @since 1.6.1
+       */
+      export declare type AppleSuccessResult = {
+        status: 'success';
+      };
+
+      /**
+       * Apple error result from native layer
+       * @since 1.6.1
+       */
+      export declare type AppleErrorResult = {
+        status: 'error';
+        errorCode: string;
+        message: string;
+      };
+
+      /**
        * Apple result from native layer
        * @since 1.4.0
+       * @lastupdated 1.6.1
        */
-      export declare type AppleResult = {
-        status: 'success' | 'error';
-        errorCode?: string;
-        message?: string;
-      };
+      export declare type AppleResult = AppleSuccessResult | AppleErrorResult;
 
       /**
        * Reserved Apple permission types
@@ -199,6 +217,7 @@ declare global {
       /**
        * Apple native social login
        * @since 1.4.0
+       * @lastupdated 1.6.1
        */
       function login(
         permissions: ApplePermissions,
@@ -220,6 +239,7 @@ declare global {
        *
        * Calls callback function with the user identifier.
        * @since 1.4.0
+       * @lastupdated 1.6.1
        */
       function getUserIdentifier(
         callback: (result: AppleResult, userIdentifier?: string) => void
@@ -268,7 +288,8 @@ declare global {
        * Registers an event listener for native back key handler.
        * If registered, instead of default back key handling, calls registered callback.
        * @param {function} event - Function willing to be called when back key pressed.
-       * @returns {string} - Returns registered event id
+       * @param eventId - Event id willing to be set.
+       * @returns {string | void} - Returns registered event id, or `void` if failed.
        * @example
        * // Default event id provided
        * Nachocode.backkey.addEvent((eventId) => {
@@ -286,7 +307,7 @@ declare global {
       function addEvent(
         event: (eventId: string) => void,
         eventId?: string
-      ): string;
+      ): string | void;
 
       /**
        * Removes all of registered event listeners.
@@ -299,7 +320,7 @@ declare global {
 
       /**
        * Gets last event id
-       * @returns {string} - Returns last registered event id
+       * @returns {string | void} - Returns last registered event id, or `void` if failed.
        * @example
        * // Register first event for backkey handling
        * Nachocode.backkey.addEvent((eventId) => {
@@ -317,12 +338,12 @@ declare global {
        * const eventId = Nachocode.backkey.getLastEvent(); // sample2
        * @since 1.2.0
        */
-      function getLastEvent(): string;
+      function getLastEvent(): string | void;
 
       /**
        * Removes registered event listener for native back key handler.
        * @param {string} [eventId] - Registered event id
-       * @returns {string} - Returns removed event id
+       * @returns {string | void} - Returns removed event id, or void if failed.
        * @example
        * // Default removes last event
        * Nachocode.backkey.removeEvent();
@@ -331,7 +352,7 @@ declare global {
        * Nachocode.backkey.removeEvent('sample');
        * @since 1.2.0
        */
-      function removeEvent(eventId?: string): string;
+      function removeEvent(eventId?: string): string | void;
     }
 
     /**
@@ -576,10 +597,11 @@ declare global {
 
       /**
        * Retrieves the stored application source version.
-       * @returns {VersionString} The source version of the application.
+       * @returns {VersionString | void} The source version of the application.
+       * - `void` if called in web environment
        * @since 1.2.0
        */
-      function getAppSourceVersion(): VersionString;
+      function getAppSourceVersion(): VersionString | void;
 
       /**
        * Retrieves the current environment of the application.
@@ -708,18 +730,36 @@ declare global {
     /**
      * Namespace for Facebook native features
      * @since 1.4.0
-     * @lastupdated 1.4.0
+     * @lastupdated 1.6.1
      */
     namespace facebook {
       /**
+       * Facebook success result from native layer
+       * @since 1.6.1
+       */
+      export declare type FacebookSuccessResult = {
+        /**
+         * Status which shows success of Facebook native feature.
+         */
+        status: 'success';
+      };
+      /**
+       * Facebook error result from native layer
+       * @since 1.6.1
+       */
+      export declare type FacebookErrorResult = {
+        status: 'error';
+        errorCode: string;
+        message: string;
+      };
+      /**
        * Facebook result from native layer
        * @since 1.4.0
+       * @lastupdated 1.6.1
        */
-      export declare type FacebookResult = {
-        status: 'success' | 'error';
-        errorCode?: string;
-        message?: string;
-      };
+      export declare type FacebookResult =
+        | FacebookSuccessResult
+        | FacebookErrorResult;
 
       /**
        * Reserved facebook permission types
@@ -774,6 +814,7 @@ declare global {
       /**
        * Facebook native social login
        * @since 1.4.0
+       * @lastupdated 1.6.1
        */
       function login(
         permissions: FacebookPermissions,
@@ -788,6 +829,7 @@ declare global {
       /**
        * Check whether logged in with Facebook native social login
        * @since 1.4.0
+       * @lastupdated 1.6.1
        */
       function isLoggedIn(
         callback: (
@@ -804,6 +846,7 @@ declare global {
        *
        * Calls callback function with the data.
        * @since 1.4.0
+       * @lastupdated 1.6.1
        */
       function getUserData(
         permissions: FacebookPermissions,
@@ -820,26 +863,49 @@ declare global {
     /**
      * Namespace for Google native features
      * @since 1.5.0
+     * @lastupdated 1.6.1
      */
     namespace google {
       /**
-       * Google result from native layer
-       * @since 1.5.0
+       * Google success result from native layer
+       * @since 1.6.1
        */
-      export declare type GoogleResult = {
+      export declare type GoogleSuccessResult = {
         /**
-         * Whether the Google native feature failed or not.
+         * Status which shows success of Google native feature.
          */
-        status: 'success' | 'error';
+        status: 'success';
         /**
          * Google native feature result status code. 200 when successful.
          */
+        statusCode: 200;
+      };
+      /**
+       * Google error result from native layer
+       * @since 1.6.1
+       */
+      export declare type GoogleErrorResult = {
+        /**
+         * Status which shows failure of Google native feature.
+         */
+        status: 'error';
+        /**
+         * Failure result status code of Google native feature.
+         */
         statusCode: number;
         /**
-         * Google native feature result message when failed.
+         * Google native feature result message from native layer when failed.
          */
-        message?: string;
+        message: string;
       };
+      /**
+       * Google result from native layer
+       * @since 1.5.0
+       * @lastupdated 1.6.1
+       */
+      export declare type GoogleResult =
+        | GoogleSuccessResult
+        | GoogleErrorResult;
 
       /**
        * Google user data from native layer
@@ -876,6 +942,7 @@ declare global {
        *
        * Calls callback function with the value whether the user is logged in or not.
        * @since 1.5.0
+       * @lastupdated 1.6.1
        */
       function isLoggedIn(
         callback: (
@@ -891,6 +958,7 @@ declare global {
        *
        * Calls callback function with the user data.
        * @since 1.5.0
+       * @lastupdated 1.6.1
        */
       function getUserData(
         callback: (result: GoogleResult, userData?: GoogleUserData) => void
@@ -943,26 +1011,47 @@ declare global {
     /**
      * Namespace for Kakao native features
      * @since 1.5.0
+     * @lastupdated 1.6.1
      */
     namespace kakao {
       /**
-       * Kakao result from native layer
-       * @since 1.5.0
+       * Kakao success result from native layer
+       * @since 1.6.1
        */
-      export declare type KakaoResult = {
+      export declare type KakaoSuccessResult = {
         /**
-         * Whether the Kakao native feature failed or not.
+         * Status which shows success of Kakao native feature.
          */
-        status: 'success' | 'error';
+        status: 'success';
         /**
          * Kakao native feature result status code. 200 when successful.
          */
         statusCode: number;
-        /**
-         * Kakao native feature result message when failed.
-         */
-        message?: string;
       };
+      /**
+       * Kakao error result from native layer
+       * @since 1.6.1
+       */
+      export declare type KakaoErrorResult = {
+        /**
+         * Status which shows failure of Kakao native feature.
+         */
+        status: 'error';
+        /**
+         * Failure result status code of Kakao native feature.
+         */
+        statusCode: number;
+        /**
+         * Kakao native feature result message from native layer when failed.
+         */
+        message: string;
+      };
+      /**
+       * Kakao result from native layer
+       * @since 1.5.0
+       * @lastupdated 1.6.1
+       */
+      export declare type KakaoResult = KakaoSuccessResult | KakaoErrorResult;
 
       /**
        * Kakao login data from native layer.
@@ -1109,6 +1198,7 @@ declare global {
        *
        * Calls callback function with the login data value.
        * @since 1.5.0
+       * @lastupdated 1.6.1
        */
       function login(
         callback: (result: KakaoResult, loginData?: KakaoLoginData) => void
@@ -1120,6 +1210,7 @@ declare global {
        *
        * Calls callback function with the value whether the user is logged in or not.
        * @since 1.5.0
+       * @lastupdated 1.6.1
        */
       function isLoggedIn(
         callback: (
@@ -1135,6 +1226,7 @@ declare global {
        *
        * Calls callback function with the user data.
        * @since 1.5.0
+       * @lastupdated 1.6.1
        */
       function getUserData(
         callback: (result: KakaoResult, userData?: KakaoUserData) => void
@@ -1375,52 +1467,6 @@ declare global {
        * @since 1.2.0
        */
       function setData(key: string, data: string): void;
-
-      /**
-       * Deletes the custom user id data from native layer's preference area.
-       * @since 1.4.2
-       */
-      function deleteCustomUserId(): void;
-
-      /**
-       * @description
-       * Retrieves the custom user id data from native layer's preference area.
-       *
-       * Calls callback function with the result data.
-       * @param callback
-       * - if `customUserId` is not set yet,
-       * parameter `customUserId` has `undefined` type.
-       * @example
-       * Nachocode.preference.getCustomUserId((status, customUserId) => {
-       *   if (status == 'error') {
-       *     // failed to get data from native app layer..
-       *     console.log('Getting custom user id failed..');
-       *     return;
-       *   }
-       *   if (!customUserId) {
-       *     // custom user id not set..
-       *     const userId = 'your_user_id';
-       *     // set custom user id..
-       *     Nachocode.preference.setCustomUserId(userId);
-       *   } else {
-       *     // `customUserId` exists..
-       *     console.log(customUserId);
-       *   }
-       * });
-       * @since 1.4.2
-       */
-      function getCustomUserId(
-        callback: (
-          status: 'success' | 'error',
-          customUserId: string | undefined
-        ) => void
-      ): void;
-
-      /**
-       * Sets the custom user id data into native layer's preference area.
-       * @since 1.4.2
-       */
-      function setCustomUserId(customUserId: string): void;
     }
 
     /**
@@ -1489,32 +1535,53 @@ declare global {
       /**
        * Push subscription result from native layer
        * @since 1.6.0
+       * @lastupdated 1.6.1
        */
-      export declare type PushTopicResult = {
-        /**
-         * Whether push subscription request was successful or not
-         */
-        status: 'success' | 'error';
-        /**
-         * Status code of the subscription result
-         * - `200` : the process was successful
-         * - `201` : already subscribed
-         * - `202` : already unsubscribed
-         * - `401` : subscribe failed
-         * - `402` : unsubscribe failed
-         */
-        statusCode: 200 | 201 | 202 | 401 | 402;
-        /**
-         * If the subscription failed, returns error code.
-         */
-        errorCode?: string;
-        /**
-         * Result message from native layer.
-         *
-         * If the subscription failed, returns the reason why.
-         */
-        message: string;
-      };
+      export declare type PushTopicResult =
+        | {
+            /**
+             * Status which shows success of push subscription request
+             */
+            status: 'success';
+            /**
+             * Status code of the subscription result
+             * - `200` : all process was successful
+             * - `201` : already subscribed
+             * - `202` : already unsubscribed
+             * - `203` : FCM subscription was successful but failed in nachocode server
+             */
+            statusCode: 200 | 201 | 202 | 203;
+            /**
+             * Result message from native layer.
+             *
+             * If the subscription failed, returns the reason why.
+             */
+            message: string;
+          }
+        | {
+            /**
+             * Status which shows failure of push subscription request
+             */
+            status: 'error';
+            /**
+             * Error status code of the subscription result
+             * - `400` : bad request
+             * - `401` : subscribe failed
+             * - `402` : unsubscribe failed
+             * - `500` : internal error
+             */
+            statusCode: 400 | 401 | 402 | 500;
+            /**
+             * If the subscription failed, returns error code.
+             */
+            errorCode: string;
+            /**
+             * Result message from native layer.
+             *
+             * The reason why it failed.
+             */
+            message: string;
+          };
 
       /**
        * Asks for the permission for push notifications.
@@ -1574,28 +1641,22 @@ declare global {
       /**
        * Function to request native layer to subscribe push topic.
        *
-       * Calls `callback` function with the result from native layer.
+       * Returns the result from native layer.
        * @param topic - Topic to subscribe
-       * @param callback - Callback called with the response from native layer.
        * @since 1.6.0
+       * @lastupdated 1.6.1
        */
-      function subscribePushTopic(
-        topic: string,
-        callback?: (result: PushTopicResult) => void
-      ): void;
+      function subscribePushTopic(topic: string): Promise<PushTopicResult>;
 
       /**
        * Function to request native layer to unsubscribe push topic.
        *
-       * Calls `callback` function with the result from native layer.
+       * Returns the result from native layer.
        * @param topic - Topic to unsubscribe
-       * @param callback - Callback called with the response from native layer.
        * @since 1.6.0
+       * @lastupdated 1.6.1
        */
-      function unsubscribePushTopic(
-        topic: string,
-        callback?: (result: PushTopicResult) => void
-      ): void;
+      function unsubscribePushTopic(topic: string): Promise<PushTopicResult>;
 
       /**
        * Function to get push topic subscription list.
