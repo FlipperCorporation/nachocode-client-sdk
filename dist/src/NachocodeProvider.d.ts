@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import type Nachocode from '../types/Nachocode.d.ts';
+import Nachocode from '@nachocode/types';
 type NachocodeContextType = {
     isLoading: true;
     isError: false;

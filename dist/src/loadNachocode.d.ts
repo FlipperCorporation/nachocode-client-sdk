@@ -8,4 +8,4 @@ export declare function loadNachocode(apiKey: string, options?: Nachocode.Initia
     osVersion?: string;
     packageName?: string;
     pushToken?: string;
-}) => void): Promise<typeof Nachocode>;
+}) => void): Promise<typeof window.Nachocode>;

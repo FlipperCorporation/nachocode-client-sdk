@@ -6,7 +6,7 @@ import {
   SCRIPT_URL,
 } from './constants';
 
-let cachedPromise: Promise<typeof Nachocode> | undefined;
+let cachedPromise: Promise<typeof window.Nachocode> | undefined;
 
 export function loadNachocode(
   apiKey: string,
@@ -23,7 +23,7 @@ export function loadNachocode(
     packageName?: string;
     pushToken?: string;
   }) => void
-): Promise<typeof Nachocode> {
+): Promise<typeof window.Nachocode> {
   if (typeof window === 'undefined') {
     return Promise.reject(
       // 서버 환경에서는 실행할 수 없습니다.
@@ -89,7 +89,7 @@ export function loadNachocode(
 async function initializeNachocode(
   apiKey: string,
   options?: Nachocode.InitializeOptions
-): Promise<typeof Nachocode> {
+): Promise<typeof window.Nachocode> {
   if (!window.Nachocode || !window.Nachocode.env) {
     // SDK가 존재하지 않습니다.
     throw new Error('[Nachocode] SDK is not available on the window object.');

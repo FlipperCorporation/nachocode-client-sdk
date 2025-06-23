@@ -37,11 +37,13 @@
     "target": "ESNext",
     "useDefineForClassFields": false,
     "useUnknownInCatchVariables": true,
-    "paths": {
-      "Nachocode": ["./types/global.d.ts"]
-    },
-    "types": ["./types/global", "jest", "react", "@testing-library/jest-dom"]
+    "types": ["@nachocode/types", "jest", "react", "@testing-library/jest-dom"]
   },
-  "include": ["src/**/*", "tests/**/*", "releases/*", "types/**/*.d.ts"],
+  "include": [
+    "src/**/*",
+    "tests/**/*",
+    "releases/*",
+    "node_modules/@nachocode/types"
+  ],
   "exclude": ["src/client-sdk.js", "node_modules", "**/node_modules/*"]
 }
