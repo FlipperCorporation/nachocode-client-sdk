@@ -15,16 +15,16 @@ declare function loadNachocode(apiKey: string, options?: Nachocode.InitializeOpt
 
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.6.1
+   * nachocode JavaScript Client SDK Type Declaration v1.6.2
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.6.1/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.6.2/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-06-20
+   * Last Updated Date: 2025-07-08
    */
   namespace Nachocode {
     /**
@@ -157,7 +157,7 @@ declare global {
      *   - _Currently, only iOS supported._
      *   - _Customization needed._
      * @since 1.4.0
-     * @lastupdated 1.4.0
+     * @lastupdated 1.6.1
      */
     namespace apple {
       /**
@@ -968,8 +968,9 @@ declare global {
        * @description
        * Function to logout with Google native social features.
        * @since 1.5.0
+       * @lastupdated 1.6.2
        */
-      function logout(callback: (result: GoogleResult) => void): void;
+      function logout(callback?: (result: GoogleResult) => void): void;
     }
 
     /**
@@ -1239,8 +1240,9 @@ declare global {
        * When the user attempts to log in, automatically authorized again
        * with past account info from KakaoTalk.
        * @since 1.5.0
+       * @lastupdated 1.6.2
        */
-      function logout(callback: (result: KakaoResult) => void): void;
+      function logout(callback?: (result: KakaoResult) => void): void;
 
       /**
        * @description
@@ -1249,8 +1251,9 @@ declare global {
        * When the user attempts to log in, must be authorized again
        * from scratch on KakaoTalk, after unlinked.
        * @since 1.5.0
+       * @lastupdated 1.6.2
        */
-      function unlink(callback: (result: KakaoResult) => void): void;
+      function unlink(callback?: (result: KakaoResult) => void): void;
 
       /**
        * Native Kakao sharing types
@@ -1347,30 +1350,89 @@ declare global {
     }
 
     /**
-     * Namespace for functions called from native-side of the application.
-     * @since 1.0.0
-     * @lastupdated 1.0.3
+     * Namespace for location related features
+     * @since 1.6.2
      */
-    namespace native {
-      export declare type CallbackResponse = {
-        method: string;
-        data?: object;
-        message?: string;
+    namespace location {
+      export declare type LocationPosition = {
+        /**
+         * A double number representing the position's `latitude` in decimal degrees.
+         */
+        latitude: number;
+        /**
+         * A double number representing the position's `latitude` in decimal degrees.
+         */
+        longitude: number;
       };
 
       /**
-       * A placeholder callback function that can be called from the native application.
-       * This function should be implemented to handle specific callback from native code.
+       * Get current position success result
+       * @since 1.6.2
        */
-      function handleCallback(response: CallbackResponse): void;
+      export declare type GetCurrentPositionSuccessResult = {
+        /**
+         * request was successful
+         */
+        status: 'success';
+        /**
+         * status code
+         */
+        statusCode: 200;
+        /**
+         * result message
+         */
+        message: string;
+        /**
+         * result location data
+         */
+        data: LocationPosition;
+      };
 
       /**
-       * A collection of named callback functions that can be invoked from native code.
-       * Each property of this object can be a function that gets executed in response to a native call.
+       * Get current position error result
+       * @since 1.6.2
        */
-      const handleCallbacks: {
-        [callbackName: string]: (response: any) => void;
+      export declare type GetCurrentPositionErrorResult = {
+        /**
+         * request failed
+         */
+        status: 'error';
+        /**
+         * status code
+         */
+        statusCode: 400 | number;
+        /**
+         * result message, describes error
+         */
+        message: string;
+        /**
+         * error code
+         */
+        errorCode: string;
       };
+
+      /**
+       * Get current position result
+       * @since 1.6.2
+       */
+      export declare type GetCurrentPositionResult =
+        | GetCurrentPositionSuccessResult
+        | GetCurrentPositionErrorResult;
+
+      /**
+       * Retrieves the current location position of the device.
+       *
+       * Automatically checks current environment and uses different interface.
+       *
+       * Asks location permission if not granted, and called for the first time.
+       *
+       * Supported Platforms
+       * - **Android** : Uses native interface
+       * - **iOS** : Uses native interface
+       * - **Web** : Uses Web Geolocation API
+       * @since 1.6.2
+       */
+      function getCurrentPosition(): Promise<GetCurrentPositionResult>;
     }
 
     /**
