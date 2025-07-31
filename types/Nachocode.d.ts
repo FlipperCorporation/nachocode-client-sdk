@@ -1,34 +1,77 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.6.2
+   * nachocode JavaScript Client SDK Type Declaration v1.6.3
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.6.2/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.6.3/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-07-08
+   * Last Updated Date: 2025-07-28
    */
   namespace Nachocode {
     /**
      * An error thrown when attempting to use the SDK before it has been initialized.
      */
-    export declare class NotInitializedError extends Error {}
+    export declare class NotInitializedError extends Error {
+      /**
+       * Error status code
+       */
+      statusCode: 400;
+      /**
+       * Error message describing the issue
+       */
+      message: 'NOT_INITIALIZED';
+      /**
+       * Error description about the issue
+       */
+      desc: string;
+      /**
+       * Error code in the format `ERR-<TYPE>`
+       */
+      code: 'ERR-NS-CNI-001';
+    }
 
     /**
-     * Standard SDK Error format
+     * nachocode Server API Error
+     */
+    export declare interface ApiError extends error {
+      /**
+       * Server error status code
+       */
+      statusCode: number;
+      /**
+       * Error message describing the issue
+       */
+      message: string;
+      /**
+       * Error description about the issue
+       */
+      desc: string;
+      /**
+       * Error code in the format `ERR-<TYPE>`
+       */
+      code: `ERR-${string}`;
+    }
+
+    /**
+     * Standard SDK Error
      */
     export declare interface SDKError {
+      /**
+       * Error message describing the issue
+       */
+      message: string;
       /**
        * Error code in the format `ERR-<TYPE>`
        */
       code: `ERR-${string}`;
       /**
-       * Error message describing the issue
+       * SDK error status code
        */
-      message: string;
+      statusCode?: number;
     }
 
     /**
@@ -239,10 +282,14 @@ declare global {
       /**
        * Authentication result
        */
-      export declare type AuthenticationResult = {
-        authenticated: boolean;
-        error?: SDKError;
-      };
+      export declare type AuthenticationResult =
+        | {
+            authenticated: boolean;
+          }
+        | {
+            authenticated: false;
+            error: SDKError;
+          };
 
       /**
        * Function to check availability of biometrics authentication.
@@ -250,7 +297,7 @@ declare global {
        * @since 1.3.0
        */
       function canUseBiometrics(
-        callback: (available: boolean, error?: SDKError) => void
+        callback: (available: boolean, error?: SDKError | undefined) => void
       ): void;
 
       /**
@@ -343,14 +390,19 @@ declare global {
     /**
      * Namespace for browser-related functions
      * @since 1.0.3
-     * @lastupdated 1.1.0
+     * @lastupdated 1.6.3 - new option added in `OpenURLOption`
      */
     namespace browser {
       /**
        * Option for opening a URL.
        *   - Default : 'external'
+       * @since 1.0.3
+       * @lastupdated 1.6.3 - `internal_default` newly added
        */
-      export declare type OpenURLOption = 'external' | 'internal';
+      export declare type OpenURLOption =
+        | 'external' // opens link with external browser ex. Safari, Chrome
+        | 'internal' // uses customized in-app browser
+        | 'internal_default'; // uses default browser engine ex. Safari, Chrome
 
       /**
        * Opens the provided URL with the specified option.
@@ -366,7 +418,11 @@ declare global {
        * @example
        * // Open internal browser
        * Nachocode.browser.openLink('https://nachocode.io', 'internal');
+       * @example
+       * // Open default internal browser (ex. `Safari`, `Chrome`)
+       * Nachocode.browser.openLink('https://nachocode.io', 'internal_default');
        * @since 1.0.3
+       * @lastupdated 1.6.3 - `internal_default` newly added
        */
       function openLink(url: string, option?: OpenURLOption): void;
     }
@@ -374,17 +430,34 @@ declare global {
     /**
      * Namespace for clipboard related functions
      * @since 1.4.0
+     * @lastupdated 1.6.3 - updated to support `Web` platforms
      */
     namespace clipboard {
       /**
-       * Function to get text from the native clipboard through native layer.
+       * Function to get text from the clipboard.
+       *
+       * Automatically checks current OS and gets text from the clipboard.
+       *
+       * Supported Platforms
+       * - Android
+       * - iOS
+       * - Web
        * @since 1.4.0
+       * @lastupdated 1.6.3 - updated to support `Web` platforms
        */
       function getText(callback: (text: string) => void): void;
 
       /**
-       * Function to set text to the native clipboard through native layer.
+       * Function to set text to the clipboard.
+       *
+       * Automatically checks current OS and sets text to the clipboard.
+       *
+       * Supported Platforms
+       * - Android
+       * - iOS
+       * - Web
        * @since 1.4.0
+       * @lastupdated 1.6.3 - updated to support `Web` platforms
        */
       function setText(
         text: string,
@@ -985,6 +1058,7 @@ declare global {
 
       /**
        * Initiates a purchase transaction for the specified product.
+       * @server Calls nachocode server api internally
        * @since 1.4.0
        */
       function purchase(
@@ -1242,7 +1316,7 @@ declare global {
 
       /**
        * Native Kakao sharing types
-       * @since 1.4.2
+       * @since 1.5.0
        */
       export declare const KAKAO_SHARE_TYPES = {
         CUSTOM: 'custom',
@@ -1251,15 +1325,14 @@ declare global {
 
       /**
        * Type for native Kakao sharing types
-       * @since 1.2.0
-       * @lastupdated 1.4.2
+       * @since 1.5.0
        */
       export declare type KakaoShareType =
         (typeof KAKAO_SHARE_TYPES)[keyof typeof KAKAO_SHARE_TYPES];
 
       /**
        * Native Kakao custom data to send
-       * @since 1.2.0
+       * @since 1.5.0
        */
       export declare type KakaoShareCustom = {
         templateId: number;
@@ -1273,7 +1346,7 @@ declare global {
 
       /**
        * Native Kakao scrap data to send
-       * @since 1.2.0
+       * @since 1.5.0
        */
       export declare type KakaoShareScrap = {
         requestUrl: string;
@@ -1304,15 +1377,14 @@ declare global {
 
       /**
        * Kakao share result status code
-       * @since 1.2.0
-       * @lastupdated 1.4.2
+       * @since 1.5.0
        */
       export declare type KakaoShareStatusCode =
         (typeof KAKAO_SHARE_RESULT_STATUS_CODES)[keyof typeof KAKAO_SHARE_RESULT_STATUS_CODES];
 
       /**
        * Kakao share result
-       * @since 1.2.0
+       * @since 1.5.0
        */
       export declare type KakaoShareResult = {
         status: 'success' | 'error';
@@ -1523,6 +1595,47 @@ declare global {
      */
     namespace push {
       /**
+       * @since 1.6.3
+       */
+      export declare type PushTokenResult =
+        | {
+            /**
+             * Registration success status.
+             */
+            status: 'success';
+            /**
+             * Registration success status code.
+             */
+            statusCode: 201;
+            /**
+             * Registration success message.
+             */
+            message: string;
+          }
+        | {
+            /**
+             * Whether registering push token was successful or not
+             */
+            status: 'error';
+            /**
+             * If the registration fails, returns error status code.
+             */
+            statusCode: number;
+            /**
+             * If the registration fails, returns the reason why.
+             */
+            message: string;
+            /**
+             * If the registration fails, describes the detailed issue.
+             */
+            desc: string;
+            /**
+             * If the registration fails, returns error code.
+             */
+            code: string;
+          };
+
+      /**
        * Options for local push notification
        * @since 1.4.1
        */
@@ -1639,24 +1752,34 @@ declare global {
       function askPushPermission(): void;
 
       /**
-       * Asynchronously retrieves the push token.
+       * Retrieves the push token.
+       *
+       * Only works in native environment.
+       * @returns FCM device token. empty string if failed
        * @since 1.0.0
+       * @lastupdated 1.6.3 - Set return type to string
        */
-      function getPushToken(): Promise<string>;
+      function getPushToken(): string;
 
       /**
-       * Registers the push token to the nachocode server.
-       * @param userID - Client user identifier
+       * Registers the push token with provided `userId` to the nachocode server.
+       * @param userId - Client user identifier
+       * @server Calls nachocode server api internally
        * @since 1.0.0
+       * @lastupdated 1.6.3 - Set return type, logic improved
        */
-      function registerPushToken(userID: string): Promise<any>;
+      function registerPushToken(userId: string): Promise<PushTokenResult>;
 
       /**
-       * Deletes the push token with the user identifier.
-       * @param userID - Client user identifier
+       * Deletes the push token with provided user identifier.
+       *
+       * *If `userId` not provided deletes current device token*
+       * @param userId - Client user identifier
+       * @server Calls nachocode server api internally
        * @since 1.0.0
+       * @lastupdated 1.6.3 - Set return type, userId set optional
        */
-      function deletePushToken(userID: string): Promise<any>;
+      function deletePushToken(userId?: string): Promise<PushTokenResult>;
 
       /**
        * Function to reserve local push from native layer.
@@ -1690,8 +1813,9 @@ declare global {
        *
        * Returns the result from native layer.
        * @param topic - Topic to subscribe
+       * @server Calls nachocode server api internally
        * @since 1.6.0
-       * @lastupdated 1.6.1
+       * @updated 1.6.1 - Updated from `callback` to `Promise`
        */
       function subscribePushTopic(topic: string): Promise<PushTopicResult>;
 
@@ -1700,8 +1824,9 @@ declare global {
        *
        * Returns the result from native layer.
        * @param topic - Topic to unsubscribe
+       * @server Calls nachocode server api internally
        * @since 1.6.0
-       * @lastupdated 1.6.1
+       * @updated 1.6.1 - Updated from `callback` to `Promise`
        */
       function unsubscribePushTopic(topic: string): Promise<PushTopicResult>;
 
@@ -1746,7 +1871,10 @@ declare global {
           openDirect: boolean;
           openType?: 'internal' | 'external' | 'main';
         },
-        callback?: (data: string, error?: SDKError) => void
+        callback?: (
+          data: string | undefined,
+          error?: SDKError | undefined
+        ) => void
       ): void;
     }
 
@@ -1764,8 +1892,7 @@ declare global {
 
       /**
        * Set whether pull to refresh feature is enabled or not.
-       * @since 1.3.0
-       * @lastupdated 1.4.0
+       * @since 1.4.0
        */
       function setPullToRefresh(enable: boolean): void;
 
@@ -2009,7 +2136,7 @@ declare global {
 
     /**
      * Namespace for vibration features
-     * @since 1.2.0
+     * @since 1.1.0
      */
     namespace vibration {
       /**
@@ -2023,7 +2150,7 @@ declare global {
 
       /**
        * Type for haptics feedback types
-       * @since 1.2.0
+       * @since 1.1.0
        * @lastupdated 1.4.2
        */
       export declare type HapticsType =
@@ -2031,25 +2158,25 @@ declare global {
 
       /**
        * Set whether haptics feedback is used or not.
-       * @since 1.2.0
+       * @since 1.1.0
        */
       function setHaptics(enable: boolean): void;
 
       /**
        * Set whether vibration is used or not.
-       * @since 1.2.0
+       * @since 1.1.0
        */
       function setVibration(enable: boolean): void;
 
       /**
        * Get whether haptics feedback is used or not from native.
-       * @since 1.2.0
+       * @since 1.1.0
        */
       function getHaptics(callback: (enable: boolean) => void): void;
 
       /**
        * Get whether vibration is used or not from native.
-       * @since 1.2.0
+       * @since 1.1.0
        */
       function getVibration(callback: (enable: boolean) => void): void;
 
@@ -2057,13 +2184,13 @@ declare global {
        * @description
        * Triggers haptics feedback.
        * - Default : `0`
-       * @since 1.2.0
+       * @since 1.1.0
        */
       function haptics(hapticsType?: HapticsType): void;
 
       /**
        * Triggers vibration.
-       * @since 1.2.0
+       * @since 1.1.0
        */
       function vibrate(): void;
     }
