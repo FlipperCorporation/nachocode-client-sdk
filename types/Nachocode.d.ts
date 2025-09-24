@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.6.3
+   * nachocode JavaScript Client SDK Type Declaration v1.7.0
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.6.3/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.7.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-07-28
+   * Last Updated Date: 2025-09-23
    */
   namespace Nachocode {
     /**
@@ -183,7 +183,6 @@ declare global {
      * Namespace for Apple native features
      *
      *   - _Currently, only iOS supported._
-     *   - _Customization needed._
      * @since 1.4.0
      * @lastupdated 1.6.1
      */
@@ -272,6 +271,176 @@ declare global {
       function getUserIdentifier(
         callback: (result: AppleResult, userIdentifier?: string) => void
       ): void;
+    }
+
+    /**
+     * Namespace for integrated Appsflyer native features.
+     * @since 1.7.0
+     */
+    namespace appsflyer {
+      export declare type AppsflyerSuccessResult = {
+        status: 'success';
+        statusCode: 200;
+        message: string;
+      };
+      export declare type AppsflyerErrorResult = {
+        status: 'error';
+        statusCode: number;
+        errorCode: string;
+        message: string;
+      };
+      export declare type AppsflyerResult =
+        | AppsflyerSuccessResult
+        | AppsflyerErrorResult;
+
+      interface GetCustomUserIdSuccessResult extends AppsflyerSuccessResult {
+        userId: string;
+      }
+      export declare type GetCustomUserIdResult =
+        | GetCustomUserIdSuccessResult
+        | AppsflyerErrorResult;
+
+      /**
+       * @example
+       * {
+       *   timestamp: 1758550124487,
+       *   event_type: "conversion_data",
+       *   install_time: "2025-09-22 09:30:36.455",
+       *   af_message: "organic install",
+       *   af_status: "Organic",
+       *   is_first_launch: true
+       * }
+       */
+      export declare interface ConversionData {
+        /**
+         * Unix epoch time in milliseconds when the attribution was received.
+         */
+        timestamp: number;
+        /**
+         * How the attribution was received.
+         */
+        event_type: 'conversion_data';
+        install_time: string;
+        af_message: string;
+        /**
+         * Install attribution type reported by AppsFlyer.
+         * - "Organic": Natural install (no campaign).
+         * - "Non-organic": Attributed to a campaign or ad network.
+         */
+        af_status: 'Organic' | 'Non-organic';
+        /**
+         * `true` if this session marked as the very first launch for the install.
+         */
+        is_first_launch: boolean;
+      }
+
+      /**
+       * @example
+       * {
+       *   timestamp: 1758610751590,
+       *   event_type: "deeplink_data",
+       *   link_type: "app_link",
+       *   scheme: "https",
+       *   host: "nachocode.link",
+       *   path: "/",
+       *   link: "https://nachocode.link/",
+       *   is_deferred: false
+       * }
+       */
+      export declare interface BaseDeepLinkData {
+        /**
+         * Unix epoch time in milliseconds when the attribution was received.
+         */
+        timestamp: number;
+        /**
+         * How the attribution was received.
+         */
+        event_type: 'deeplink_data';
+        link_type: 'app_link' | 'universal_link' | 'uri_scheme';
+        scheme: string;
+        host: string;
+        path: string;
+        /**
+         * Full URL
+         */
+        link: string;
+        is_deferred?: boolean;
+      }
+
+      export declare type DeepLinkData = BaseDeepLinkData &
+        Omit<Record<string, string>, keyof BaseDeepLinkData>;
+
+      export declare type AttributionData = ConversionData | DeepLinkData;
+
+      interface GetAttributionDataSuccessResult extends AppsflyerSuccessResult {
+        data: AttributionData;
+      }
+
+      export declare type GetAttributionDataResult =
+        | GetAttributionDataSuccessResult
+        | AppsflyerErrorResult;
+
+      interface GetAttributionListSuccessResult extends AppsflyerSuccessResult {
+        data: AttributionData[];
+      }
+
+      export declare type GetAttributionListResult =
+        | GetAttributionListSuccessResult
+        | AppsflyerErrorResult;
+
+      /**
+       * Function to set a custom user id with provided parameter `userId` to Appsflyer feature in the native layer.
+       * @param userId - Client user identifier
+       * @since 1.7.0
+       */
+      function setCustomUserId(userId: string): Promise<AppsflyerResult>;
+
+      /**
+       * Function to get registered custom user id from Appsflyer feature in the native layer.
+       * @since 1.7.0
+       */
+      function getCustomUserId(): Promise<GetCustomUserIdResult>;
+
+      /**
+       * Function to delete registered custom user id from Appsflyer feature in the native layer.
+       * @since 1.7.0
+       */
+      function deleteCustomUserId(): Promise<AppsflyerResult>;
+
+      /**
+       * Function to get attribution data.
+       * @since 1.7.0
+       */
+      function getAttributionData(): Promise<GetAttributionDataResult>;
+
+      /**
+       * Function to clear attribution data.
+       * @since 1.7.0
+       */
+      function clearAttributionData(): Promise<AppsflyerResult>;
+
+      /**
+       * Function to get attribution data list.
+       * @since 1.7.0
+       */
+      function getAttributionList(): Promise<GetAttributionListResult>;
+
+      /**
+       * Function to clear attribution data list.
+       * @since 1.7.0
+       */
+      function clearAttributionList(): Promise<AppsflyerResult>;
+
+      /**
+       * Function to log custom event on AppsFlyer.
+       * @param eventName - Custom event name
+       * @param values - Custom event value object
+       * @since 1.7.0
+       */
+      function logEvent(
+        eventName: string,
+        values: Record<string, any>
+      ): Promise<AppsflyerResult>;
     }
 
     /**

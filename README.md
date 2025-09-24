@@ -15,7 +15,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2025-07-31_
+> 🔔 **최신화 일자:** _2025-09-24_
 
 ## 목차
 
@@ -184,7 +184,7 @@ nachocode Client SDK는 초기화 시 선택적으로 옵션을 설정할 수 �
 최신 버전 로드 (기본)
 
 - 최신 버전의 SDK를 항상 유지하려면 아래 코드를 사용하세요
-- 현재 최신 버전 v.1.6.3
+- 현재 최신 버전 v.1.7.0
 
 ```jsx
 loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
@@ -195,7 +195,7 @@ loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
 - 특정 버전으로 고정하려면 다음과 같이 사용합니다
 
 ```jsx
-loadNachocode('your-api-key', options, '1.6.3');
+loadNachocode('your-api-key', options, '1.7.0');
 ```
 
 > 📢 최신 버전 사용이 권장되며, 특정 버전 고정은 호환성이 중요한 경우에만 사용하세요.
@@ -237,6 +237,7 @@ nachocode Client SDK는 각 기능별로 **네임스페이스(namespace)** 로 �
 | ---------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `app`            | 앱 이름, 버전, 패키지 이름 등의 정보를 제공합니다.                               | [앱 문서](https://developer.nachocode.io/docs/sdk/namespaces/app)                    |
 | `apple`          | Apple 계정을 통한 소셜 로그인 기능 등을 제공합니다.                              | [Apple 문서](https://developer.nachocode.io/docs/sdk/namespaces/apple)               |
+| `appsflyer`      | AppsFlyer 마케팅 어트리뷰션 및 사용자 트래킹 기능 등을 제공합니다.               | [AppsFlyer 문서](https://developer.nachocode.io/docs/sdk/integrations/appsflyer)     |
 | `authentication` | 생체 인증(Fingerprint/Face ID) 등의 기능을 제공합니다.                           | [인증 문서](https://developer.nachocode.io/docs/sdk/namespaces/authentication)       |
 | `backkey`        | Android 디바이스의 네이티브 백 키 이벤트를 제어할 수 있습니다.                   | [백 키 문서](https://developer.nachocode.io/docs/sdk/namespaces/backkey)             |
 | `browser`        | 외부 또는 내부 브라우저로 URL을 열 수 있습니다.                                  | [브라우저 문서](https://developer.nachocode.io/docs/sdk/namespaces/browser)          |

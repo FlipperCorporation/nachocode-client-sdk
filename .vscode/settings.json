@@ -14,6 +14,7 @@
   "prettier.enable": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "cSpell.words": [
+    "appsflyer",
     "backkey",
     "kakao",
     "keyboardhidden",
