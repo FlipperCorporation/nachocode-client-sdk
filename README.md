@@ -15,7 +15,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2025-09-24_
+> 🔔 **최신화 일자:** _2025-09-25_
 
 ## 목차
 
@@ -245,10 +245,10 @@ nachocode Client SDK는 각 기능별로 **네임스페이스(namespace)** 로 �
 | `device`         | 디바이스 모델, OS 버전, 배터리 및 네트워크 상태 등을 확인합니다.                 | [디바이스 문서](https://developer.nachocode.io/docs/sdk/namespaces/device)           |
 | `env`            | SDK 초기화 상태, 실행 환경(웹/앱) 등을 확인할 수 있습니다.                       | [환경 문서](https://developer.nachocode.io/docs/sdk/namespaces/env)                  |
 | `event`          | 초기화, 포그라운드/백그라운드 전환, 네트워크 상태 변경 등의 이벤트를 처리합니다. | [이벤트 문서](https://developer.nachocode.io/docs/sdk/namespaces/event)              |
-| `facebook`       | Facebook 소셜 로그인 기능을 제공합니다.                                          | [Facebook 문서](https://developer.nachocode.io/docs/sdk/namespaces/facebook)         |
-| `google`         | Google 소셜 로그인 기능을 제공합니다.                                            | [Google 문서](https://developer.nachocode.io/docs/sdk/namespaces/google)             |
+| `facebook`       | Facebook 소셜 로그인 기능을 제공합니다.                                          | [Facebook 문서](https://developer.nachocode.io/docs/sdk/integrations/facebook)       |
+| `google`         | Google 소셜 로그인 기능을 제공합니다.                                            | [Google 문서](https://developer.nachocode.io/docs/sdk/integrations/google)           |
 | `iap`            | Google Play 및 Apple App Store 인앱 결제 기능을 제공합니다.                      | [인앱 결제 문서](https://developer.nachocode.io/docs/sdk/namespaces/iap)             |
-| `kakao`          | Kakao 소셜 로그인 및 공유 기능을 제공합니다.                                     | [Kakao 문서](https://developer.nachocode.io/docs/sdk/namespaces/kakao)               |
+| `kakao`          | Kakao 소셜 로그인 및 공유 기능을 제공합니다.                                     | [Kakao 문서](https://developer.nachocode.io/docs/sdk/integrations/kakao)             |
 | `location`       | 현재 디바이스 위치의 경도, 위도를 확인할 수 있습니다.                            | [Location 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/location) |
 | `permission`     | 카메라, 위치, 푸시 알림 등 디바이스 권한을 요청하고 상태를 확인할 수 있습니다.   | [권한 문서](https://developer.nachocode.io/docs/sdk/namespaces/permission)           |
 | `preference`     | 애플리케이션 내부 저장소를 통해 데이터를 저장 및 관리합니다.                     | [내부 저장소 문서](https://developer.nachocode.io/docs/sdk/namespaces/preference)    |
