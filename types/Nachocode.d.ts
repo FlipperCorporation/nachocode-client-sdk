@@ -324,17 +324,17 @@ declare global {
          */
         data_type: 'conversion_data';
         install_time: string;
-        af_message: string;
+        /**
+         * `true` if this session marked as the very first launch for the install.
+         */
+        is_first_launch: boolean;
         /**
          * Install attribution type reported by AppsFlyer.
          * - "Organic": Natural install (no campaign).
          * - "Non-organic": Attributed to a campaign or ad network.
          */
         af_status: 'Organic' | 'Non-organic';
-        /**
-         * `true` if this session marked as the very first launch for the install.
-         */
-        is_first_launch: boolean;
+        af_message?: string;
       }
 
       /**
@@ -367,13 +367,51 @@ declare global {
          * Full URL
          */
         link: string;
-        is_deferred?: boolean;
+        is_deferred: false;
+      }
+
+      /**
+       * @see {@link https://dev.appsflyer.com/hc/docs/android-sdk-reference-deeplink}
+       * @see {@link https://dev.appsflyer.com/hc/docs/ios-sdk-reference-appsflyerdeeplink}
+       */
+      export declare interface BaseDeferredDeepLinkData {
+        /**
+         * Unix epoch time in milliseconds when the attribution was received.
+         */
+        timestamp: number;
+        /**
+         * How the attribution was received.
+         */
+        data_type: 'deeplink_data';
+        link_type: 'deferred_link';
+        is_deferred: true;
+        match_type:
+          | 'referrer' // Google Play referrer string
+          | 'id_matching'
+          | 'probabilistic'
+          | 'srn'; // self-reporting network
+        media_source: string;
+        campaign: string;
+        campaign_id: string;
+        click_http_referrer: string;
+        deep_link_value: string;
+        af_sub1: string;
+        af_sub2: string;
+        af_sub3: string;
+        af_sub4: string;
+        af_sub5: string;
       }
 
       export declare type DeepLinkData = BaseDeepLinkData &
         Omit<Record<string, string>, keyof BaseDeepLinkData>;
 
-      export declare type AttributionData = ConversionData | DeepLinkData;
+      export declare type DeferredDeepLinkData = BaseDeferredDeepLinkData &
+        Omit<Record<string, string>, keyof BaseDeepLinkData>;
+
+      export declare type AttributionData =
+        | ConversionData
+        | DeepLinkData
+        | DeferredDeepLinkData;
 
       interface GetAttributionDataSuccessResult extends AppsflyerSuccessResult {
         data: AttributionData;
