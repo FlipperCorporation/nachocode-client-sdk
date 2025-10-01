@@ -15,7 +15,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2025-09-25_
+> 🔔 **최신화 일자:** _2025-10-01_
 
 ## 목차
 
@@ -32,6 +32,7 @@
   - [SDK 버전 관리](#sdk-버전-관리)
   - [SDK 기능 사용](#sdk-기능-사용)
   - [네임스페이스 소개](#네임스페이스-소개)
+  - [네임스페이스 (외부연동) 소개](#네임스페이스-외부연동-소개)
   - [기여자](#기여자)
   - [기여하기](#기여하기)
   - [라이선스](#라이선스)
@@ -229,36 +230,47 @@ loadNachocode('your-api-key', options, '1.7.0');
 
 ## 네임스페이스 소개
 
-nachocode Client SDK는 각 기능별로 **네임스페이스(namespace)** 로 구분되어 있습니다.
-
+nachocode SDK는 각 기능별로 **네임스페이스(namespace)** 로 구분되어 있습니다.  
 아래는 주요 네임스페이스의 목록과 설명입니다. 각 네임스페이스에 대한 상세한 문서는 **문서 링크**에서 확인하세요.
 
-| **네임스페이스** | **설명**                                                                         | **문서 링크**                                                                            |
-| ---------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `app`            | 앱 이름, 버전, 패키지 이름 등의 정보를 제공합니다.                               | [앱 문서](https://developer.nachocode.io/docs/sdk/namespaces/app)                        |
-| `apple`          | Apple 계정을 통한 소셜 로그인 기능 등을 제공합니다.                              | [Apple 문서](https://developer.nachocode.io/docs/sdk/namespaces/apple)                   |
-| `appsflyer`      | AppsFlyer 마케팅 어트리뷰션 및 사용자 트래킹 기능 등을 제공합니다.               | [AppsFlyer 문서](https://developer.nachocode.io/docs/sdk//reference/appsflyer/reference) |
-| `authentication` | 생체 인증(Fingerprint/Face ID) 등의 기능을 제공합니다.                           | [인증 문서](https://developer.nachocode.io/docs/sdk/namespaces/authentication)           |
-| `backkey`        | Android 디바이스의 네이티브 백 키 이벤트를 제어할 수 있습니다.                   | [백 키 문서](https://developer.nachocode.io/docs/sdk/namespaces/backkey)                 |
-| `browser`        | 외부 또는 내부 브라우저로 URL을 열 수 있습니다.                                  | [브라우저 문서](https://developer.nachocode.io/docs/sdk/namespaces/browser)              |
-| `clipboard`      | 텍스트를 클립보드에 복사하거나 읽을 수 있습니다.                                 | [클립보드 문서](https://developer.nachocode.io/docs/sdk/namespaces/clipboard)            |
-| `device`         | 디바이스 모델, OS 버전, 배터리 및 네트워크 상태 등을 확인합니다.                 | [디바이스 문서](https://developer.nachocode.io/docs/sdk/namespaces/device)               |
-| `env`            | SDK 초기화 상태, 실행 환경(웹/앱) 등을 확인할 수 있습니다.                       | [환경 문서](https://developer.nachocode.io/docs/sdk/namespaces/env)                      |
-| `event`          | 초기화, 포그라운드/백그라운드 전환, 네트워크 상태 변경 등의 이벤트를 처리합니다. | [이벤트 문서](https://developer.nachocode.io/docs/sdk/namespaces/event)                  |
-| `facebook`       | Facebook 소셜 로그인 기능을 제공합니다.                                          | [Facebook 문서](https://developer.nachocode.io/docs/sdk/integrations/facebook/reference) |
-| `google`         | Google 소셜 로그인 기능을 제공합니다.                                            | [Google 문서](https://developer.nachocode.io/docs/sdk/integrations/google/reference)     |
-| `iap`            | Google Play 및 Apple App Store 인앱 결제 기능을 제공합니다.                      | [인앱 결제 문서](https://developer.nachocode.io/docs/sdk/namespaces/iap)                 |
-| `kakao`          | Kakao 소셜 로그인 및 공유 기능을 제공합니다.                                     | [Kakao 문서](https://developer.nachocode.io/docs/sdk/integrations/kakao/reference)       |
-| `location`       | 현재 디바이스 위치의 경도, 위도를 확인할 수 있습니다.                            | [Location 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/location)     |
-| `permission`     | 카메라, 위치, 푸시 알림 등 디바이스 권한을 요청하고 상태를 확인할 수 있습니다.   | [권한 문서](https://developer.nachocode.io/docs/sdk/namespaces/permission)               |
-| `preference`     | 애플리케이션 내부 저장소를 통해 데이터를 저장 및 관리합니다.                     | [내부 저장소 문서](https://developer.nachocode.io/docs/sdk/namespaces/preference)        |
-| `push`           | 푸시 알림 토큰을 관리하고 Nachocode 서버에 등록할 수 있습니다.                   | [푸시 문서](https://developer.nachocode.io/docs/sdk/namespaces/push)                     |
-| `scanner`        | QR 코드 스캔 및 기타 스캔 기능을 제공합니다.                                     | [스캐너 문서](https://developer.nachocode.io/docs/sdk/namespaces/scanner)                |
-| `setting`        | Pull to Refresh와 같은 설정 기능을 제공합니다.                                   | [설정 문서](https://developer.nachocode.io/docs/sdk/namespaces/setting)                  |
-| `share`          | 네이티브 공유 UI를 통해 URL을 공유할 수 있습니다.                                | [공유 문서](https://developer.nachocode.io/docs/sdk/namespaces/share)                    |
-| `store`          | Apple App Store, Google Play Store 상호작용 관련 기능을 제공합니다.              | [스토어 문서](https://developer.nachocode.io/docs/sdk/namespaces/store)                  |
-| `tabbar`         | 앱 내부 탭바의 표시 여부 및 이동을 제어할 수 있습니다.                           | [탭 바 문서](https://developer.nachocode.io/docs/sdk/namespaces/tabbar)                  |
-| `vibration`      | 디바이스 진동 및 햅틱 피드백을 제어합니다.                                       | [진동 문서](https://developer.nachocode.io/docs/sdk/namespaces/vibration)                |
+| **네임스페이스** | **설명**                                                                         | **문서 링크**                                                                             |
+| ---------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `app`            | 앱 이름, 버전, 패키지 이름 등의 정보를 제공합니다.                               | [앱 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/app)                 |
+| `authentication` | 생체 인증(Fingerprint/Face ID) 등의 기능을 제공합니다.                           | [인증 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/authentication)    |
+| `backkey`        | Android 디바이스의 네이티브 백 키 이벤트를 제어할 수 있습니다.                   | [백 키 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/backkey)          |
+| `browser`        | 외부 또는 내부 브라우저로 URL을 열 수 있습니다.                                  | [브라우저 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/browser)       |
+| `clipboard`      | 텍스트를 클립보드에 복사하거나 읽을 수 있습니다.                                 | [클립보드 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/clipboard)     |
+| `device`         | 디바이스 모델, OS 버전, 배터리 및 네트워크 상태 등을 확인합니다.                 | [디바이스 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/device)        |
+| `env`            | SDK 초기화 상태, 실행 환경(웹/앱) 등을 확인할 수 있습니다.                       | [환경 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/env)               |
+| `event`          | 초기화, 포그라운드/백그라운드 전환, 네트워크 상태 변경 등의 이벤트를 처리합니다. | [이벤트 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/event)           |
+| `iap`            | Google Play 및 Apple App Store 인앱 결제 기능을 제공합니다.                      | [인앱 결제 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/iap)          |
+| `location`       | 현재 디바이스 위치의 경도, 위도를 확인할 수 있습니다.                            | [Location 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/location)      |
+| `permission`     | 카메라, 위치, 푸시 알림 등 디바이스 권한을 요청하고 상태를 확인할 수 있습니다.   | [권한 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/permission)        |
+| `preference`     | 애플리케이션 내부 저장소를 통해 데이터를 저장 및 관리합니다.                     | [내부 저장소 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/preference) |
+| `push`           | 푸시 알림 토큰을 관리하고 Nachocode 서버에 등록할 수 있습니다.                   | [푸시 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/push)              |
+| `scanner`        | QR 코드 스캔 및 기타 스캔 기능을 제공합니다.                                     | [스캐너 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/scanner)         |
+| `setting`        | Pull to Refresh와 같은 설정 기능을 제공합니다.                                   | [설정 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/setting)           |
+| `share`          | 네이티브 공유 UI를 통해 URL을 공유할 수 있습니다.                                | [공유 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/share)             |
+| `store`          | 앱스토어 및 플레이스토어 상호작용 기능을 제공합니다.                             | [공유 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/store)             |
+| `tabbar`         | 앱 내부 탭바의 표시 여부 및 이동을 제어할 수 있습니다.                           | [탭 바 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/tabbar)           |
+| `vibration`      | 디바이스 진동 및 햅틱 피드백을 제어합니다.                                       | [진동 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/vibration)         |
+
+더 많은 네임스페이스와 사용법은 [공식 문서](https://developer.nachocode.io/docs/sdk/intro)를 확인하세요.
+
+---
+
+## 네임스페이스 (외부연동) 소개
+
+nachocode SDK는 연동된 외부 솔루션의 기능들도 **네임스페이스(namespace)** 로 구분되어 있습니다.  
+아래는 주요 네임스페이스의 목록과 설명입니다. 각 네임스페이스에 대한 상세한 문서는 **문서 링크**에서 확인하세요.
+
+| **네임스페이스** | **설명**                                                           | **문서 링크**                                                                                      |
+| ---------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `apple`          | Apple 계정을 통한 소셜 로그인 기능 등을 제공합니다.                | [Apple 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/apple/reference)         |
+| `appsflyer`      | AppsFlyer 마케팅 애트리뷰션 및 사용자 트래킹 기능 등을 제공합니다. | [AppsFlyer 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/appsflyer/reference) |
+| `facebook`       | Facebook 소셜 로그인 기능을 제공합니다.                            | [Facebook 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/facebook/reference)   |
+| `google`         | Google 소셜 로그인 기능을 제공합니다.                              | [Google 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/google/reference)       |
+| `kakao`          | Kakao 소셜 로그인 기능을 제공합니다.                               | [Kakao 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/kakao/reference)         |
 
 더 많은 네임스페이스와 사용법은 [공식 문서](https://developer.nachocode.io/docs/sdk/intro)를 확인하세요.
 
