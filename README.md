@@ -266,13 +266,13 @@ nachocode SDK는 각 기능별로 **네임스페이스(namespace)** 로 구분�
 nachocode SDK는 연동된 외부 솔루션의 기능들도 **네임스페이스(namespace)** 로 구분되어 있습니다.  
 아래는 주요 네임스페이스의 목록과 설명입니다. 각 네임스페이스에 대한 상세한 문서는 **문서 링크**에서 확인하세요.
 
-| **네임스페이스** | **설명** | **문서 링크** |
-| ---------------- | 2------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| `apple` | Apple 계정을 통한 소셜 로그인 기능 등을 제공합니다. | [Apple 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/apple/reference) |
-| `appsflyer` | AppsFlyer 마케팅 애트리뷰션 및 사용자 트래킹 기능 등을 제공합니다. | [AppsFlyer 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/appsflyer/reference) |
-| `facebook` | Facebook 소셜 로그인 기능을 제공합니다. | [Facebook 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/facebook/reference) |
-| `google` | Google 소셜 로그인 기능을 제공합니다. | [Google 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/google/reference) |
-| `kakao` | Kakao 소셜 로그인 기능을 제공합니다. | [Kakao 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/kakao/reference) |
+| **네임스페이스** | **설명**                                                           | **문서 링크**                                                                                      |
+| ---------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `apple`          | Apple 계정을 통한 소셜 로그인 기능 등을 제공합니다.                | [Apple 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/apple/reference)         |
+| `appsflyer`      | AppsFlyer 마케팅 애트리뷰션 및 사용자 트래킹 기능 등을 제공합니다. | [AppsFlyer 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/appsflyer/reference) |
+| `facebook`       | Facebook 소셜 로그인 기능을 제공합니다.                            | [Facebook 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/facebook/reference)   |
+| `google`         | Google 소셜 로그인 기능을 제공합니다.                              | [Google 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/google/reference)       |
+| `kakao`          | Kakao 소셜 로그인 기능을 제공합니다.                               | [Kakao 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/kakao/reference)         |
 
 더 많은 네임스페이스와 사용법은 [공식 문서](https://developer.nachocode.io/docs/sdk/intro)를 확인하세요.
 
