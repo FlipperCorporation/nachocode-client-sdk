@@ -1,7 +1,7 @@
 {
   "name": "nachocode-client-sdk",
-  "version": "1.7.0",
-  "description": "Nachocode Client SDK",
+  "version": "1.8.0",
+  "description": "nachocode Client SDK",
   "type": "module",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",

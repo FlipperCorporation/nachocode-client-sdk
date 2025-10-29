@@ -8,14 +8,14 @@
 
 <!-- markdownlint-disable MD033 -->
 <p align="center">
-  <img src="https://cdn.nachocode.io/common/assets/images/logo.png" width="130" alt="Nachocode Logo" style="margin-top: 50px; margin-left: 150px" />
+  <img src="https://cdn.nachocode.io/common/assets/images/logo.png" width="130" alt="nachocode Logo" style="margin-top: 50px; margin-left: 150px" />
 </p>
 <p align="center">
-  <img src="https://cdn.nachocode.io/common/assets/images/character.png" width="170" alt="Nachocode Character" style="margin-bottom: 30px;"/>
+  <img src="https://cdn.nachocode.io/common/assets/images/character.png" width="170" alt="nachocode Character" style="margin-bottom: 30px;"/>
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2025-10-01_
+> 🔔 **최신화 일자:** _2025-10-29_
 
 ## 목차
 
@@ -81,7 +81,7 @@ function MyComponent() {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
-  return <p>Nachocode SDK 사용 가능!</p>;
+  return <p>nachocode SDK 사용 가능!</p>;
 }
 
 export default function App() {
@@ -106,7 +106,7 @@ export default function MyComponent2() {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
-  return <p>Nachocode SDK 사용 가능!</p>;
+  return <p>nachocode SDK 사용 가능!</p>;
 }
 ```
 
@@ -114,7 +114,7 @@ export default function MyComponent2() {
 
 | 반환값      | 설명                                          |
 | ----------- | --------------------------------------------- |
-| `Nachocode` | Nachocode SDK 객체                            |
+| `Nachocode` | nachocode SDK 객체                            |
 | `isLoading` | SDK 로딩 상태 (`true` 또는 `false`)           |
 | `isError`   | SDK 에러 여부 (`true` 또는 `false`)           |
 | `error`     | SDK 로드 중 발생한 에러 (`Error` 또는 `null`) |
@@ -129,9 +129,9 @@ import { loadNachocode } from 'nachocode-client-sdk';
 async function initSDK() {
   try {
     const Nachocode = await loadNachocode('your-api-key-here');
-    console.log('Nachocode SDK 로드 완료:', Nachocode);
+    console.log('nachocode SDK 로드 완료:', Nachocode);
   } catch (error) {
-    console.error('Nachocode SDK 로드 실패:', error);
+    console.error('nachocode SDK 로드 실패:', error);
   }
 }
 
@@ -185,7 +185,7 @@ nachocode Client SDK는 초기화 시 선택적으로 옵션을 설정할 수 �
 최신 버전 로드 (기본)
 
 - 최신 버전의 SDK를 항상 유지하려면 아래 코드를 사용하세요
-- 현재 최신 버전 v.1.7.0
+- 현재 최신 버전 v.1.8.0
 
 ```jsx
 loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
@@ -196,7 +196,7 @@ loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
 - 특정 버전으로 고정하려면 다음과 같이 사용합니다
 
 ```jsx
-loadNachocode('your-api-key', options, '1.7.0');
+loadNachocode('your-api-key', options, '1.8.0');
 ```
 
 > 📢 최신 버전 사용이 권장되며, 특정 버전 고정은 호환성이 중요한 경우에만 사용하세요.
@@ -244,10 +244,12 @@ nachocode SDK는 각 기능별로 **네임스페이스(namespace)** 로 구분�
 | `env`            | SDK 초기화 상태, 실행 환경(웹/앱) 등을 확인할 수 있습니다.                       | [환경 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/env)               |
 | `event`          | 초기화, 포그라운드/백그라운드 전환, 네트워크 상태 변경 등의 이벤트를 처리합니다. | [이벤트 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/event)           |
 | `iap`            | Google Play 및 Apple App Store 인앱 결제 기능을 제공합니다.                      | [인앱 결제 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/iap)          |
-| `location`       | 현재 디바이스 위치의 경도, 위도를 확인할 수 있습니다.                            | [Location 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/location)      |
+| `loading`        | 네이티브 로딩 인디케이터를 제어할 수 있습니다.                                   | [로딩 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/loading)           |
+| `location`       | 현재 디바이스 위치의 경도, 위도를 확인할 수 있습니다.                            | [위치 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/location)          |
+| `navigation`     | 앱의 네비게이션 스택을 제어하고 스와이프 제스처를 설정할 수 있습니다.            | [네비게이션 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/navigation)  |
 | `permission`     | 카메라, 위치, 푸시 알림 등 디바이스 권한을 요청하고 상태를 확인할 수 있습니다.   | [권한 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/permission)        |
 | `preference`     | 애플리케이션 내부 저장소를 통해 데이터를 저장 및 관리합니다.                     | [내부 저장소 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/preference) |
-| `push`           | 푸시 알림 토큰을 관리하고 Nachocode 서버에 등록할 수 있습니다.                   | [푸시 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/push)              |
+| `push`           | 푸시 알림 토큰을 관리하고 nachocode 서버에 등록할 수 있습니다.                   | [푸시 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/push)              |
 | `scanner`        | QR 코드 스캔 및 기타 스캔 기능을 제공합니다.                                     | [스캐너 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/scanner)         |
 | `setting`        | Pull to Refresh와 같은 설정 기능을 제공합니다.                                   | [설정 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/setting)           |
 | `share`          | 네이티브 공유 UI를 통해 URL을 공유할 수 있습니다.                                | [공유 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/share)             |

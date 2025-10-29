@@ -6,7 +6,7 @@ var react = require('react');
 const SCRIPT_ID = 'nachocode-client-sdk';
 const SCRIPT_URL = 'https://cdn.nachocode.io/nachocode/client-sdk/';
 const SCRIPT_NAME = 'client-sdk.min.js';
-const LATEST_VERSION = '1.7.0';
+const LATEST_VERSION = '1.8.0';
 
 let cachedPromise;
 function loadNachocode(apiKey, options, version, onInitialized) {

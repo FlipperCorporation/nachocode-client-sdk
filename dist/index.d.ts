@@ -15,16 +15,16 @@ declare function loadNachocode(apiKey: string, options?: Nachocode.InitializeOpt
 
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.7.0
+   * nachocode JavaScript Client SDK Type Declaration v1.8.0
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.7.0/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.8.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-09-25
+   * Last Updated Date: 2025-10-24
    */
   namespace Nachocode {
     /**
@@ -150,7 +150,7 @@ declare global {
     /**
      * Namespace for application specific functions
      * @since 1.0.0
-     * @lastupdated 1.4.0
+     * @lastupdated 1.8.0 - `exitApp` added
      */
     namespace app {
       /**
@@ -192,6 +192,12 @@ declare global {
        * @since 1.0.0
        */
       function getPackageName(): string | void;
+
+      /**
+       * Exits the application.
+       * @since 1.8.0
+       */
+      function exitApp(): void;
     }
 
     /**
@@ -310,12 +316,12 @@ declare global {
         | AppsflyerSuccessResult
         | AppsflyerErrorResult;
 
-      interface GetCustomUserIdSuccessResult extends AppsflyerSuccessResult {
+      interface GetCustomerUserIdSuccessResult extends AppsflyerSuccessResult {
         userId: string;
       }
 
-      export declare type GetCustomUserIdResult =
-        | GetCustomUserIdSuccessResult
+      export declare type GetCustomerUserIdResult =
+        | GetCustomerUserIdSuccessResult
         | AppsflyerErrorResult;
 
       /**
@@ -445,23 +451,32 @@ declare global {
         | AppsflyerErrorResult;
 
       /**
-       * Function to set a custom user id with provided parameter `userId` to Appsflyer feature in the native layer.
-       * @param userId - Client user identifier
+       * Function to set a customer user id with provided parameter `customUserId` to Appsflyer feature in the native layer.
+       * Enables you to cross-reference your own unique ID with AppsFlyer's unique ID and the other devices' IDs.
+       * @see {@link https://dev.appsflyer.com/hc/docs/set-customer-user-id}
+       * @see {@link https://dev.appsflyer.com/hc/docs/integrate-ios-sdk#setting-the-customer-user-id}
+       * @see {@link https://dev.appsflyer.com/hc/docs/integrate-android-sdk#set-the-customer-user-id}
+       * @param customUserId - client customer user identifier.
        * @since 1.7.0
+       * @lastupdated 1.8.0 - renamed from `setCustomUserId` to `setCustomerUserId`
        */
-      function setCustomUserId(userId: string): Promise<AppsflyerResult>;
+      function setCustomerUserId(
+        customUserId: string
+      ): Promise<AppsflyerResult>;
 
       /**
-       * Function to get registered custom user id from Appsflyer feature in the native layer.
+       * Function to get registered customer user id for Appsflyer features in the native layer.
        * @since 1.7.0
+       * @lastupdated 1.8.0 - renamed from `getCustomUserId` to `getCustomerUserId`
        */
-      function getCustomUserId(): Promise<GetCustomUserIdResult>;
+      function getCustomerUserId(): Promise<GetCustomerUserIdResult>;
 
       /**
-       * Function to delete registered custom user id from Appsflyer feature in the native layer.
+       * Function to delete registered customer user id from Appsflyer feature in the native layer.
        * @since 1.7.0
+       * @lastupdated 1.8.0 - renamed from `deleteCustomUserId` to `deleteCustomerUserId`
        */
-      function deleteCustomUserId(): Promise<AppsflyerResult>;
+      function deleteCustomerUserId(): Promise<AppsflyerResult>;
 
       /**
        * Function to get attribution data.
@@ -471,9 +486,12 @@ declare global {
 
       /**
        * Function to clear attribution data.
+       * @param timestamp - Unix epoch time in milliseconds to clear specific attribution data with the given time.
        * @since 1.7.0
        */
-      function clearAttributionData(): Promise<AppsflyerResult>;
+      function clearAttributionData(
+        timestamp?: number
+      ): Promise<AppsflyerResult>;
 
       /**
        * Function to get attribution data list.
@@ -615,7 +633,8 @@ declare global {
     /**
      * Namespace for browser-related functions
      * @since 1.0.3
-     * @lastupdated 1.6.3 - new option added in `OpenURLOption`
+     * @updated 1.6.3 - new option added in `OpenURLOption`
+     * @lastupdated 1.8.0 - `setInternalBrowser` added
      */
     namespace browser {
       /**
@@ -628,6 +647,14 @@ declare global {
         | 'external' // opens link with external browser ex. Safari, Chrome
         | 'internal' // uses customized in-app browser
         | 'internal_default'; // uses default browser engine ex. Safari, Chrome
+
+      /**
+       * Sets the internal browser option.
+       * @since 1.8.0
+       */
+      export declare type SetInternalBrowserOption = {
+        usingUrl: boolean; // Whether to show URL bar in internal browser or not.
+      };
 
       /**
        * Opens the provided URL with the specified option.
@@ -650,6 +677,17 @@ declare global {
        * @lastupdated 1.6.3 - `internal_default` newly added
        */
       function openLink(url: string, option?: OpenURLOption): void;
+
+      /**
+       * Function to set internal browser options.
+       *
+       * Supported Platforms
+       * - Android
+       * - iOS
+       * @since 1.8.0
+       * @param option - Options for internal browser
+       */
+      function setInternalBrowser(option: SetInternalBrowserOption): void;
     }
 
     /**
@@ -693,7 +731,7 @@ declare global {
     /**
      * Namespace for device specific functions
      * @since 1.0.0
-     * @lastupdated 1.4.2
+     * @lastupdated 1.8.0 - `getSafeAreaInsets` added
      */
     namespace device {
       /**
@@ -732,6 +770,42 @@ declare global {
        */
       export declare type NetworkConnectionType =
         (typeof NETWORK_CONNECTION_TYPES)[keyof typeof NETWORK_CONNECTION_TYPES];
+
+      /**
+       * Safe area insets type
+       * @since 1.8.0
+       */
+      export declare type SafeAreaInsets = {
+        top: number;
+        bottom: number;
+        left: number;
+        right: number;
+      };
+
+      /**
+       * Get safe area success result type
+       * @since 1.8.0
+       */
+      export declare type GetSafeAreaInsetsSuccessResult = {
+        isError: false;
+      } & SafeAreaInsets;
+
+      /**
+       * Get safe area error result type
+       * @since 1.8.0
+       */
+      export declare type GetSafeAreaInsetsErrorResult = {
+        isError: true;
+        errorMessage: string;
+      };
+
+      /**
+       * Get safe area result type
+       * @since 1.8.0
+       */
+      export declare type GetSafeAreaInsetsResult =
+        | GetSafeAreaInsetsSuccessResult
+        | GetSafeAreaInsetsErrorResult;
 
       /**
        * Detect the device type using the User-Agent string.
@@ -795,6 +869,26 @@ declare global {
           connectionType: NetworkConnectionType;
         }) => void
       ): void;
+
+      /**
+       * Asynchronously calculates the safe area insets of the device from native layer.
+       *
+       * Supported Platforms
+       * - iOS (iPhone X and later)
+       * @example
+       * const safeArea = await Nachocode.device.getSafeAreaInsets();
+       * if (!safeArea.isError) {
+       *   console.log(`Top: ${safeArea.top}`);
+       *   console.log(`Bottom: ${safeArea.bottom}`);
+       *   console.log(`Left: ${safeArea.left}`);
+       *   console.log(`Right: ${safeArea.right}`);
+       *   console.log(`Scale: ${safeArea.scale}`);
+       * } else {
+       *   console.error(`Error retrieving safe area: ${safeArea.errorMessage}`);
+       * }
+       * @since 1.8.0
+       */
+      function getSafeAreaInsets(): Promise<GetSafeAreaInsetsResult>;
 
       /**
        * Retrieves the type of the device.
@@ -1632,6 +1726,19 @@ declare global {
     }
 
     /**
+     * Namespace for loading related features
+     * @since 1.8.0
+     */
+    namespace loading {
+      /**
+       * @description
+       * Hides native loading indicator.
+       * @since 1.8.0
+       */
+      function hideIndicator(): void;
+    }
+
+    /**
      * Namespace for location related features
      * @since 1.6.2
      */
@@ -1715,6 +1822,69 @@ declare global {
        * @since 1.6.2
        */
       function getCurrentPosition(): Promise<GetCurrentPositionResult>;
+    }
+
+    /**
+     * Namespace for functions called from native-side of the application.
+     * @since 1.0.0
+     * @lastupdated 1.0.3
+     */
+    namespace native {
+      export declare type CallbackResponse = {
+        method: string;
+        data?: object;
+        message?: string;
+      };
+
+      /**
+       * A placeholder callback function that can be called from the native application.
+       * This function should be implemented to handle specific callback from native code.
+       */
+      function handleCallback(response: CallbackResponse): void;
+
+      /**
+       * A collection of named callback functions that can be invoked from native code.
+       * Each property of this object can be a function that gets executed in response to a native call.
+       */
+      const handleCallbacks: {
+        [callbackName: string]: (response: any) => void;
+      };
+    }
+
+    /**
+     * Namespace for navigation related features
+     * @since 1.8.0
+     */
+    namespace navigation {
+      /**
+       * @description
+       * Clears the navigation history stack, leaving only the root view. _Only supported on Android._
+       *
+       * Supported Platforms
+       * - Android
+       * @since 1.8.0
+       */
+      function clearHistory(): void;
+
+      /**
+       * @description
+       * Enables or disables the swipe gesture for navigating back to the previous screen. _Only supported on iOS._
+       *
+       * Supported Platforms
+       * - iOS
+       * @param enabled - A boolean value indicating whether to enable (`true`) or disable (`false`) the swipe gesture.
+       * @since 1.8.0
+       */
+      function setSwipeGesture(enabled: boolean): void;
+
+      /**
+       * @description
+       * Resets the navigation stack to the root view with an optional URL.
+       * @param url - The URL to load in the root view after resetting the navigation stack.
+       * Uses the default root app URL if not provided.
+       * @since 1.8.0
+       */
+      function resetToRoot(url?: string): void;
     }
 
     /**
@@ -2362,24 +2532,137 @@ declare global {
     /**
      * Namespace for vibration features
      * @since 1.1.0
+     * @lastupdated 1.8.0 - added iOS and Android specific haptics types and functions
      */
     namespace vibration {
       /**
        * Haptics feedback types
        * @since 1.4.2
+       * @lastupdated 1.8.0 -  modified haptics type descriptions
        */
       export declare const HAPTICS_TYPES = {
-        SUCCESS: 0,
-        ERROR: 1,
+        LIGHT: 0,
+        MEDIUM: 1,
+        HEAVY: 2,
       } as const;
 
       /**
        * Type for haptics feedback types
        * @since 1.1.0
-       * @lastupdated 1.4.2
+       * @lastupdated 1.8.0
        */
       export declare type HapticsType =
         (typeof HAPTICS_TYPES)[keyof typeof HAPTICS_TYPES];
+
+      /**
+       * iOS Haptics impact feedback types
+       * - iOS Only
+       * @since 1.8.0
+       */
+      export declare const HAPTICS_IMPACT_TYPES = {
+        /**
+         * _(iOS 10.0+)_
+         * A collision between small, light user interface elements.
+         */
+        LIGHT: 0,
+        /**
+         * _(iOS 10.0+)_
+         * A collision between moderately sized user interface elements.
+         */
+        MEDIUM: 1,
+        /**
+         * _(iOS 10.0+)_
+         * A collision between large, heavy user interface elements.
+         */
+        HEAVY: 2,
+        /**
+         * _(iOS 13.0+)_
+         * A collision between user interface elements that are soft,
+         * exhibiting a large amount of compression or elasticity.
+         */
+        SOFT: 3,
+        /**
+         * _(iOS 13.0+)_
+         * A collision between user interface elements that are rigid,
+         * exhibiting a small amount of compression or elasticity.
+         */
+        RIGID: 4,
+      } as const;
+
+      /**
+       * Type for iOS haptics impact feedback types
+       * - iOS Only
+       * @since 1.8.0
+       */
+      export declare type HapticsImpactType =
+        (typeof HAPTICS_IMPACT_TYPES)[keyof typeof HAPTICS_IMPACT_TYPES];
+
+      /**
+       * iOS Haptics notification feedback types
+       * - iOS Only
+       * @since 1.8.0
+       */
+      export declare const HAPTICS_NOTIFICATION_TYPES = {
+        /**
+         * _(iOS 10.0+)_
+         * A notification feedback type that indicates a task has completed successfully.
+         */
+        SUCCESS: 0,
+        /**
+         * _(iOS 10.0+)_
+         * A notification feedback type that indicates a task has produced a warning.
+         */
+        WARNING: 1,
+        /**
+         * _(iOS 10.0+)_
+         * A notification feedback type that indicates a task has failed.
+         */
+        ERROR: 2,
+      } as const;
+
+      /**
+       * Type for iOS haptics notification feedback types
+       * - iOS Only
+       * @since 1.8.0
+       */
+      export declare type HapticsNotificationType =
+        (typeof HAPTICS_NOTIFICATION_TYPES)[keyof typeof HAPTICS_NOTIFICATION_TYPES];
+
+      /**
+       * Android Haptics effect feedback types
+       * - Android Only
+       * @since 1.8.0
+       */
+      export declare const HAPTICS_EFFECT_TYPES = {
+        /**
+         * _(Android API Level 29+)_
+         * A click effect. Use this effect as a baseline, as it's the most common type of click effect.
+         */
+        EFFECT_CLICK: 0,
+        /**
+         * _(Android API Level 29+)_
+         * A double click effect.
+         */
+        EFFECT_DOUBLE_CLICK: 1,
+        /**
+         * _(Android API Level 29+)_
+         * A tick effect. This effect is less strong compared to `EFFECT_CLICK`.
+         */
+        EFFECT_TICK: 2,
+        /**
+         * _(Android API Level 29+)_
+         * A heavy click effect. This effect is stronger than `EFFECT_CLICK`.
+         */
+        EFFECT_HEAVY_CLICK: 5,
+      } as const;
+
+      /**
+       * Type for Android haptics effect feedback
+       * - Android Only
+       * @since 1.8.0
+       */
+      export declare type HapticsEffectType =
+        (typeof HAPTICS_EFFECT_TYPES)[keyof typeof HAPTICS_EFFECT_TYPES];
 
       /**
        * Set whether haptics feedback is used or not.
@@ -2408,10 +2691,63 @@ declare global {
       /**
        * @description
        * Triggers haptics feedback.
-       * - Default : `0`
+       * - Default : `0` (LIGHT)
+       * - `0` : LIGHT
+       * - `1` : MEDIUM
+       * - `2` : HEAVY
        * @since 1.1.0
+       * @lastupdated 1.8.0 - modified haptics types
        */
       function haptics(hapticsType?: HapticsType): void;
+
+      /**
+       * @description
+       * Triggers iOS haptics impact feedback.
+       * - iOS Only
+       * - Default : `0` (LIGHT)
+       * - `0` : LIGHT // iOS 10.0+
+       * - `1` : MEDIUM // iOS 10.0+
+       * - `2` : HEAVY // iOS 10.0+
+       * - `3` : SOFT // iOS 13.0+
+       * - `4` : RIGID // iOS 13.0+
+       * @since 1.8.0
+       */
+      function hapticsImpact(hapticsType?: HapticsImpactType): void;
+
+      /**
+       * @description
+       * Triggers iOS haptics notification feedback.
+       * Used to communicate successes, failures and warnings.
+       * - iOS Only
+       * - Default : `0` (SUCCESS)
+       * - `0` : SUCCESS
+       * - `1` : WARNING
+       * - `2` : ERROR
+       * @since 1.8.0
+       */
+      function hapticsNotification(hapticsType?: HapticsImpactType): void;
+
+      /**
+       * @description
+       * Triggers iOS haptics selection feedback.
+       * Used to indicate a change in selection.
+       * - iOS Only
+       * @since 1.8.0
+       */
+      function hapticsSelection(): void;
+
+      /**
+       * @description
+       * Triggers Android haptics effect.
+       * - Android Only
+       * - Default : `0` (SUCCESS)
+       * - `0` : EFFECT_CLICK
+       * - `1` : EFFECT_DOUBLE_CLICK
+       * - `2` : EFFECT_TICK
+       * - `5` : EFFECT_HEAVY_CLICK
+       * @since 1.8.0
+       */
+      function hapticsEffect(hapticsType?: HapticsEffectType): void;
 
       /**
        * Triggers vibration.
