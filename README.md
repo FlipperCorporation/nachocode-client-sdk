@@ -3,7 +3,6 @@
 ![npm](https://img.shields.io/npm/v/nachocode-client-sdk)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/nachocode-client-sdk)
 ![npm downloads](https://img.shields.io/npm/dm/nachocode-client-sdk)
-![GitHub stars](https://img.shields.io/github/stars/FlipperCorporation/nachocode-client-sdk)
 ![License](https://img.shields.io/npm/l/nachocode-client-sdk)
 
 <!-- markdownlint-disable MD033 -->
@@ -15,7 +14,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2025-10-29_
+> 🔔 **최신화 일자:** _2026-01-16_
 
 ## 목차
 
@@ -185,7 +184,7 @@ nachocode Client SDK는 초기화 시 선택적으로 옵션을 설정할 수 �
 최신 버전 로드 (기본)
 
 - 최신 버전의 SDK를 항상 유지하려면 아래 코드를 사용하세요
-- 현재 최신 버전 v.1.8.0
+- 현재 최신 버전 v.1.9.0
 
 ```jsx
 loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
@@ -196,7 +195,7 @@ loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
 - 특정 버전으로 고정하려면 다음과 같이 사용합니다
 
 ```jsx
-loadNachocode('your-api-key', options, '1.8.0');
+loadNachocode('your-api-key', options, '1.9.0');
 ```
 
 > 📢 최신 버전 사용이 권장되며, 특정 버전 고정은 호환성이 중요한 경우에만 사용하세요.
@@ -273,6 +272,7 @@ nachocode SDK는 연동된 외부 솔루션의 기능들도 **네임스페이스
 | `facebook`       | Facebook 소셜 로그인 기능을 제공합니다.                            | [Facebook 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/facebook/reference)   |
 | `google`         | Google 소셜 로그인 기능을 제공합니다.                              | [Google 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/google/reference)       |
 | `kakao`          | Kakao 소셜 로그인 기능을 제공합니다.                               | [Kakao 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/kakao/reference)         |
+| `naver`          | Naver 소셜 로그인 기능을 제공합니다.                               | [Naver 네임스페이스](https://developer.nachocode.io/docs/sdk/integrations/naver/reference)         |
 
 더 많은 네임스페이스와 사용법은 [공식 문서](https://developer.nachocode.io/docs/sdk/intro)를 확인하세요.
 

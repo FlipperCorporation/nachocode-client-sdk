@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.8.0
+   * nachocode JavaScript Client SDK Type Declaration v1.9.0
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.8.0/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.9.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2025-10-24
+   * Last Updated Date: 2026-01-15
    */
   namespace Nachocode {
     /**
@@ -1092,7 +1092,7 @@ declare global {
     /**
      * Namespace for Facebook native features
      * @since 1.4.0
-     * @lastupdated 1.6.1
+     * @lastupdated 1.9.0 - `logEvent` added
      */
     namespace facebook {
       /**
@@ -1216,10 +1216,22 @@ declare global {
       ): void;
 
       /**
+       * @description
        * Facebook native social logout
        * @since 1.4.0
        */
       function logout(): void;
+
+      /**
+       * @description
+       * Function to trigger facebook app event.
+       * @returns {void}
+       * @since 1.9.0
+       */
+      function logEvent(
+        eventName: string,
+        parameters?: Record<string, string>
+      ): void;
     }
 
     /**
@@ -1834,6 +1846,140 @@ declare global {
       const handleCallbacks: {
         [callbackName: string]: (response: any) => void;
       };
+    }
+
+    /**
+     * Namespace for Naver native features
+     * @since 1.9.0
+     */
+    namespace naver {
+      /**
+       * Naver success result from native layer
+       * @since 1.9.0
+       */
+      export declare type NaverSuccessResult = {
+        /**
+         * Status which shows success of Naver native feature.
+         */
+        status: 'success';
+      };
+      /**
+       * Naver error result from native layer
+       * @since 1.9.0
+       */
+      export declare type NaverErrorResult = {
+        /**
+         * Status which shows failure of Naver native feature.
+         */
+        status: 'error';
+        /**
+         * Failure result error code of Naver native feature.
+         */
+        errorCode: string;
+        /**
+         * Naver native feature result message from native layer when failed.
+         */
+        message: string;
+      };
+      /**
+       * Naver result from native layer
+       * @since 1.9.0
+       */
+      export declare type NaverResult = NaverSuccessResult | NaverErrorResult;
+
+      /**
+       * Naver login data from native layer
+       * @since 1.9.0
+       */
+      export declare type NaverLoginData = {
+        expiresAt: string;
+        accessToken: string;
+        refreshToken: string;
+      };
+
+      /**
+       * Naver user data from native layer
+       * @since 1.9.0
+       * @example
+       * // User Data Example
+       * {
+       *    id: "ABCDEF123456_GHIJKLMN12345_OPQERST1234567",
+       *    gender: "F",
+       *    name: "김나쵸",
+       *    nickname: "nachocode",
+       *    email: "nachocode@naver.com",
+       *    mobile: "010-1234-5678",
+       *    mobile_e164: "+821012345678",
+       *    age: "20-29",
+       *    birthyear: "2000",
+       *    birthday: "12-31"
+       *    profile_image: "https://phinf.pstatic.net/contact/20241227_20/1735275960557XUHqT_PNG/image.png",
+       * }
+       */
+      export declare type NaverUserData = {
+        id: string;
+        gender?: 'F' | 'M';
+        name?: string;
+        nickName?: string;
+        email?: string;
+        mobile?: string;
+        mobile_e164?: string;
+        age?: string;
+        birthyear?: string;
+        birthday?: string;
+        profile_image?: string;
+      };
+
+      /**
+       * @description
+       * Function to authenticate with native Naver social login.
+       *
+       * Calls callback function with the login data value.
+       * @since 1.9.0
+       */
+      function login(
+        callback: (result: NaverResult, loginData?: NaverLoginData) => void
+      ): void;
+
+      /**
+       * @description
+       * Function to check whether authenticated with native Naver social login.
+       *
+       * Calls callback function with the value whether the user is logged in or not.
+       * @since 1.9.0
+       */
+      function isLoggedIn(
+        callback: (
+          result: NaverResult,
+          isLoggedIn: boolean,
+          accessToken?: string
+        ) => void
+      ): void;
+
+      /**
+       * @description
+       * Function to get Naver user data from native layer.
+       *
+       * Calls callback function with the user data.
+       * @since 1.9.0
+       */
+      function getUserData(
+        callback: (result: NaverResult, userData?: NaverUserData) => void
+      ): void;
+
+      /**
+       * @description
+       * Function to logout with Naver native social features.
+       * @since 1.9.0
+       */
+      function logout(callback?: (result: NaverResult) => void): void;
+
+      /**
+       * @description
+       * Function to disconnect with Naver native social features.
+       * @since 1.9.0
+       */
+      function disconnect(callback?: (result: NaverResult) => void): void;
     }
 
     /**
