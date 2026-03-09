@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.9.0
+   * nachocode JavaScript Client SDK Type Declaration v1.10.0
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.9.0/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-01-15
+   * Last Updated Date: 2026-03-06
    */
   namespace Nachocode {
     /**
@@ -37,7 +37,7 @@ declare global {
     /**
      * nachocode Server API Error
      */
-    export declare interface ApiError extends error {
+    export declare interface ApiError extends Error {
       /**
        * Server error status code
        */
@@ -244,7 +244,7 @@ declare global {
           givenName: string;
           familyName: string;
         };
-        [fields: string]: any;
+        [fields: string]: string;
       };
 
       /**
@@ -716,7 +716,8 @@ declare global {
     /**
      * Namespace for device specific functions
      * @since 1.0.0
-     * @lastupdated 1.8.0 - `getSafeAreaInsets` added
+     * @updated 1.8.0 - `getSafeAreaInsets` added
+     * @lastupdated 1.10.0 - `getNachoDeviceToken` added
      */
     namespace device {
       /**
@@ -842,6 +843,15 @@ declare global {
        * @since 1.3.0
        */
       function getDeviceOS(): { os: DeviceType; version: string };
+
+      /**
+       * Retrieves the unique nachocode device token from the native layer.
+       *
+       * Only works in native environment.
+       * @returns - nachocode device token
+       * @since 1.10.0
+       */
+      function getNachoDeviceToken(): string;
 
       /**
        * Retrieves the network status from the native layer.
@@ -1455,10 +1465,6 @@ declare global {
          */
         profileNeedsAgreement?: boolean;
         /**
-         * Whether profile can be provided under user consent
-         */
-        profileNeedsAgreement?: boolean;
-        /**
          * Whether profileNickname can be provided under user consent
          */
         profileNicknameNeedsAgreement?: boolean;
@@ -1696,7 +1702,7 @@ declare global {
        * @since 1.5.0
        */
       export declare type KakaoShareStatusCode =
-        (typeof KAKAO_SHARE_RESULT_STATUS_CODES)[keyof typeof KAKAO_SHARE_RESULT_STATUS_CODES];
+        (typeof KAKAO_SHARE_STATUS_CODES)[keyof typeof KAKAO_SHARE_STATUS_CODES];
 
       /**
        * Kakao share result
@@ -2117,7 +2123,8 @@ declare global {
     /**
      * Namespace for push notification functions
      * @since 1.0.0
-     * @lastupdated 1.6.0
+     * @updated 1.6.0 - push topic subscription functions added
+     * @lastupdated 1.10.0 - marketing acceptance related functions added
      */
     namespace push {
       /**
@@ -2270,6 +2277,21 @@ declare global {
           };
 
       /**
+       * Marketing allowed result from native layer
+       * @since 1.10.0
+       */
+      export declare type MarketingAllowedResult = {
+        /**
+         * marketing push acceptance for guest user, `null` if unknown _(ex. not selected yet)_
+         */
+        guest: boolean | null;
+        /**
+         * marketing push acceptance for logged-in user, `null` if unknown _(ex. not selected yet)_
+         */
+        user: boolean | null;
+      };
+
+      /**
        * Asks for the permission for push notifications.
        *
        * If already granted, nothing happens.
@@ -2292,7 +2314,9 @@ declare global {
        * @param userId - Client user identifier
        * @server Calls nachocode server api internally
        * @since 1.0.0
-       * @lastupdated 1.6.3 - Set return type, logic improved
+       * @updated 1.6.3 - Set return type, logic improved
+       * @updated 1.8.0 - Updated to internally check token already registered or not
+       * @lastupdated 1.10.0 - Updated to call `Nachocode.user.setUserId` internally
        */
       function registerPushToken(userId: string): Promise<PushTokenResult>;
 
@@ -2303,7 +2327,8 @@ declare global {
        * @param userId - Client user identifier
        * @server Calls nachocode server api internally
        * @since 1.0.0
-       * @lastupdated 1.6.3 - Set return type, userId set optional
+       * @updated 1.6.3 - Set return type, set userId optional
+       * @lastupdated 1.10.0 - Updated to call `Nachocode.user.deleteUserId` internally
        */
       function deletePushToken(userId?: string): Promise<PushTokenResult>;
 
@@ -2366,6 +2391,52 @@ declare global {
       function getSubscriptionList(
         callback: (subscriptionList: Array<string>) => void
       ): void;
+
+      /**
+       * Function to get marketing push topic subscription list.
+       *
+       * Calls `callback` function with the list data.
+       * @param callback - Callback called with the response from native layer.
+       * @since 1.10.0
+       */
+      function getMarketingSubscriptionList(
+        callback: (subscriptionList: Array<string>) => void
+      ): void;
+
+      /**
+       * Function to set whether the device user agrees to receive an advertising push notification.
+       * @param allowed - Whether the user agrees to receive marketing push notifications.
+       * @since 1.10.0
+       */
+      function setMarketingAllowed(allowed: boolean): void;
+
+      /**
+       * Function to get whether the device user agrees to receive an advertising push notification.
+       *
+       * @returns
+       * Returns advertising push acceptance from the native layer.
+       * - Default returned value : `Promise<{guest: null, user: null}>`
+       * - Returns `null` if unknown _(ex. not selected yet)_
+       * @since 1.10.0
+       */
+      function getMarketingAllowed(): Promise<MarketingAllowedResult>;
+
+      /**
+       * Function to set whether the device user agrees to receive night push notifications.
+       * @param allowed - Whether the user agrees to receive night push notifications.
+       * @since 1.10.0
+       */
+      function setNightAllowed(allowed: boolean): void;
+
+      /**
+       * Function to get whether the device user agrees to receive a night push notification.
+       * @returns
+       * Returns night push acceptance from the native layer.
+       * - Default returned value : `Promise<null>`
+       * - Returns `null` if unknown _(ex. not selected yet)_
+       * @since 1.10.0
+       */
+      function getNightAllowed(): Promise<boolean | null>;
     }
 
     /**
@@ -2661,6 +2732,35 @@ declare global {
     }
 
     /**
+     * Namespace for user related functions
+     * @since 1.10.0
+     */
+    namespace user {
+      /**
+       * Function to set a user id with provided parameter `userId` in the native layer.
+       *
+       * Enables to cross-reference own unique ID with nachocode's unique ID and the other devices' IDs.
+       * @since 1.10.0
+       */
+      function setUserId(userId: string): void;
+
+      /**
+       * Function to get registered user id from the native layer.
+       * @returns
+       * - Returns `null` if there is no registered user id or unavailable to get.
+       * - Default returned value : `Promise<null>`
+       * @since 1.10.0
+       */
+      function getUserId(): Promise<string | null>;
+
+      /**
+       * Function to delete registered user id in the native layer.
+       * @since 1.10.0
+       */
+      function deleteUserId(): void;
+    }
+
+    /**
      * Namespace for vibration features
      * @since 1.1.0
      * @lastupdated 1.8.0 - added iOS and Android specific haptics types and functions
@@ -2856,7 +2956,7 @@ declare global {
        * - `2` : ERROR
        * @since 1.8.0
        */
-      function hapticsNotification(hapticsType?: HapticsImpactType): void;
+      function hapticsNotification(hapticsType?: HapticsNotificationType): void;
 
       /**
        * @description
