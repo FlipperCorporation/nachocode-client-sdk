@@ -24,7 +24,7 @@ declare global {
    * CDN
    *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-03-06
+   * Last Updated Date: 2026-03-20
    */
   namespace Nachocode {
     /**
@@ -164,34 +164,35 @@ declare global {
 
       /**
        * Retrieves the stored application name.
-       * @returns {string} The name of the application.
+       * @returns The name of the application.
+       * - Empty `string` if called uninitialized or called in web environment.
        * @since 1.0.0
        */
       function getAppName(): string;
 
       /**
        * Retrieves the stored application key.
-       * @returns {string | void} The key of the application.
-       * - `void` if called in web environment.
+       * @returns The key of the application.
+       * - Empty `string` if called uninitialized or called in web environment.
        * @since 1.0.0
        */
-      function getAppKey(): string | void;
+      function getAppKey(): string;
 
       /**
        * Retrieves the stored application version.
-       * @returns {VersionString | void} The current version of the application installed.
-       * - `void` if called in web environment.
+       * @returns The current version of the application installed.
+       * - `void` if called uninitialized or called in web environment.
        * @since 1.0.0
        */
       function getCurrentAppVersion(): VersionString | void;
 
       /**
        * Retrieves the stored application package name.
-       * @returns {string | void} The package name of the application.
-       * - `void` if called in web environment.
+       * @returns The package name of the application.
+       * - Empty `string` if called uninitialized or called in web environment.
        * @since 1.0.0
        */
-      function getPackageName(): string | void;
+      function getPackageName(): string;
 
       /**
        * Exits the application.
@@ -540,7 +541,7 @@ declare global {
        * @since 1.3.0
        */
       function canUseBiometrics(
-        callback: (available: boolean, error?: SDKError | undefined) => void
+        callback: (available: boolean, error?: SDKError) => void
       ): void;
 
       /**
@@ -658,6 +659,11 @@ declare global {
 
       /**
        * Opens the provided URL with the specified option.
+       *
+       * Supported Platforms
+       * - Android
+       * - iOS
+       * - Web
        * @param url - The URL to be opened.
        * @param option - The option for the way to open the URL.
        *   - Default : `'external'`
@@ -674,7 +680,7 @@ declare global {
        * // Open default internal browser (ex. `Safari`, `Chrome`)
        * Nachocode.browser.openLink('https://nachocode.io', 'internal_default');
        * @since 1.0.3
-       * @lastupdated 1.6.3 - `internal_default` newly added
+       * @lastupdated 1.6.3 - `internal_default` option newly added
        */
       function openLink(url: string, option?: OpenURLOption): void;
 
@@ -1406,7 +1412,7 @@ declare global {
         productKey: string,
         userId: string,
         callback: (result: IapPurchaseResult) => void
-      ): Promise<any>;
+      ): Promise<void>;
     }
 
     /**
@@ -2331,7 +2337,6 @@ declare global {
        * @since 1.0.0
        * @updated 1.6.3 - Set return type, logic improved
        * @updated 1.8.0 - Updated to internally check token already registered or not
-       * @lastupdated 1.10.0 - Updated to call `Nachocode.user.setUserId` internally
        */
       function registerPushToken(userId: string): Promise<PushTokenResult>;
 
@@ -2343,7 +2348,6 @@ declare global {
        * @server Calls nachocode server api internally
        * @since 1.0.0
        * @updated 1.6.3 - Set return type, set userId optional
-       * @lastupdated 1.10.0 - Updated to call `Nachocode.user.deleteUserId` internally
        */
       function deletePushToken(userId?: string): Promise<PushTokenResult>;
 
