@@ -9,7 +9,7 @@ declare global {
    * CDN
    *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-03-20
+   * Last Updated Date: 2026-03-23
    */
   namespace Nachocode {
     /**
@@ -2309,11 +2309,12 @@ declare global {
        * Retrieves the push token.
        *
        * Only works in native environment.
-       * @returns FCM device token. empty string if failed
+       * @returns FCM device token. empty `string` if failed
        * @since 1.0.0
-       * @lastupdated 1.6.3 - Set return type to string
+       * @updated 1.6.3 - Set return type to `string`
+       * @lastupdated 1.10.0 - Set return type to `Promise<string>`
        */
-      function getPushToken(): string;
+      function getPushToken(): Promise<string>;
 
       /**
        * Registers the push token with provided `userId` to the nachocode server.
