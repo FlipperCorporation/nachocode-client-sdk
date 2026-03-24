@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.10.0
+   * nachocode JavaScript Client SDK Type Declaration v1.10.1
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.0/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.1/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-03-23
+   * Last Updated Date: 2026-03-24
    */
   namespace Nachocode {
     /**
@@ -79,7 +79,7 @@ declare global {
      */
     export declare type InitializeOptions = {
       /**
-       * Option to use sandbox server or not
+       * Option to use sandbox environment or not
        */
       sandbox?: boolean;
       /**
@@ -946,7 +946,7 @@ declare global {
          */
         runningEnv: RunningEnvironment;
         /**
-         * Using sandbox server or not
+         * Using sandbox environment or not
          */
         sandbox: boolean;
         /**
@@ -964,7 +964,7 @@ declare global {
        */
       export declare type EnvironmentOptions = {
         /**
-         * Using sandbox server or not
+         * Using sandbox environment or not
          */
         sandbox?: boolean;
         /**
@@ -1012,7 +1012,7 @@ declare global {
       function isInitialized(): boolean;
 
       /**
-       * Checks whether currently using sandbox server.
+       * Checks whether currently using sandbox environment.
        * @since 1.0.0
        */
       function isUsingSandbox(): boolean;
@@ -1834,33 +1834,6 @@ declare global {
     }
 
     /**
-     * Namespace for functions called from native-side of the application.
-     * @since 1.0.0
-     * @lastupdated 1.0.3
-     */
-    namespace native {
-      export declare type CallbackResponse = {
-        method: string;
-        data?: object;
-        message?: string;
-      };
-
-      /**
-       * A placeholder callback function that can be called from the native application.
-       * This function should be implemented to handle specific callback from native code.
-       */
-      function handleCallback(response: CallbackResponse): void;
-
-      /**
-       * A collection of named callback functions that can be invoked from native code.
-       * Each property of this object can be a function that gets executed in response to a native call.
-       */
-      const handleCallbacks: {
-        [callbackName: string]: (response: any) => void;
-      };
-    }
-
-    /**
      * Namespace for Naver native features
      * @since 1.9.0
      */
@@ -2130,7 +2103,8 @@ declare global {
      * Namespace for push notification functions
      * @since 1.0.0
      * @updated 1.6.0 - push topic subscription functions added
-     * @lastupdated 1.10.0 - marketing acceptance related functions added
+     * @updated 1.10.0 - marketing acceptance related functions added
+     * @lastupdated 1.10.1 - setting marketing acceptance return type modified
      */
     namespace push {
       /**
@@ -2286,7 +2260,7 @@ declare global {
        * Marketing allowed result from native layer
        * @since 1.10.0
        */
-      export declare type MarketingAllowedResult = {
+      export declare type GetMarketingAllowedResult = {
         /**
          * marketing push acceptance for guest user, `null` if unknown _(ex. not selected yet)_
          */
@@ -2295,6 +2269,16 @@ declare global {
          * marketing push acceptance for logged-in user, `null` if unknown _(ex. not selected yet)_
          */
         user: boolean | null;
+      };
+
+      /**
+       * Set marketing allowed result from native layer
+       * @since 1.10.1
+       */
+      export declare type SetMarketingAllowedResult = {
+        status: 'success' | 'error';
+        statusCode: number;
+        message?: string;
       };
 
       /**
@@ -2412,8 +2396,11 @@ declare global {
        * Function to set whether the device user agrees to receive an advertising push notification.
        * @param allowed - Whether the user agrees to receive marketing push notifications.
        * @since 1.10.0
+       * @lastupdated 1.10.1 - Updated return type for better handling
        */
-      function setMarketingAllowed(allowed: boolean): void;
+      function setMarketingAllowed(
+        allowed: boolean
+      ): Promise<SetMarketingAllowedResult>;
 
       /**
        * Function to get whether the device user agrees to receive an advertising push notification.
@@ -2424,14 +2411,17 @@ declare global {
        * - Returns `null` if unknown _(ex. not selected yet)_
        * @since 1.10.0
        */
-      function getMarketingAllowed(): Promise<MarketingAllowedResult>;
+      function getMarketingAllowed(): Promise<GetMarketingAllowedResult>;
 
       /**
        * Function to set whether the device user agrees to receive night push notifications.
        * @param allowed - Whether the user agrees to receive night push notifications.
        * @since 1.10.0
+       * @lastupdated 1.10.1 - Updated return type for better handling
        */
-      function setNightAllowed(allowed: boolean): void;
+      function setNightAllowed(
+        allowed: boolean
+      ): Promise<SetMarketingAllowedResult>;
 
       /**
        * Function to get whether the device user agrees to receive a night push notification.
@@ -2442,21 +2432,6 @@ declare global {
        * @since 1.10.0
        */
       function getNightAllowed(): Promise<boolean | null>;
-    }
-
-    /**
-     * Namespace for refresh related functions
-     * @since 1.3.0
-     * @deprecated This namespace would be removed in `SDK version 1.5.0`
-     */
-    namespace refresh {
-      /**
-       * Set whether pull to refresh feature is enabled or not.
-       * @since 1.3.0
-       * @deprecated This method has been moved to `setting` namespace since `SDK version 1.4.0`
-       * Use `Nachocode.setting.setPullToRefresh(enable)` instead.
-       */
-      function setPullToRefresh(enable: boolean): void;
     }
 
     /**
@@ -2739,15 +2714,27 @@ declare global {
     /**
      * Namespace for user related functions
      * @since 1.10.0
+     * @lastupdated 1.10.1 - Updated return type for better handling
      */
     namespace user {
+      /**
+       * User operation result from native layer
+       * @since 1.10.1
+       */
+      export declare type UserOperationResult = {
+        status: 'success' | 'error';
+        statusCode: number;
+        message?: string;
+      };
+
       /**
        * Function to set a user id with provided parameter `userId` in the native layer.
        *
        * Enables to cross-reference own unique ID with nachocode's unique ID and the other devices' IDs.
        * @since 1.10.0
+       * @lastupdated 1.10.1 - Updated return type for better handling
        */
-      function setUserId(userId: string): void;
+      function setUserId(userId: string): Promise<UserOperationResult>;
 
       /**
        * Function to get registered user id from the native layer.
@@ -2761,8 +2748,9 @@ declare global {
       /**
        * Function to delete registered user id in the native layer.
        * @since 1.10.0
+       * @lastupdated 1.10.1 - Updated return type for better handling
        */
-      function deleteUserId(): void;
+      function deleteUserId(): Promise<UserOperationResult>;
     }
 
     /**
