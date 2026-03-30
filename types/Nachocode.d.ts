@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.10.1
+   * nachocode JavaScript Client SDK Type Declaration v1.10.2
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.1/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.2/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-03-24
+   * Last Updated Date: 2026-03-27
    */
   namespace Nachocode {
     /**
@@ -2104,7 +2104,8 @@ declare global {
      * @since 1.0.0
      * @updated 1.6.0 - push topic subscription functions added
      * @updated 1.10.0 - marketing acceptance related functions added
-     * @lastupdated 1.10.1 - setting marketing acceptance return type modified
+     * @updated 1.10.1 - set marketing acceptance return type modified
+     * @lastupdated 1.10.2 - get night marketing result type modified
      */
     namespace push {
       /**
@@ -2257,7 +2258,7 @@ declare global {
           };
 
       /**
-       * Marketing allowed result from native layer
+       * Get marketing allowed result from native layer
        * @since 1.10.0
        */
       export declare type GetMarketingAllowedResult = {
@@ -2279,6 +2280,27 @@ declare global {
         status: 'success' | 'error';
         statusCode: number;
         message?: string;
+      };
+
+      /**
+       * Get marketing preference result from native layer
+       * @since 1.10.2
+       */
+      export declare type GetMarketingPreferenceResult = {
+        /**
+         * marketing push acceptance for guest user, `null` if unknown _(ex. not selected yet)_
+         */
+        guest: {
+          marketingAllowed: boolean | null;
+          nightAllowed: boolean | null;
+        };
+        /**
+         * marketing push acceptance for logged-in user, `null` if unknown _(ex. not selected yet)_
+         */
+        user: {
+          marketingAllowed: boolean | null;
+          nightAllowed: boolean | null;
+        };
       };
 
       /**
@@ -2409,6 +2431,14 @@ declare global {
        * Returns advertising push acceptance from the native layer.
        * - Default returned value : `Promise<{guest: null, user: null}>`
        * - Returns `null` if unknown _(ex. not selected yet)_
+       * @example
+       * // Get marketing push acceptance example
+       * const marketingAllowed = await Nachocode.push.getMarketingAllowed();
+       * console.log(marketingAllowed);
+       * // {
+       * //   guest: true,
+       * //   user: true
+       * // }
        * @since 1.10.0
        */
       function getMarketingAllowed(): Promise<GetMarketingAllowedResult>;
@@ -2424,14 +2454,71 @@ declare global {
       ): Promise<SetMarketingAllowedResult>;
 
       /**
-       * Function to get whether the device user agrees to receive a night push notification.
+       * Function to get whether the device user agrees to receive a night marketing push notification.
        * @returns
        * Returns night push acceptance from the native layer.
-       * - Default returned value : `Promise<null>`
+       * - Default returned value : `Promise<{guest: null, user: null}>`
        * - Returns `null` if unknown _(ex. not selected yet)_
+       * @example
+       * // Get night marketing push acceptance example
+       * const nightAllowed = await Nachocode.push.getNightAllowed();
+       * console.log(nightAllowed);
+       * // {
+       * //   guest: true,
+       * //   user: true
+       * // }
        * @since 1.10.0
+       * @lastupdated 1.10.2 - Updated return type for better handling
        */
-      function getNightAllowed(): Promise<boolean | null>;
+      function getNightAllowed(): Promise<GetMarketingAllowedResult>;
+
+      /**
+       * Function to set the user's marketing preferences
+       * including marketing push and night push acceptance in one call.
+       * @param data - The marketing preference data to set.
+       * @returns
+       * Asynchronously returns the response from native layer.
+       * @example
+       * // Set marketing preference example
+       * const result = await Nachocode.push.setMarketingPreference({
+       *   marketingAllowed: true,
+       *   nightAllowed: false,
+       * });
+       * console.log(result);
+       * // {
+       * //   status: 'success',
+       * //   statusCode: 200,
+       * // }
+       * @since 1.10.2
+       */
+      function setMarketingPreference(data: {
+        /**
+         * Whether the user agrees to receive marketing push notifications.
+         */
+        marketingAllowed: boolean;
+        /**
+         * Whether the user agrees to receive night push notifications.
+         */
+        nightAllowed: boolean;
+      }): Promise<SetMarketingAllowedResult>;
+
+      /**
+       * Function to get the user's marketing preferences.
+       * @returns
+       * Returns the marketing preference from the native layer.
+       * - Default returned value : `Promise<{guest: {marketingAllowed: null, nightAllowed: null}, user: {marketingAllowed: null, nightAllowed: null}}>`
+       * - Returns `null` if unknown _(ex. not selected yet)_
+       * @example
+       * // Get marketing preference example
+       * const preference = await Nachocode.push.getMarketingPreference();
+       * console.log(preference);
+       * // {
+       * //   guest: { marketingAllowed: true, nightAllowed: false },
+       * //   user: { marketingAllowed: true, nightAllowed: false }
+       * // }
+       * @since 1.10.2
+       */
+      function getMarketingPreference(): Promise<GetMarketingPreferenceResult>;
     }
 
     /**
