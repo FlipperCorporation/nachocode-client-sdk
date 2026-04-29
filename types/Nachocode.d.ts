@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.10.2
+   * nachocode JavaScript Client SDK Type Declaration v1.10.3
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.2/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.3/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-03-27
+   * Last Updated Date: 2026-04-21
    */
   namespace Nachocode {
     /**
@@ -2152,6 +2152,7 @@ declare global {
       /**
        * Options for local push notification
        * @since 1.4.1
+       * @lastupdated 1.10.3 - `groupId` added for local push notification grouping
        */
       export declare type LocalPushPayload = {
         /**
@@ -2180,6 +2181,11 @@ declare global {
          * If provided, sets provided `id` to the local push notification
          */
         id?: number;
+        /**
+         * @since 1.10.3
+         * If provided, groups the local push notification with provided `groupId`
+         */
+        groupId?: string;
       };
 
       /**
