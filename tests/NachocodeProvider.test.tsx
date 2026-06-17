@@ -23,7 +23,7 @@ const TestComponent = () => {
 describe('NachoProvider', () => {
   beforeEach(() => {
     // 🔥 `window.Nachocode`를 mock으로 설정
-    Object.defineProperty(global, 'Nachocode', {
+    Object.defineProperty(globalThis as any, 'Nachocode', {
       value: {
         init: jest.fn(),
         env: { isInitialized: () => true },
@@ -33,7 +33,7 @@ describe('NachoProvider', () => {
   });
 
   afterEach(() => {
-    delete (window as any).Nachocode; // ✅ Nachocode 초기화
+    delete (globalThis as any).Nachocode; // ✅ Nachocode 초기화
   });
 
   test('Provider가 정상적으로 Context를 제공하는지 확인', async () => {

@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.10.3
+   * nachocode JavaScript Client SDK Type Declaration v1.10.4
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.3/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.4/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-04-21
+   * Last Updated Date: 2026-06-12
    */
   namespace Nachocode {
     /**
@@ -2844,6 +2844,12 @@ declare global {
        * @lastupdated 1.10.1 - Updated return type for better handling
        */
       function deleteUserId(): Promise<UserOperationResult>;
+
+      /**
+       * Function to withdraw current user in the native layer, deletes all data related to the user.
+       * @since 1.10.4
+       */
+      function withdrawUser(): Promise<UserOperationResult>;
     }
 
     /**
