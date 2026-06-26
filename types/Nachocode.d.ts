@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.10.4
+   * nachocode JavaScript Client SDK Type Declaration v1.10.5
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.4/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.5/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-06-12
+   * Last Updated Date: 2026-06-25
    */
   namespace Nachocode {
     /**
@@ -873,9 +873,6 @@ declare global {
 
       /**
        * Asynchronously calculates the safe area insets of the device from native layer.
-       *
-       * Supported Platforms
-       * - iOS (iPhone X and later)
        * @example
        * const safeArea = await Nachocode.device.getSafeAreaInsets();
        * if (!safeArea.isError) {
@@ -888,6 +885,7 @@ declare global {
        *   console.error(`Error retrieving safe area: ${safeArea.errorMessage}`);
        * }
        * @since 1.8.0
+       * @lastupdated 1.10.5 - Android safe area insets calculation added
        */
       function getSafeAreaInsets(): Promise<GetSafeAreaInsetsResult>;
 
