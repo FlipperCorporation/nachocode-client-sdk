@@ -1,6 +1,6 @@
 {
   "name": "nachocode-client-sdk",
-  "version": "1.10.6",
+  "version": "1.11.0",
   "description": "nachocode Client SDK",
   "type": "module",
   "main": "dist/index.cjs.js",

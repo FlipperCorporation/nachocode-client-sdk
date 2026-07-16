@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.10.5
+   * nachocode JavaScript Client SDK Type Declaration v1.11.0
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.5/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.0/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-06-25
+   * Last Updated Date: 2026-07-14
    */
   namespace Nachocode {
     /**
@@ -1248,6 +1248,77 @@ declare global {
       ): void;
     }
 
+    /**
+     * Namespace for Firebase native features
+     * @since 1.11.0
+     */
+    namespace firebase {
+      /**
+       * Firebase result from native layer
+       * @since 1.11.0
+       */
+      export declare type FirebaseResult = {
+        /**
+         * Status which shows success of Firebase native feature.
+         */
+        status: 'success' | 'error';
+        /**
+         * Firebase native feature result status code. 200 when successful.
+         */
+        statusCode: number;
+        /**
+         * Firebase native feature result message from native layer.
+         */
+        message?: string;
+      };
+
+      /**
+       * @description
+       * Function to trigger Firebase Analytics app event.
+       * @returns {Promise<FirebaseResult>}
+       * @since 1.11.0
+       */
+      function logEvent(
+        /**
+         * Event name to be logged in Firebase Analytics.
+         */
+        eventName: string,
+        /**
+         * Optional parameters to be logged in Firebase Analytics.
+         */
+        parameters?: Record<string, string | number>
+      ): Promise<FirebaseResult>;
+
+      /**
+       * @description
+       * Function to set user property in Firebase Analytics.
+       * @returns {Promise<FirebaseResult>}
+       * @since 1.11.0
+       */
+      function setUserProperty(
+        /**
+         * User property name to be set in Firebase Analytics.
+         */
+        propertyName: string,
+        /**
+         * User property value to be set in Firebase Analytics.
+         */
+        propertyValue: string
+      ): Promise<FirebaseResult>;
+
+      /**
+       * @description
+       * Function to delete user property in Firebase Analytics.
+       * @returns {Promise<FirebaseResult>}
+       * @since 1.11.0
+       */
+      function deleteUserProperty(
+        /**
+         * User property name to be deleted in Firebase Analytics.
+         */
+        propertyName: string
+      ): Promise<FirebaseResult>;
+    }
     /**
      * Namespace for Google native features
      * @since 1.5.0
@@ -2724,6 +2795,39 @@ declare global {
           };
 
       /**
+       * Type for the successful result of getting the store country code.
+       * @since 1.11.0
+       */
+      export declare type GetStoreCountryCodeSuccessResult = {
+        status: 'success';
+        statusCode: 200;
+        message: string;
+        /**
+         * Country code of the app store in alpha-3 format (e.g., "KOR")
+         */
+        data: string;
+      };
+
+      /**
+       * Type for the error result of getting the store country code.
+       * @since 1.11.0
+       */
+      export declare type GetStoreCountryCodeErrorResult = {
+        status: 'error';
+        statusCode: 400 | 500;
+        message: string;
+        errorCode?: string;
+      };
+
+      /**
+       * Type for the result of getting the store country code.
+       * @since 1.11.0
+       */
+      export declare type GetStoreCountryCodeResult =
+        | GetStoreCountryCodeSuccessResult
+        | GetStoreCountryCodeErrorResult;
+
+      /**
        * Opens Apple App Store or Google Play Store.
        *
        * Automatically checks current OS and opens target store.
@@ -2775,6 +2879,23 @@ declare global {
        * @since 1.6.0
        */
       function requestReview(): void;
+
+      /**
+       * Retrieves the country code of the app store based on the current device's location.
+       * @returns
+       * Returns the country code of the app store.
+       * - Returns `data` as a string if successful.
+       * @example
+       * // Get store country code example
+       * const result = await Nachocode.store.getStoreCountryCode();
+       * if (result.status === 'success') {
+       *   console.log(result.data); // e.g., "KOR"
+       * } else {
+       *   console.error(result.message);
+       * }
+       * @since 1.11.0
+       */
+      function getStoreCountryCode(): Promise<GetStoreCountryCodeResult>;
     }
 
     /**
