@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.11.0
+   * nachocode JavaScript Client SDK Type Declaration v1.11.1
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.0/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.1/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-07-14
+   * Last Updated Date: 2026-07-28
    */
   namespace Nachocode {
     /**
@@ -2921,6 +2921,75 @@ declare global {
        * @since 1.0.3
        */
       function hide(): void;
+    }
+
+    /**
+     * Namespace for telecom related functions
+     * @since 1.11.1
+     */
+    namespace telecom {
+      /**
+       * Telecom user token result from native layer
+       * @since 1.11.1
+       */
+      export declare type TelecomUserTokenResult = {
+        status: 'success' | 'error';
+        statusCode: number;
+        message?: string;
+      };
+
+      /**
+       * Check telecom user token success result from native layer
+       * @since 1.11.1
+       */
+      export declare type CheckTelecomUserTokenSuccessResult = {
+        status: 'success';
+        statusCode: 200;
+        message: string;
+        /**
+         * Returns `true` if the telecom user token exists, otherwise returns `false`.
+         */
+        data: boolean;
+      };
+      /**
+       * Check telecom user token error result from native layer
+       * @since 1.11.1
+       */
+      export declare type CheckTelecomUserTokenErrorResult = {
+        status: 'error';
+        statusCode: 400 | 500;
+        message: string;
+      };
+      /**
+       * Check telecom user token result from native layer
+       * @since 1.11.1
+       */
+      export declare type CheckTelecomUserTokenResult =
+        | CheckTelecomUserTokenSuccessResult
+        | CheckTelecomUserTokenErrorResult;
+
+      /**
+       * Sets the telecom user token.
+       * @param {string} token - The telecom user token
+       * @since 1.11.1
+       */
+      function setTelecomUserToken(
+        token: string
+      ): Promise<TelecomUserTokenResult>;
+
+      /**
+       * Deletes the telecom user token.
+       * @returns {Promise<TelecomUserTokenResult>}
+       * @since 1.11.1
+       */
+      function deleteTelecomUserToken(): Promise<TelecomUserTokenResult>;
+
+      /**
+       * Checks whether the telecom user token exists or not.
+       * @returns {Promise<CheckTelecomUserTokenResult>}
+       * @since 1.11.1
+       */
+      function checkTelecomUserToken(): Promise<CheckTelecomUserTokenResult>;
     }
 
     /**
