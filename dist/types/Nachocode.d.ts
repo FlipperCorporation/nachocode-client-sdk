@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.10.3
+   * nachocode JavaScript Client SDK Type Declaration v1.11.2
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.10.3/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.2/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-04-21
+   * Last Updated Date: 2026-08-04
    */
   namespace Nachocode {
     /**
@@ -873,9 +873,6 @@ declare global {
 
       /**
        * Asynchronously calculates the safe area insets of the device from native layer.
-       *
-       * Supported Platforms
-       * - iOS (iPhone X and later)
        * @example
        * const safeArea = await Nachocode.device.getSafeAreaInsets();
        * if (!safeArea.isError) {
@@ -888,6 +885,7 @@ declare global {
        *   console.error(`Error retrieving safe area: ${safeArea.errorMessage}`);
        * }
        * @since 1.8.0
+       * @lastupdated 1.10.5 - Android safe area insets calculation added
        */
       function getSafeAreaInsets(): Promise<GetSafeAreaInsetsResult>;
 
@@ -1250,6 +1248,77 @@ declare global {
       ): void;
     }
 
+    /**
+     * Namespace for Firebase native features
+     * @since 1.11.0
+     */
+    namespace firebase {
+      /**
+       * Firebase result from native layer
+       * @since 1.11.0
+       */
+      export declare type FirebaseResult = {
+        /**
+         * Status which shows success of Firebase native feature.
+         */
+        status: 'success' | 'error';
+        /**
+         * Firebase native feature result status code. 200 when successful.
+         */
+        statusCode: number;
+        /**
+         * Firebase native feature result message from native layer.
+         */
+        message?: string;
+      };
+
+      /**
+       * @description
+       * Function to trigger Firebase Analytics app event.
+       * @returns {Promise<FirebaseResult>}
+       * @since 1.11.0
+       */
+      function logEvent(
+        /**
+         * Event name to be logged in Firebase Analytics.
+         */
+        eventName: string,
+        /**
+         * Optional parameters to be logged in Firebase Analytics.
+         */
+        parameters?: Record<string, string | number>
+      ): Promise<FirebaseResult>;
+
+      /**
+       * @description
+       * Function to set user property in Firebase Analytics.
+       * @returns {Promise<FirebaseResult>}
+       * @since 1.11.0
+       */
+      function setUserProperty(
+        /**
+         * User property name to be set in Firebase Analytics.
+         */
+        propertyName: string,
+        /**
+         * User property value to be set in Firebase Analytics.
+         */
+        propertyValue: string
+      ): Promise<FirebaseResult>;
+
+      /**
+       * @description
+       * Function to delete user property in Firebase Analytics.
+       * @returns {Promise<FirebaseResult>}
+       * @since 1.11.0
+       */
+      function deleteUserProperty(
+        /**
+         * User property name to be deleted in Firebase Analytics.
+         */
+        propertyName: string
+      ): Promise<FirebaseResult>;
+    }
     /**
      * Namespace for Google native features
      * @since 1.5.0
@@ -1831,6 +1900,33 @@ declare global {
        * @since 1.6.2
        */
       function getCurrentPosition(): Promise<GetCurrentPositionResult>;
+    }
+
+    /**
+     * Namespace for functions called from native-side of the application.
+     * @since 1.0.0
+     * @lastupdated 1.0.3
+     */
+    namespace native {
+      export declare type CallbackResponse = {
+        method: string;
+        data?: object;
+        message?: string;
+      };
+
+      /**
+       * A placeholder callback function that can be called from the native application.
+       * This function should be implemented to handle specific callback from native code.
+       */
+      function handleCallback(response: CallbackResponse): void;
+
+      /**
+       * A collection of named callback functions that can be invoked from native code.
+       * Each property of this object can be a function that gets executed in response to a native call.
+       */
+      const handleCallbacks: {
+        [callbackName: string]: (response: any) => void;
+      };
     }
 
     /**
@@ -2561,6 +2657,12 @@ declare global {
       function openSetting(): void;
 
       /**
+       * Function to open up Native application setting view.
+       * @since 1.11.2
+       */
+      function openAppSettingView(): void;
+
+      /**
        * Set whether pull to refresh feature is enabled or not.
        * @since 1.4.0
        */
@@ -2726,6 +2828,39 @@ declare global {
           };
 
       /**
+       * Type for the successful result of getting the store country code.
+       * @since 1.11.0
+       */
+      export declare type GetStoreCountryCodeSuccessResult = {
+        status: 'success';
+        statusCode: 200;
+        message: string;
+        /**
+         * Country code of the app store in alpha-3 format (e.g., "KOR")
+         */
+        data: string;
+      };
+
+      /**
+       * Type for the error result of getting the store country code.
+       * @since 1.11.0
+       */
+      export declare type GetStoreCountryCodeErrorResult = {
+        status: 'error';
+        statusCode: 400 | 500;
+        message: string;
+        errorCode?: string;
+      };
+
+      /**
+       * Type for the result of getting the store country code.
+       * @since 1.11.0
+       */
+      export declare type GetStoreCountryCodeResult =
+        | GetStoreCountryCodeSuccessResult
+        | GetStoreCountryCodeErrorResult;
+
+      /**
        * Opens Apple App Store or Google Play Store.
        *
        * Automatically checks current OS and opens target store.
@@ -2777,6 +2912,23 @@ declare global {
        * @since 1.6.0
        */
       function requestReview(): void;
+
+      /**
+       * Retrieves the country code of the app store based on the current device's location.
+       * @returns
+       * Returns the country code of the app store.
+       * - Returns `data` as a string if successful.
+       * @example
+       * // Get store country code example
+       * const result = await Nachocode.store.getStoreCountryCode();
+       * if (result.status === 'success') {
+       *   console.log(result.data); // e.g., "KOR"
+       * } else {
+       *   console.error(result.message);
+       * }
+       * @since 1.11.0
+       */
+      function getStoreCountryCode(): Promise<GetStoreCountryCodeResult>;
     }
 
     /**
@@ -2805,6 +2957,75 @@ declare global {
     }
 
     /**
+     * Namespace for telecom related functions
+     * @since 1.11.1
+     */
+    namespace telecom {
+      /**
+       * Telecom user token result from native layer
+       * @since 1.11.1
+       */
+      export declare type TelecomUserTokenResult = {
+        status: 'success' | 'error';
+        statusCode: number;
+        message?: string;
+      };
+
+      /**
+       * Check telecom user token success result from native layer
+       * @since 1.11.1
+       */
+      export declare type CheckTelecomUserTokenSuccessResult = {
+        status: 'success';
+        statusCode: 200;
+        message: string;
+        /**
+         * Returns `true` if the telecom user token exists, otherwise returns `false`.
+         */
+        data: boolean;
+      };
+      /**
+       * Check telecom user token error result from native layer
+       * @since 1.11.1
+       */
+      export declare type CheckTelecomUserTokenErrorResult = {
+        status: 'error';
+        statusCode: 400 | 500;
+        message: string;
+      };
+      /**
+       * Check telecom user token result from native layer
+       * @since 1.11.1
+       */
+      export declare type CheckTelecomUserTokenResult =
+        | CheckTelecomUserTokenSuccessResult
+        | CheckTelecomUserTokenErrorResult;
+
+      /**
+       * Sets the telecom user token.
+       * @param {string} token - The telecom user token
+       * @since 1.11.1
+       */
+      function setTelecomUserToken(
+        token: string
+      ): Promise<TelecomUserTokenResult>;
+
+      /**
+       * Deletes the telecom user token.
+       * @returns {Promise<TelecomUserTokenResult>}
+       * @since 1.11.1
+       */
+      function deleteTelecomUserToken(): Promise<TelecomUserTokenResult>;
+
+      /**
+       * Checks whether the telecom user token exists or not.
+       * @returns {Promise<CheckTelecomUserTokenResult>}
+       * @since 1.11.1
+       */
+      function checkTelecomUserToken(): Promise<CheckTelecomUserTokenResult>;
+    }
+
+    /**
      * Namespace for user related functions
      * @since 1.10.0
      * @lastupdated 1.10.1 - Updated return type for better handling
@@ -2823,9 +3044,12 @@ declare global {
       /**
        * Function to set a user id with provided parameter `userId` in the native layer.
        *
+       * Internally, registers push token with the provided `userId` to the app server.
+       *
        * Enables to cross-reference own unique ID with nachocode's unique ID and the other devices' IDs.
        * @since 1.10.0
-       * @lastupdated 1.10.1 - Updated return type for better handling
+       * @updated 1.10.1 - Updated return type for better handling
+       * @lastupdated 1.11.2 - Added push token registration before setting user id to ensure that the push token is registered with the user id in the app server.
        */
       function setUserId(userId: string): Promise<UserOperationResult>;
 
@@ -2844,6 +3068,12 @@ declare global {
        * @lastupdated 1.10.1 - Updated return type for better handling
        */
       function deleteUserId(): Promise<UserOperationResult>;
+
+      /**
+       * Function to withdraw current user in the native layer, deletes all data related to the user.
+       * @since 1.10.4
+       */
+      function withdrawUser(): Promise<UserOperationResult>;
     }
 
     /**

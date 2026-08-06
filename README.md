@@ -14,7 +14,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2026-07-28_
+> 🔔 **최신화 일자:** _2026-08-06_
 
 ## 목차
 
@@ -184,7 +184,7 @@ nachocode Client SDK는 초기화 시 선택적으로 옵션을 설정할 수 �
 최신 버전 로드 (기본)
 
 - 최신 버전의 SDK를 항상 유지하려면 아래 코드를 사용하세요
-- 현재 최신 버전 v.1.11.1
+- 현재 최신 버전 v.1.11.2
 
 ```jsx
 loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
@@ -195,7 +195,7 @@ loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
 - 특정 버전으로 고정하려면 다음과 같이 사용합니다
 
 ```jsx
-loadNachocode('your-api-key', options, '1.11.1');
+loadNachocode('your-api-key', options, '1.11.2');
 ```
 
 > 📢 최신 버전 사용이 권장되며, 특정 버전 고정은 호환성이 중요한 경우에만 사용하세요.

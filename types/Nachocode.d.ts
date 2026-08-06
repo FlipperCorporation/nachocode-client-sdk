@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.11.1
+   * nachocode JavaScript Client SDK Type Declaration v1.11.2
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.1/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.2/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-07-28
+   * Last Updated Date: 2026-08-04
    */
   namespace Nachocode {
     /**
@@ -2630,6 +2630,12 @@ declare global {
       function openSetting(): void;
 
       /**
+       * Function to open up Native application setting view.
+       * @since 1.11.2
+       */
+      function openAppSettingView(): void;
+
+      /**
        * Set whether pull to refresh feature is enabled or not.
        * @since 1.4.0
        */
@@ -3011,9 +3017,12 @@ declare global {
       /**
        * Function to set a user id with provided parameter `userId` in the native layer.
        *
+       * Internally, registers push token with the provided `userId` to the app server.
+       *
        * Enables to cross-reference own unique ID with nachocode's unique ID and the other devices' IDs.
        * @since 1.10.0
-       * @lastupdated 1.10.1 - Updated return type for better handling
+       * @updated 1.10.1 - Updated return type for better handling
+       * @lastupdated 1.11.2 - Added push token registration before setting user id to ensure that the push token is registered with the user id in the app server.
        */
       function setUserId(userId: string): Promise<UserOperationResult>;
 
