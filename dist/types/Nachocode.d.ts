@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.11.2
+   * nachocode JavaScript Client SDK Type Declaration v1.11.3
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.2/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.3/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-08-04
+   * Last Updated Date: 2026-08-13
    */
   namespace Nachocode {
     /**
@@ -1817,6 +1817,120 @@ declare global {
     }
 
     /**
+     * Namespace for locale related features
+     * @since 1.11.3 - `getAppCountryList`, `getAppCountryCode` added
+     */
+    namespace locale {
+      /**
+       * Data structure representing an application country with its code and URL.
+       * @since 1.11.3
+       */
+      export declare type AppCountryData = {
+        /**
+         * ISO 3166-1 alpha-3 country code (ex. "KOR")
+         */
+        countryCode: string;
+        /**
+         * Website URL built into the app for the specific country
+         */
+        url: string;
+      };
+
+      /**
+       * Result structure for successfully retrieving the list of supported application countries.
+       * @since 1.11.3
+       */
+      export declare type GetAppCountryListSuccessResult = {
+        status: 'success';
+        statusCode: 200;
+        message: string;
+        data: AppCountryData[];
+      };
+
+      /**
+       * Result structure for error when retrieving the list of supported application countries.
+       * @since 1.11.3
+       */
+      export declare type GetAppCountryListErrorResult = {
+        status: 'error';
+        statusCode: 400 | 500;
+        message: string;
+      };
+
+      /**
+       * Result structure for retrieving the list of supported application countries.
+       * @since 1.11.3
+       */
+      export declare type GetAppCountryListResult =
+        | GetAppCountryListSuccessResult
+        | GetAppCountryListErrorResult;
+
+      /**
+       * Result structure for successfully retrieving the current application country code.
+       * @since 1.11.3
+       */
+      export declare type GetCountryCodeSuccessResult = {
+        status: 'success';
+        statusCode: 200;
+        message: string;
+        /**
+         * The current application country code.
+         * ISO 3166-1 alpha-3 format, ex. "KOR"
+         */
+        data: string;
+      };
+
+      /**
+       * Result structure for error when retrieving the current application country code.
+       * @since 1.11.3
+       */
+      export declare type GetCountryCodeErrorResult = {
+        status: 'error';
+        statusCode: 400 | 500;
+        message: string;
+      };
+
+      /**
+       * Result structure for retrieving the current application country code.
+       * @since 1.11.3
+       */
+      export declare type GetAppCountryCodeResult =
+        | GetCountryCodeSuccessResult
+        | GetCountryCodeErrorResult;
+
+      /**
+       * Result structure for setting the application country code.
+       * @since 1.11.3
+       */
+      export declare type SetAppCountryCodeResult = {
+        status: 'success' | 'error';
+        statusCode: number;
+        message?: string;
+      };
+
+      /**
+       * Retrieves the list of supported application countries.
+       * @since 1.11.3
+       */
+      function getAppCountryList(): Promise<GetAppCountryListResult>;
+
+      /**
+       * Retrieves the current application country code.
+       * @since 1.11.3
+       */
+      function getAppCountryCode(): Promise<GetAppCountryCodeResult>;
+
+      /**
+       * Sets the application country code.
+       * @param countryCode - The country code to set.
+       * @since 1.11.3
+       */
+      function setAppCountryCode(
+        countryCode: string
+      ): Promise<SetAppCountryCodeResult>;
+    }
+
+    /**
      * Namespace for location related features
      * @since 1.6.2
      */
@@ -1900,33 +2014,6 @@ declare global {
        * @since 1.6.2
        */
       function getCurrentPosition(): Promise<GetCurrentPositionResult>;
-    }
-
-    /**
-     * Namespace for functions called from native-side of the application.
-     * @since 1.0.0
-     * @lastupdated 1.0.3
-     */
-    namespace native {
-      export declare type CallbackResponse = {
-        method: string;
-        data?: object;
-        message?: string;
-      };
-
-      /**
-       * A placeholder callback function that can be called from the native application.
-       * This function should be implemented to handle specific callback from native code.
-       */
-      function handleCallback(response: CallbackResponse): void;
-
-      /**
-       * A collection of named callback functions that can be invoked from native code.
-       * Each property of this object can be a function that gets executed in response to a native call.
-       */
-      const handleCallbacks: {
-        [callbackName: string]: (response: any) => void;
-      };
     }
 
     /**
@@ -2647,7 +2734,7 @@ declare global {
     /**
      * Namespace for settings related functions
      * @since 1.4.0
-     * @lastupdated 1.4.2
+     * @lastupdated 1.11.2 - `openAppSettingView` function added
      */
     namespace setting {
       /**
