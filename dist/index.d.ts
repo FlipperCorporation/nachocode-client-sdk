@@ -1,17 +1,4 @@
-import * as react from 'react';
-import { ReactNode } from 'react';
-
-declare function loadNachocode(apiKey: string, options?: Nachocode.InitializeOptions, version?: Nachocode.VersionString, onInitialized?: (response?: {
-    appKey?: string;
-    appName?: string;
-    appSourceVersion?: Nachocode.VersionString;
-    appVersion?: Nachocode.VersionString;
-    deviceModel?: string;
-    os?: 'iOS' | 'Android';
-    osVersion?: string;
-    packageName?: string;
-    pushToken?: string;
-}) => void): Promise<typeof Nachocode>;
+import { ReactNode, ReactElement } from 'react';
 
 declare global {
   /**
@@ -3475,58 +3462,14 @@ declare global {
 
 var Nachocode$1 = Nachocode;
 
-type NachocodeContextType = {
-    isLoading: true;
-    isError: false;
-    error: null;
-    Nachocode: null;
-} | {
-    isLoading: false;
-    isError: true;
-    error: Error;
-    Nachocode: null;
-} | {
-    isLoading: false;
-    isError: false;
-    error: null;
-    Nachocode: typeof Nachocode$1;
-};
-declare function NachoProvider({ apiKey, options, version, onInitialized, children, }: {
-    apiKey: string;
-    options?: Nachocode$1.InitializeOptions;
-    version?: Nachocode$1.VersionString;
-    onInitialized?: (response?: {
-        appKey?: string;
-        appName?: string;
-        appSourceVersion?: Nachocode$1.VersionString;
-        appVersion?: Nachocode$1.VersionString;
-        deviceModel?: string;
-        os?: 'iOS' | 'Android';
-        osVersion?: string;
-        packageName?: string;
-        pushToken?: string;
-    }) => void;
-    children: ReactNode;
-}): react.JSX.Element;
-declare function useNachocodeContext(): NachocodeContextType;
-
-type UseNachocodeReturn = {
-    isLoading: true;
-    isError: false;
-    error: null;
-    Nachocode: null;
-} | {
-    isLoading: false;
-    isError: true;
-    error: Error;
-    Nachocode: null;
-} | {
-    isLoading: false;
-    isError: false;
-    error: null;
-    Nachocode: typeof Nachocode$1;
-};
-declare function useNachocode(apiKey: string, options?: Nachocode$1.InitializeOptions, version?: Nachocode$1.VersionString, onInitialized?: (response?: {
+/**
+ * 초기화가 완료된 nachocode SDK 객체 (`window.Nachocode`)
+ */
+type NachocodeSDK = typeof Nachocode$1;
+/**
+ * SDK 초기화 완료(`init`) 이벤트로 전달되는 애플리케이션 정보
+ */
+type NachocodeInitResponse = {
     appKey?: string;
     appName?: string;
     appSourceVersion?: Nachocode$1.VersionString;
@@ -3536,6 +3479,84 @@ declare function useNachocode(apiKey: string, options?: Nachocode$1.InitializeOp
     osVersion?: string;
     packageName?: string;
     pushToken?: string;
-}) => void): UseNachocodeReturn;
+};
+/**
+ * SDK 초기화 완료 시 호출되는 콜백
+ */
+type OnInitialized = (response?: NachocodeInitResponse) => void;
+/**
+ * SDK 로드 상태
+ */
+type NachocodeState = {
+    isLoading: true;
+    isError: false;
+    error: null;
+    Nachocode: null;
+} | {
+    isLoading: false;
+    isError: true;
+    error: Error;
+    Nachocode: null;
+} | {
+    isLoading: false;
+    isError: false;
+    error: null;
+    Nachocode: NachocodeSDK;
+};
+
+/**
+ * nachocode SDK 스크립트를 로드하고 초기화한다.
+ *
+ * 이미 로드가 진행 중이거나 완료된 경우 같은 `Promise` 를 반환하며,
+ * 이때 새로 전달한 인자(`options`, `version`, `onInitialized`)는 사용되지 않는다.
+ * @param apiKey - nachocode 대시보드에서 발급받은 API Key
+ * @param options - SDK 초기화 옵션
+ * @param version - 로드할 SDK 버전. 생략하면 최신 버전을 로드한다.
+ * @param onInitialized - SDK 초기화 완료(`init`) 이벤트 콜백
+ * @returns 초기화가 완료된 `Nachocode` SDK 객체
+ */
+declare function loadNachocode(apiKey: string, options?: Nachocode.InitializeOptions, version?: Nachocode.VersionString, onInitialized?: OnInitialized): Promise<NachocodeSDK>;
+
+/**
+ * `NachoProvider` props
+ */
+type NachoProviderProps = {
+    /**
+     * nachocode 대시보드에서 발급받은 API Key
+     */
+    apiKey: string;
+    /**
+     * SDK 초기화 옵션
+     */
+    options?: Nachocode.InitializeOptions;
+    /**
+     * 로드할 SDK 버전. 생략하면 최신 버전을 로드한다.
+     */
+    version?: Nachocode.VersionString;
+    /**
+     * SDK 초기화 완료(`init`) 이벤트 콜백
+     */
+    onInitialized?: OnInitialized;
+    children: ReactNode;
+};
+/**
+ * nachocode SDK를 로드하고, 하위 컴포넌트에 로드 상태를 제공하는 Provider
+ */
+declare function NachoProvider({ apiKey, options, version, onInitialized, children, }: NachoProviderProps): ReactElement;
+/**
+ * `NachoProvider` 가 제공하는 SDK 로드 상태를 반환하는 훅
+ * @throws `NachoProvider` 밖에서 호출한 경우
+ */
+declare function useNachocodeContext(): NachocodeState;
+
+/**
+ * nachocode SDK를 로드하고 로드 상태를 반환하는 훅
+ * @param apiKey - nachocode 대시보드에서 발급받은 API Key
+ * @param options - SDK 초기화 옵션
+ * @param version - 로드할 SDK 버전. 생략하면 최신 버전을 로드한다.
+ * @param onInitialized - SDK 초기화 완료(`init`) 이벤트 콜백
+ */
+declare function useNachocode(apiKey: string, options?: Nachocode.InitializeOptions, version?: Nachocode.VersionString, onInitialized?: OnInitialized): NachocodeState;
 
 export { NachoProvider, loadNachocode, useNachocode, useNachocodeContext };
+export type { NachoProviderProps, NachocodeInitResponse, NachocodeSDK, NachocodeState, OnInitialized };
