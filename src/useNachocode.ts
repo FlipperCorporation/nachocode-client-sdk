@@ -13,6 +13,22 @@ const LOADING_STATE: NachocodeState = {
 };
 
 /**
+ * 훅(Hooks)을 지원하는 React 버전인지 확인한다.
+ *
+ * 훅은 React 16.8 부터 제공되므로, 하위 버전에서는 원인을 알기 어려운 오류
+ * (`useState is not a function`) 대신 안내 메시지를 던진다.
+ * @param caller - 오류 메시지에 표시할 호출 주체 이름
+ * @internal
+ */
+export function assertHooksSupported(caller: string): void {
+  if (typeof useState !== 'function') {
+    throw new Error(
+      `[Nachocode] \`${caller}\` requires React 16.8 or later. Use \`loadNachocode\` instead.`
+    );
+  }
+}
+
+/**
  * `useNachocode` 훅과 `NachoProvider` 가 공유하는 SDK 로드 로직
  * @param caller - 로그에 표시할 호출 주체 이름
  * @internal
@@ -24,6 +40,8 @@ export function useNachocodeLoader(
   version?: Nachocode.VersionString,
   onInitialized?: OnInitialized
 ): NachocodeState {
+  assertHooksSupported(caller);
+
   const [state, setState] = useState<NachocodeState>(LOADING_STATE);
 
   useEffect(() => {

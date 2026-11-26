@@ -45,11 +45,12 @@ function loadScript(version) {
             ? existingScript
             : document.createElement('script');
         const settle = (error) => {
+            var _a;
             script.removeEventListener('load', onLoad);
             script.removeEventListener('error', onError);
             script.removeAttribute(SCRIPT_LOADING_ATTRIBUTE);
             if (error) {
-                script.parentNode?.removeChild(script);
+                (_a = script.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(script);
                 reject(error);
             }
             else {
@@ -73,12 +74,13 @@ function loadScript(version) {
     });
 }
 async function initializeNachocode(apiKey, options, onInitialized) {
+    var _a;
     const sdk = window.Nachocode;
     if (!sdk || !sdk.env) {
         throw new Error('[Nachocode] SDK is not available on the window object.');
     }
     try {
-        if (onInitialized && typeof sdk.event?.on === 'function') {
+        if (onInitialized && typeof ((_a = sdk.event) === null || _a === void 0 ? void 0 : _a.on) === 'function') {
             sdk.event.on(INIT_EVENT, onInitialized);
         }
         if (!sdk.env.isInitialized()) {
@@ -103,18 +105,24 @@ const LOADING_STATE = {
     error: null,
     Nachocode: null,
 };
+function assertHooksSupported(caller) {
+    if (typeof react.useState !== 'function') {
+        throw new Error(`[Nachocode] \`${caller}\` requires React 16.8 or later. Use \`loadNachocode\` instead.`);
+    }
+}
 function useNachocodeLoader(caller, apiKey, options, version, onInitialized) {
+    assertHooksSupported(caller);
     const [state, setState] = react.useState(LOADING_STATE);
     react.useEffect(() => {
         let isActive = true;
-        if (options?.logger) {
+        if (options === null || options === void 0 ? void 0 : options.logger) {
             console.log(`[Nachocode] ${caller} mounted.`);
         }
         loadNachocode(apiKey, options, version, onInitialized)
             .then(sdk => {
             if (!isActive)
                 return;
-            if (options?.logger) {
+            if (options === null || options === void 0 ? void 0 : options.logger) {
                 console.log('[Nachocode] Nachocode SDK successfully loaded:', sdk);
             }
             setState({
@@ -145,13 +153,20 @@ function useNachocode(apiKey, options, version, onInitialized) {
     return useNachocodeLoader('useNachocode', apiKey, options, version, onInitialized);
 }
 
-const NachoContext = react.createContext(null);
+let nachoContext;
+function getNachoContext() {
+    if (!nachoContext) {
+        nachoContext = react.createContext(null);
+    }
+    return nachoContext;
+}
 function NachoProvider({ apiKey, options, version, onInitialized, children, }) {
     const state = useNachocodeLoader('NachoProvider', apiKey, options, version, onInitialized);
-    return react.createElement(NachoContext.Provider, { value: state }, children);
+    return react.createElement(getNachoContext().Provider, { value: state }, children);
 }
 function useNachocodeContext() {
-    const context = react.useContext(NachoContext);
+    assertHooksSupported('useNachocodeContext');
+    const context = react.useContext(getNachoContext());
     if (!context) {
         throw new Error('[Nachocode] `useNachocodeContext` must be used within a `<NachoProvider>` component.');
     }

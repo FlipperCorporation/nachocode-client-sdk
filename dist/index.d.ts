@@ -3541,10 +3541,14 @@ type NachoProviderProps = {
 };
 /**
  * nachocode SDK를 로드하고, 하위 컴포넌트에 로드 상태를 제공하는 Provider
+ *
+ * React 16.8 이상이 필요하다.
  */
 declare function NachoProvider({ apiKey, options, version, onInitialized, children, }: NachoProviderProps): ReactElement;
 /**
  * `NachoProvider` 가 제공하는 SDK 로드 상태를 반환하는 훅
+ *
+ * React 16.8 이상이 필요하다.
  * @throws `NachoProvider` 밖에서 호출한 경우
  */
 declare function useNachocodeContext(): NachocodeState;

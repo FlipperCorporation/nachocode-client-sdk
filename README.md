@@ -61,7 +61,8 @@ npm install nachocode-client-sdk
 yarn add nachocode-client-sdk
 ```
 
-> React **16.8 이상**이 필요합니다.
+> `NachoProvider`, `useNachocode`, `useNachocodeContext`는 Hooks를 사용하므로 React **16.8 이상**이 필요합니다.
+> 그보다 낮은 버전의 React에서는 [`loadNachocode`](#3️⃣-loadnachocode-직접-사용)를 사용하세요.
 
 ---
 
