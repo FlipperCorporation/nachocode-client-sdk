@@ -14,7 +14,7 @@
 </p>
 <!-- markdownlint-enable MD033 -->
 
-> 🔔 **최신화 일자:** _2026-08-13_
+> 🔔 **최신화 일자:** _2026-11-26_
 
 ## 목차
 
@@ -28,6 +28,7 @@
       - [`useNachocode()` 반환값](#usenachocode-반환값)
     - [3️⃣ `loadNachocode` 직접 사용](#3️⃣-loadnachocode-직접-사용)
   - [SDK 초기화 옵션 (`InitializeOptions`)](#sdk-초기화-옵션-initializeoptions)
+  - [SDK 초기화 완료 콜백 (`onInitialized`)](#sdk-초기화-완료-콜백-oninitialized)
   - [SDK 버전 관리](#sdk-버전-관리)
   - [SDK 기능 사용](#sdk-기능-사용)
   - [네임스페이스 소개](#네임스페이스-소개)
@@ -60,6 +61,8 @@ npm install nachocode-client-sdk
 yarn add nachocode-client-sdk
 ```
 
+> React **16.8 이상**이 필요합니다.
+
 ---
 
 ## 사용법
@@ -70,6 +73,7 @@ nachocode Client SDK는 세 가지 방법으로 사용할 수 있습니다.
 
 - 애플리케이션 전체에서 `Nachocode`를 사용할 수 있도록 `Provider` 패턴을 제공합니다.
 - `useNachocodeContext` 훅을 사용하여 `Nachocode` 객체에 접근할 수 있습니다.
+- `useNachocodeContext` 훅은 반드시 `NachoProvider` 하위 컴포넌트에서 호출해야 하며, 그렇지 않으면 오류가 발생합니다.
 
 ```jsx
 import { NachoProvider, useNachocodeContext } from 'nachocode-client-sdk';
@@ -143,7 +147,7 @@ initSDK();
 
 nachocode Client SDK는 초기화 시 선택적으로 옵션을 설정할 수 있습니다.
 
-초기화 옵션은 `NachoProvider`, `loadNachocode` 두 방식에서 모두 사용할 수 있습니다.
+초기화 옵션은 `NachoProvider`, `useNachocode`, `loadNachocode` 세 방식에서 모두 사용할 수 있습니다.
 
 1. `NachoProvider` 방식에서 `options` 사용
 
@@ -158,7 +162,18 @@ nachocode Client SDK는 초기화 시 선택적으로 옵션을 설정할 수 �
    </NachoProvider>
    ```
 
-2. `loadNachocode` 직접 호출 시 `options` 사용
+2. `useNachocode` 훅에서 `options` 사용
+
+   - 두 번째 인자로 `options`를 전달할 수 있습니다:
+
+   ```jsx
+   const { Nachocode, isLoading, isError, error } = useNachocode(
+     'your-api-key',
+     { sandbox: true, logger: true }
+   );
+   ```
+
+3. `loadNachocode` 직접 호출 시 `options` 사용
 
    - 비 React 환경 또는 수동으로 초기화하고 싶을 때 사용합니다:
 
@@ -176,6 +191,37 @@ nachocode Client SDK는 초기화 시 선택적으로 옵션을 설정할 수 �
 
 - `logger`는 기본적으로 true로 설정되어 있으며, 개발 중 디버깅에 유용합니다.
 - `sandbox`는 실제 운영 API가 아닌 테스트 서버를 사용하는 경우 유용합니다.
+- SDK는 페이지에서 **한 번만** 로드 및 초기화됩니다. 이미 로드가 시작된 뒤에 다른 `options`를 전달해도 반영되지 않습니다.
+
+---
+
+## SDK 초기화 완료 콜백 (`onInitialized`)
+
+SDK 초기화가 완료되었을 때(`init` 이벤트) 호출할 콜백을 등록할 수 있습니다.
+
+콜백은 앱 이름, 앱 버전, 디바이스 정보 등 애플리케이션 정보를 인자로 전달받습니다.
+
+1. `NachoProvider`의 `onInitialized` prop
+
+   ```jsx
+   <NachoProvider
+     apiKey="your-api-key"
+     onInitialized={info => console.log('초기화 완료:', info?.appName)}
+   >
+     <YourComponent />
+   </NachoProvider>
+   ```
+
+2. `useNachocode`, `loadNachocode`의 네 번째 인자 (`apiKey`, `options`, `version`, `onInitialized` 순서)
+
+   ```jsx
+   loadNachocode('your-api-key', undefined, undefined, info => {
+     console.log('초기화 완료:', info?.appName);
+   });
+   ```
+
+- 콜백은 `Nachocode.event.on('init', callback)`으로 등록됩니다.
+- SDK 로드를 처음 시작한 호출의 콜백만 등록됩니다.
 
 ---
 
@@ -218,9 +264,8 @@ loadNachocode('your-api-key', options, '1.11.4');
   - **디바이스 정보 확인**
 
   ```jsx
-  Nachocode.device.getDeviceModel(model => {
-    console.log(`디바이스 모델: ${model}`);
-  });
+  const model = Nachocode.device.getDeviceModel();
+  console.log(`디바이스 모델: ${model}`);
   ```
 
 - 대부분의 기능은 웹 실행환경에선 무시되고, 앱 실행환경에서 정상 작동합니다.

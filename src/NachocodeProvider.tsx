@@ -1,114 +1,64 @@
 // Module dependencies
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { createContext, createElement, useContext } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 // Custom module dependencies
-import type Nachocode from '../types/Nachocode.d.ts';
-import { loadNachocode } from './loadNachocode';
+import type { NachocodeState, OnInitialized } from './types';
+import { useNachocodeLoader } from './useNachocode';
 
-type NachocodeContextType =
-  | { isLoading: true; isError: false; error: null; Nachocode: null }
-  | { isLoading: false; isError: true; error: Error; Nachocode: null }
-  | {
-      isLoading: false;
-      isError: false;
-      error: null;
-      Nachocode: typeof Nachocode;
-    };
-
-const initialContextValue: NachocodeContextType = {
-  isLoading: true,
-  isError: false,
-  error: null,
-  Nachocode: null,
+/**
+ * `NachoProvider` props
+ */
+export type NachoProviderProps = {
+  /**
+   * nachocode 대시보드에서 발급받은 API Key
+   */
+  apiKey: string;
+  /**
+   * SDK 초기화 옵션
+   */
+  options?: Nachocode.InitializeOptions;
+  /**
+   * 로드할 SDK 버전. 생략하면 최신 버전을 로드한다.
+   */
+  version?: Nachocode.VersionString;
+  /**
+   * SDK 초기화 완료(`init`) 이벤트 콜백
+   */
+  onInitialized?: OnInitialized;
+  children: ReactNode;
 };
 
-const NachoContext = createContext<NachocodeContextType>(initialContextValue);
+// Provider 밖에서 사용했는지 구분할 수 있도록 기본값은 `null`
+const NachoContext = createContext<NachocodeState | null>(null);
 
+/**
+ * nachocode SDK를 로드하고, 하위 컴포넌트에 로드 상태를 제공하는 Provider
+ */
 export function NachoProvider({
   apiKey,
   options,
   version,
   onInitialized,
   children,
-}: {
-  apiKey: string;
-  options?: Nachocode.InitializeOptions;
-  version?: Nachocode.VersionString;
-  onInitialized?: (response?: {
-    appKey?: string;
-    appName?: string;
-    appSourceVersion?: Nachocode.VersionString;
-    appVersion?: Nachocode.VersionString;
-    deviceModel?: string;
-    os?: 'iOS' | 'Android';
-    osVersion?: string;
-    packageName?: string;
-    pushToken?: string;
-  }) => void;
-  children: ReactNode;
-}) {
-  const isMounted = useRef(false);
-  const [state, setState] = useState<NachocodeContextType>({
-    isLoading: true,
-    isError: false,
-    error: null,
-    Nachocode: null,
-  });
-
-  useEffect(() => {
-    isMounted.current = true;
-
-    if (options?.logger) {
-      // NachoProvider 마운트됨
-      console.log('[Nachocode] NachoProvider mounted.');
-    }
-
-    loadNachocode(apiKey, options, version, onInitialized)
-      .then(sdk => {
-        if (!isMounted.current) return;
-
-        if (options?.logger) {
-          // SDK 로드 완료
-          console.log('[Nachocode] Nachocode SDK successfully loaded:', sdk);
-        }
-        setState({
-          isLoading: false,
-          isError: false,
-          error: null,
-          Nachocode: sdk,
-        });
-      })
-      .catch(err => {
-        if (!isMounted.current) return;
-
-        // SDK 로드 실패
-        console.error('[Nachocode] Failed to load Nachocode SDK:', err);
-        setState({
-          isLoading: false,
-          isError: true,
-          error: err,
-          Nachocode: null,
-        });
-      });
-
-    return () => {
-      isMounted.current = false;
-    };
-  }, [apiKey, version]);
-
-  return (
-    <NachoContext.Provider value={state}>{children}</NachoContext.Provider>
+}: NachoProviderProps): ReactElement {
+  const state = useNachocodeLoader(
+    'NachoProvider',
+    apiKey,
+    options,
+    version,
+    onInitialized
   );
+
+  // JSX 대신 `createElement` 를 사용해 `react/jsx-runtime` 에 의존하지 않는다. (React 16.8+ 지원)
+  return createElement(NachoContext.Provider, { value: state }, children);
 }
 
-export function useNachocodeContext() {
+/**
+ * `NachoProvider` 가 제공하는 SDK 로드 상태를 반환하는 훅
+ * @throws `NachoProvider` 밖에서 호출한 경우
+ */
+export function useNachocodeContext(): NachocodeState {
   const context = useContext(NachoContext);
   if (!context) {
     throw new Error(

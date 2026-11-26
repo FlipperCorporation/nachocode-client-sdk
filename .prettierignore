@@ -47,3 +47,7 @@ tmp
 
 # released files
 releases/**/*.min.js
+
+# Lock files
+package-lock.json
+yarn.lock

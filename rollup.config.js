@@ -1,15 +1,15 @@
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
 import dts from 'rollup-plugin-dts';
 import typescript from 'rollup-plugin-typescript2';
 
+const input = 'src/index.ts'; // 엔트리 포인트
+
 export default [
   {
-    input: 'src/index.ts', // 엔트리 포인트 지정
+    input,
     output: [
-      // CJS 빌드
+      // CJS 빌드 (`"type": "module"` 패키지이므로 반드시 `.cjs` 확장자 사용)
       {
-        file: 'dist/index.cjs.js',
+        file: 'dist/index.cjs',
         format: 'cjs',
         sourcemap: true,
       },
@@ -21,18 +21,29 @@ export default [
       },
     ],
     plugins: [
-      resolve(), // Node.js 모듈을 찾아주는 플러그인
-      commonjs(), // CommonJS 모듈을 ESM으로 변환하는 플러그인
+      // TypeScript 변환 (타입 오류가 있으면 빌드 실패)
       typescript({
         tsconfig: './tsconfig.json',
         include: ['src/**/*', 'types/**/*'],
-      }), // TypeScript 변환
+        tsconfigOverride: {
+          compilerOptions: {
+            noEmit: false,
+            removeComments: true,
+            sourceMap: true,
+          },
+        },
+      }),
     ],
-    external: ['Nachocode', 'react', 'react-dom', 'react/jsx-runtime'], // 외부 모듈은 번들에 포함하지 않음
+    // react 및 하위 경로(react/jsx-runtime 등)는 번들에 포함하지 않음
+    external: [/^react($|\/)/],
   },
   {
-    input: 'src/index.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'es' }], // 타입 선언 파일 빌드
+    // 타입 선언 파일 빌드 (전역 `Nachocode` 네임스페이스 선언 포함)
+    input,
+    output: [
+      { file: 'dist/index.d.ts', format: 'es' }, // ESM 소비자용
+      { file: 'dist/index.d.cts', format: 'es' }, // CJS 소비자용
+    ],
     plugins: [dts()],
   },
 ];
