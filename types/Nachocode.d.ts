@@ -1,15 +1,15 @@
 declare global {
   /**
-   * nachocode JavaScript Client SDK Type Declaration v1.11.3
+   * nachocode JavaScript Client SDK Type Declaration v1.11.4
    *
    * GitHub
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk
    *   - https://github.com/FlipperCorporation/nachocode-client-sdk-js
    *
    * CDN
-   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.3/Nachocode.d.ts
+   *   - https://cdn.nachocode.io/nachocode/client-sdk/@1.11.4/Nachocode.d.ts
    *
-   * Last Updated Date: 2026-08-13
+   * Last Updated Date: 2026-11-26
    */
   namespace Nachocode {
     /**
@@ -112,6 +112,7 @@ declare global {
      *   console.error('nachocode SDK not loaded..');
      * }
      * @since 1.0.0
+     * @lastupdated 1.11.4 - `init` event listener receives the application information object on web environment as well
      */
     function init(apiKey: string, options?: InitializeOptions): void;
 
@@ -126,6 +127,7 @@ declare global {
      *  // logic here only works in `App` environment..
      * }
      * @since 1.4.2
+     * @lastupdated 1.11.4 - `init` event listener receives the application information object on web environment as well, concurrent calls are all resolved
      */
     function initAsync(
       apiKey: string,
@@ -142,6 +144,7 @@ declare global {
        * Checks whether the application is first launched or not.
        * @param callback - Called with `true` if this is the first launch, `false` otherwise.
        * @since 1.4.0
+       * @lastupdated 1.11.4 - Concurrent calls are all called back
        */
       function checkFirstLaunch(
         callback: (isFirstLaunch: boolean) => void
@@ -444,7 +447,8 @@ declare global {
        * @see {@link https://dev.appsflyer.com/hc/docs/integrate-android-sdk#set-the-customer-user-id}
        * @param customUserId - client customer user identifier.
        * @since 1.7.0
-       * @lastupdated 1.8.0 - renamed from `setCustomUserId` to `setCustomerUserId`
+       * @updated 1.8.0 - renamed from `setCustomUserId` to `setCustomerUserId`
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function setCustomerUserId(
         customUserId: string
@@ -453,20 +457,23 @@ declare global {
       /**
        * Function to get registered customer user id for Appsflyer features in the native layer.
        * @since 1.7.0
-       * @lastupdated 1.8.0 - renamed from `getCustomUserId` to `getCustomerUserId`
+       * @updated 1.8.0 - renamed from `getCustomUserId` to `getCustomerUserId`
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getCustomerUserId(): Promise<GetCustomerUserIdResult>;
 
       /**
        * Function to delete registered customer user id from Appsflyer feature in the native layer.
        * @since 1.7.0
-       * @lastupdated 1.8.0 - renamed from `deleteCustomUserId` to `deleteCustomerUserId`
+       * @updated 1.8.0 - renamed from `deleteCustomUserId` to `deleteCustomerUserId`
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function deleteCustomerUserId(): Promise<AppsflyerResult>;
 
       /**
        * Function to get attribution data.
        * @since 1.7.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getAttributionData(): Promise<GetAttributionDataResult>;
 
@@ -474,6 +481,7 @@ declare global {
        * Function to clear attribution data.
        * @param timestamp - Unix epoch time in milliseconds to clear specific attribution data with the given time.
        * @since 1.7.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function clearAttributionData(
         timestamp?: number
@@ -482,12 +490,14 @@ declare global {
       /**
        * Function to get attribution data list.
        * @since 1.7.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getAttributionList(): Promise<GetAttributionListResult>;
 
       /**
        * Function to clear attribution data list.
        * @since 1.7.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function clearAttributionList(): Promise<AppsflyerResult>;
 
@@ -496,6 +506,7 @@ declare global {
        * @param eventName - Custom event name
        * @param values - Custom event value object
        * @since 1.7.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function logEvent(
         eventName: string,
@@ -524,6 +535,7 @@ declare global {
        * Function to check availability of biometrics authentication.
        * Calls callback function with the value whether it is available or not.
        * @since 1.3.0
+       * @lastupdated 1.11.4 - Concurrent calls are all called back
        */
       function canUseBiometrics(
         callback: (available: boolean, error?: SDKError) => void
@@ -564,6 +576,7 @@ declare global {
        *  console.log(eventId); // sample
        * }, 'sample');
        * @since 1.2.0
+       * @lastupdated 1.11.4 - Auto-generated event id no longer collides, event id is handled as a string, returns void if `event` is not a function
        */
       function addEvent(
         event: (eventId: string) => void,
@@ -612,6 +625,7 @@ declare global {
        * // Remove specific event with event id
        * Nachocode.backkey.removeEvent('sample');
        * @since 1.2.0
+       * @lastupdated 1.11.4 - Event id is handled as a string
        */
       function removeEvent(eventId?: string): string | void;
     }
@@ -665,7 +679,8 @@ declare global {
        * // Open default internal browser (ex. `Safari`, `Chrome`)
        * Nachocode.browser.openLink('https://nachocode.io', 'internal_default');
        * @since 1.0.3
-       * @lastupdated 1.6.3 - `internal_default` option newly added
+       * @updated 1.6.3 - `internal_default` option newly added
+       * @lastupdated 1.11.4 - Supports `localhost`, IP address hosts and `tel:`, `mailto:`, `sms:` links. Percent-encodes the URL for native apps as well, without encoding it twice. Non-`http(s)` URL is always opened with the `external` option
        */
       function openLink(url: string, option?: OpenURLOption): void;
 
@@ -697,7 +712,8 @@ declare global {
        * - iOS
        * - Web
        * @since 1.4.0
-       * @lastupdated 1.6.3 - updated to support `Web` platforms
+       * @updated 1.6.3 - updated to support `Web` platforms
+       * @lastupdated 1.11.4 - No longer throws where Clipboard API is unavailable, concurrent calls are all called back
        */
       function getText(callback: (text: string) => void): void;
 
@@ -711,7 +727,8 @@ declare global {
        * - iOS
        * - Web
        * @since 1.4.0
-       * @lastupdated 1.6.3 - updated to support `Web` platforms
+       * @updated 1.6.3 - updated to support `Web` platforms
+       * @lastupdated 1.11.4 - No longer throws where Clipboard API is unavailable, a callback of a previous call is not called again
        */
       function setText(
         text: string,
@@ -803,6 +820,7 @@ declare global {
        * Detect the device type using the User-Agent string.
        * @returns {DeviceType} The detected device type (e.g., "Android", "iOS", "Unknown").
        * @since 1.0.0
+       * @lastupdated 1.11.4 - Touch devices other than iPad are no longer detected as "iOS"
        */
       function detectType(): DeviceType;
 
@@ -817,6 +835,7 @@ declare global {
        *   alert(message);
        * });
        * @since 1.3.0
+       * @lastupdated 1.11.4 - Concurrent calls are all called back
        */
       function getBatteryLevel(
         callback: (status: {
@@ -834,6 +853,7 @@ declare global {
        *   alert(message);
        * });
        * @since 1.4.0
+       * @lastupdated 1.11.4 - Concurrent calls are all called back
        */
       function getCurrentLanguage(callback: (language: string) => void): void;
 
@@ -863,6 +883,7 @@ declare global {
        * Retrieves the network status from the native layer.
        * Calls callback function with the value.
        * @since 1.3.0
+       * @lastupdated 1.11.4 - Concurrent calls are all called back
        */
       function getNetworkStatus(
         callback: (status: {
@@ -885,25 +906,29 @@ declare global {
        *   console.error(`Error retrieving safe area: ${safeArea.errorMessage}`);
        * }
        * @since 1.8.0
-       * @lastupdated 1.10.5 - Android safe area insets calculation added
+       * @updated 1.10.5 - Android safe area insets calculation added
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getSafeAreaInsets(): Promise<GetSafeAreaInsetsResult>;
 
       /**
        * Retrieves the type of the device.
        * @since 1.0.0
+       * @lastupdated 1.11.4 - Detects the device type on demand, so it is available before initialization
        */
       function getType(): DeviceType;
 
       /**
        * Returns whether current device is Android or not.
        * @since 1.0.0
+       * @lastupdated 1.11.4 - Detects the device type on demand, so it is available before initialization
        */
       function isAndroid(): boolean;
 
       /**
        * Returns whether current device is iOS or not.
        * @since 1.0.0
+       * @lastupdated 1.11.4 - Detects the device type on demand, so it is available before initialization
        */
       function isIOS(): boolean;
     }
@@ -1092,6 +1117,7 @@ declare global {
        * Unbinds registered event listener for the specified event name.
        * @param eventName - The event type to unregister.
        * @since 1.0.3
+       * @lastupdated 1.11.4 - Supports the aliases `bg`, `fg` and `nc`, same as `on`
        */
       function off(eventName: EventType): void;
 
@@ -1277,6 +1303,7 @@ declare global {
        * Function to trigger Firebase Analytics app event.
        * @returns {Promise<FirebaseResult>}
        * @since 1.11.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function logEvent(
         /**
@@ -1294,6 +1321,7 @@ declare global {
        * Function to set user property in Firebase Analytics.
        * @returns {Promise<FirebaseResult>}
        * @since 1.11.0
+       * @lastupdated 1.11.4 - A number value is sent as a string, concurrent calls are all resolved
        */
       function setUserProperty(
         /**
@@ -1311,6 +1339,7 @@ declare global {
        * Function to delete user property in Firebase Analytics.
        * @returns {Promise<FirebaseResult>}
        * @since 1.11.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function deleteUserProperty(
         /**
@@ -1461,6 +1490,7 @@ declare global {
        * Initiates a purchase transaction for the specified product.
        * @server Calls nachocode server api internally
        * @since 1.4.0
+       * @lastupdated 1.11.4 - A purchase without a response from native layer no longer blocks following purchases forever, a response without purchase data is called back as a failure
        */
       function purchase(
         productKey: string,
@@ -1696,7 +1726,8 @@ declare global {
        * When the user attempts to log in, automatically authorized again
        * with past account info from KakaoTalk.
        * @since 1.5.0
-       * @lastupdated 1.6.2
+       * @updated 1.6.2
+       * @lastupdated 1.11.4 - A callback of a previous call is not called again when `callback` is omitted. Warns that `callback` is not called on Android app source versions lower than 1.11.10
        */
       function logout(callback?: (result: KakaoResult) => void): void;
 
@@ -1707,7 +1738,8 @@ declare global {
        * When the user attempts to log in, must be authorized again
        * from scratch on KakaoTalk, after unlinked.
        * @since 1.5.0
-       * @lastupdated 1.6.2
+       * @updated 1.6.2
+       * @lastupdated 1.11.4 - A callback of a previous call is not called again when `callback` is omitted. Warns that `callback` is not called on Android app source versions lower than 1.11.10
        */
       function unlink(callback?: (result: KakaoResult) => void): void;
 
@@ -1795,6 +1827,7 @@ declare global {
        * @param data - Data to send kakao
        * @param callback - Callback function called after sharing kakao
        * @since 1.5.0
+       * @lastupdated 1.11.4 - No longer throws when `data` is `null`, the object passed as `data` is no longer modified, a callback of a previous call is not called again when `callback` is omitted
        */
       function share(
         type: KakaoShareType,
@@ -1911,12 +1944,14 @@ declare global {
       /**
        * Retrieves the list of supported application countries.
        * @since 1.11.3
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getAppCountryList(): Promise<GetAppCountryListResult>;
 
       /**
        * Retrieves the current application country code.
        * @since 1.11.3
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getAppCountryCode(): Promise<GetAppCountryCodeResult>;
 
@@ -1924,6 +1959,7 @@ declare global {
        * Sets the application country code.
        * @param countryCode - The country code to set.
        * @since 1.11.3
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function setAppCountryCode(
         countryCode: string
@@ -2012,6 +2048,7 @@ declare global {
        * - **iOS** : Uses native interface
        * - **Web** : Uses Web Geolocation API
        * @since 1.6.2
+       * @lastupdated 1.11.4 - Resolves with an error where Geolocation API is unavailable, concurrent calls are all resolved
        */
       function getCurrentPosition(): Promise<GetCurrentPositionResult>;
     }
@@ -2088,7 +2125,7 @@ declare global {
         id: string;
         gender?: 'F' | 'M';
         name?: string;
-        nickName?: string;
+        nickname?: string;
         email?: string;
         mobile?: string;
         mobile_e164?: string;
@@ -2239,6 +2276,7 @@ declare global {
        *
        * Asks if optional parameter `ask` is set `true`.
        * @since 1.2.0
+       * @lastupdated 1.11.4 - The callback receives only the result of its own permission type (app source version 1.11.10 on Android, 1.11.6 on iOS or higher), and is not called again with the result of a later call made without a callback
        */
       function checkPermission(
         option: {
@@ -2270,6 +2308,7 @@ declare global {
        *
        * Calls callback function with selected data.
        * @since 1.2.0
+       * @lastupdated 1.11.4 - Concurrent calls with the same key are all called back
        */
       function getData(key: string, callback: (data: string) => void): void;
 
@@ -2507,7 +2546,8 @@ declare global {
        * @returns FCM device token. empty `string` if failed
        * @since 1.0.0
        * @updated 1.6.3 - Set return type to `string`
-       * @lastupdated 1.10.0 - Set return type to `Promise<string>`
+       * @updated 1.10.0 - Set return type to `Promise<string>`
+       * @lastupdated 1.11.4 - Always resolves with a `string`, concurrent calls are all resolved
        */
       function getPushToken(): Promise<string>;
 
@@ -2540,10 +2580,11 @@ declare global {
        *  content: '지금 바로 앱에서 확인하세요!',
        *  link: 'https://nachocode.io/pricing',
        *  usingAppIcon: false,
-       *  scheduleTime: new Date('2025-02-15T10:30:00Z'),
+       *  scheduledTime: new Date('2025-02-15T10:30:00Z'),
        *  id: 1,
        * });
        * @since 1.4.1
+       * @lastupdated 1.11.4 - Warns about an invalid `scheduledTime` and about iOS app source versions lower than 1.11.6 ignoring it, the callback receives an error result and a numeric `id`, and is not called again by a later call made without a callback
        */
       function sendLocalPush(
         payload: LocalPushPayload,
@@ -2567,6 +2608,7 @@ declare global {
        * @server Calls nachocode server api internally
        * @since 1.6.0
        * @updated 1.6.1 - Updated from `callback` to `Promise`
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved with their own topic result, `status` is "error" whenever the native layer failed
        */
       function subscribePushTopic(topic: string): Promise<PushTopicResult>;
 
@@ -2578,6 +2620,7 @@ declare global {
        * @server Calls nachocode server api internally
        * @since 1.6.0
        * @updated 1.6.1 - Updated from `callback` to `Promise`
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved with their own topic result, `status` is "error" whenever the native layer failed
        */
       function unsubscribePushTopic(topic: string): Promise<PushTopicResult>;
 
@@ -2587,6 +2630,7 @@ declare global {
        * Calls `callback` function with the list data.
        * @param callback - Callback called with the response from native layer.
        * @since 1.6.0
+       * @lastupdated 1.11.4 - Concurrent calls are all called back
        */
       function getSubscriptionList(
         callback: (subscriptionList: Array<string>) => void
@@ -2598,6 +2642,7 @@ declare global {
        * Calls `callback` function with the list data.
        * @param callback - Callback called with the response from native layer.
        * @since 1.10.0
+       * @lastupdated 1.11.4 - Concurrent calls are all called back
        */
       function getMarketingSubscriptionList(
         callback: (subscriptionList: Array<string>) => void
@@ -2607,7 +2652,8 @@ declare global {
        * Function to set whether the device user agrees to receive an advertising push notification.
        * @param allowed - Whether the user agrees to receive marketing push notifications.
        * @since 1.10.0
-       * @lastupdated 1.10.1 - Updated return type for better handling
+       * @updated 1.10.1 - Updated return type for better handling
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function setMarketingAllowed(
         allowed: boolean
@@ -2629,6 +2675,7 @@ declare global {
        * //   user: true
        * // }
        * @since 1.10.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getMarketingAllowed(): Promise<GetMarketingAllowedResult>;
 
@@ -2636,7 +2683,8 @@ declare global {
        * Function to set whether the device user agrees to receive night push notifications.
        * @param allowed - Whether the user agrees to receive night push notifications.
        * @since 1.10.0
-       * @lastupdated 1.10.1 - Updated return type for better handling
+       * @updated 1.10.1 - Updated return type for better handling
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function setNightAllowed(
         allowed: boolean
@@ -2657,7 +2705,8 @@ declare global {
        * //   user: true
        * // }
        * @since 1.10.0
-       * @lastupdated 1.10.2 - Updated return type for better handling
+       * @updated 1.10.2 - Updated return type for better handling
+       * @lastupdated 1.11.4 - Resolves with `{ guest: null, user: null }` instead of `null` before initialization or on web environment, concurrent calls are all resolved
        */
       function getNightAllowed(): Promise<GetMarketingAllowedResult>;
 
@@ -2679,6 +2728,7 @@ declare global {
        * //   statusCode: 200,
        * // }
        * @since 1.10.2
+       * @lastupdated 1.11.4 - The object passed as `data` is no longer modified, concurrent calls are all resolved
        */
       function setMarketingPreference(data: {
         /**
@@ -2706,6 +2756,7 @@ declare global {
        * //   user: { marketingAllowed: true, nightAllowed: false }
        * // }
        * @since 1.10.2
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getMarketingPreference(): Promise<GetMarketingPreferenceResult>;
     }
@@ -2718,6 +2769,7 @@ declare global {
       /**
        * Opens QR code scanner.
        * @since 1.4.0
+       * @lastupdated 1.11.4 - A callback of a previous call is not called again when `callback` is omitted
        */
       function openQRCodeScanner(
         option: {
@@ -2867,6 +2919,7 @@ declare global {
        * @param callback - Callback function called after sharing kakao
        * @since 1.2.0
        * @deprecated This method has been moved to `kakao` namespace since `SDK version 1.5.0`
+       * @lastupdated 1.11.4 - No longer throws when `data` is `null`, the object passed as `data` is no longer modified, a callback of a previous call is not called again when `callback` is omitted
        */
       function sendKakao(
         type: KakaoShareType,
@@ -2963,6 +3016,7 @@ declare global {
        * @param {string} storeInfo.iOSAppId - iOS app id. Can be found in apple app store connect.
        * - Used in iOS platform
        * @since 1.6.0
+       * @lastupdated 1.11.4 - No longer throws without `storeInfo` or with a number `iOSAppId`, the object passed as `storeInfo` is no longer modified
        */
       function openStore(storeInfo: StoreInfo): void;
 
@@ -3014,6 +3068,7 @@ declare global {
        *   console.error(result.message);
        * }
        * @since 1.11.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getStoreCountryCode(): Promise<GetStoreCountryCodeResult>;
     }
@@ -3092,6 +3147,7 @@ declare global {
        * Sets the telecom user token.
        * @param {string} token - The telecom user token
        * @since 1.11.1
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function setTelecomUserToken(
         token: string
@@ -3101,6 +3157,7 @@ declare global {
        * Deletes the telecom user token.
        * @returns {Promise<TelecomUserTokenResult>}
        * @since 1.11.1
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function deleteTelecomUserToken(): Promise<TelecomUserTokenResult>;
 
@@ -3108,6 +3165,7 @@ declare global {
        * Checks whether the telecom user token exists or not.
        * @returns {Promise<CheckTelecomUserTokenResult>}
        * @since 1.11.1
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function checkTelecomUserToken(): Promise<CheckTelecomUserTokenResult>;
     }
@@ -3115,7 +3173,8 @@ declare global {
     /**
      * Namespace for user related functions
      * @since 1.10.0
-     * @lastupdated 1.10.1 - Updated return type for better handling
+     * @updated 1.10.1 - Updated return type for better handling
+     * @lastupdated 1.11.4 - `setUserId` no longer keeps the user id when the native layer failed
      */
     namespace user {
       /**
@@ -3136,7 +3195,8 @@ declare global {
        * Enables to cross-reference own unique ID with nachocode's unique ID and the other devices' IDs.
        * @since 1.10.0
        * @updated 1.10.1 - Updated return type for better handling
-       * @lastupdated 1.11.2 - Added push token registration before setting user id to ensure that the push token is registered with the user id in the app server.
+       * @updated 1.11.2 - Added push token registration before setting user id to ensure that the push token is registered with the user id in the app server.
+       * @lastupdated 1.11.4 - The user id is kept only when the native layer succeeded, concurrent calls are all resolved
        */
       function setUserId(userId: string): Promise<UserOperationResult>;
 
@@ -3146,19 +3206,22 @@ declare global {
        * - Returns `null` if there is no registered user id or unavailable to get.
        * - Default returned value : `Promise<null>`
        * @since 1.10.0
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function getUserId(): Promise<string | null>;
 
       /**
        * Function to delete registered user id in the native layer.
        * @since 1.10.0
-       * @lastupdated 1.10.1 - Updated return type for better handling
+       * @updated 1.10.1 - Updated return type for better handling
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function deleteUserId(): Promise<UserOperationResult>;
 
       /**
        * Function to withdraw current user in the native layer, deletes all data related to the user.
        * @since 1.10.4
+       * @lastupdated 1.11.4 - Concurrent calls are all resolved
        */
       function withdrawUser(): Promise<UserOperationResult>;
     }
@@ -3301,6 +3364,7 @@ declare global {
       /**
        * Set whether haptics feedback is used or not.
        * @since 1.1.0
+       * @lastupdated 1.11.4 - Checks the type of the parameter `enable`, like `setVibration`
        */
       function setHaptics(enable: boolean): void;
 
@@ -3313,12 +3377,14 @@ declare global {
       /**
        * Get whether haptics feedback is used or not from native.
        * @since 1.1.0
+       * @lastupdated 1.11.4 - Concurrent calls are all called back
        */
       function getHaptics(callback: (enable: boolean) => void): void;
 
       /**
        * Get whether vibration is used or not from native.
        * @since 1.1.0
+       * @lastupdated 1.11.4 - Concurrent calls are all called back
        */
       function getVibration(callback: (enable: boolean) => void): void;
 

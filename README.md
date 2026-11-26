@@ -184,7 +184,7 @@ nachocode Client SDK는 초기화 시 선택적으로 옵션을 설정할 수 �
 최신 버전 로드 (기본)
 
 - 최신 버전의 SDK를 항상 유지하려면 아래 코드를 사용하세요
-- 현재 최신 버전 v.1.11.3
+- 현재 최신 버전 v.1.11.4
 
 ```jsx
 loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
@@ -195,7 +195,7 @@ loadNachocode('your-api-key'); // 최신 버전이 자동으로 로드됨
 - 특정 버전으로 고정하려면 다음과 같이 사용합니다
 
 ```jsx
-loadNachocode('your-api-key', options, '1.11.3');
+loadNachocode('your-api-key', options, '1.11.4');
 ```
 
 > 📢 최신 버전 사용이 권장되며, 특정 버전 고정은 호환성이 중요한 경우에만 사용하세요.
@@ -253,7 +253,7 @@ nachocode SDK는 각 기능별로 **네임스페이스(namespace)** 로 구분�
 | `scanner`        | QR 코드 스캔 및 기타 스캔 기능을 제공합니다.                                     | [스캐너 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/scanner)         |
 | `setting`        | Pull to Refresh와 같은 설정 기능을 제공합니다.                                   | [설정 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/setting)           |
 | `share`          | 네이티브 공유 UI를 통해 URL을 공유할 수 있습니다.                                | [공유 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/share)             |
-| `store`          | 앱스토어 및 플레이스토어 상호작용 기능을 제공합니다.                             | [공유 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/store)             |
+| `store`          | 앱스토어 및 플레이스토어 상호작용 기능을 제공합니다.                             | [스토어 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/store)           |
 | `tabbar`         | 앱 내부 탭바의 표시 여부 및 이동을 제어할 수 있습니다.                           | [탭 바 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/tabbar)           |
 | `telecom`        | 통신사 위젯 관련 기능을 제공합니다.                                              | [통신사 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/telecom)         |
 | `user`           | 사용자 고유 ID를 네이티브 레이어에서 관리할 수 있습니다.                         | [사용자 네임스페이스](https://developer.nachocode.io/docs/sdk/namespaces/user)            |
